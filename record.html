@@ -1,0 +1,190 @@
+<div class="app-content" >
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{$root.translation.RECORD_TITLE}}<!-- <span class="badge">16</span> --></h1> 
+  </div>
+  <div class="wrapper-md">
+    <div class="row" ng-init="getGameRecord()">
+      <div class="col-lg-9">
+        <!-- tab -->
+        <ul class="nav nav-tabs" style="max-height:40px!important;">
+          <li class="active" ng-click="getGameRecord()"> <a  data-toggle="tab" data-target="#a">{{$root.translation.RECORD_GAME_RECORD}}</a></li>
+          <li ng-click="getRechargeRecord()"><a data-toggle="tab" data-target="#b">{{$root.translation.RECORD_RECHARGE}}</a></li>
+          <li ng-click="getWithdrawalsRecord()"><a data-toggle="tab" data-target="#c">{{$root.translation.RECORD_WITHDRAW}}</a></li>
+          <select name="per_page" ng-model="num_per_page" ng-init="num_per_page = '10'" ng-change="onChangeNum_perPage()" style="margin-top: 8px; float: right;">
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+          </select> 
+          <label style="margin-top: 8px; margin-right: 10px; float: right;">{{$root.translation.RECORD_ITEMS_PAGE}} : </label>
+   　　   </ul>
+   
+          <div class="tab-content" style="margin-top:10px;">
+              <div class="tab-pane  fade in active" id="a">
+                <div class="padder">      
+                  <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
+                   
+                      <!-- .a message -->
+                      <div class="m-l-lg" ng-repeat="game_record in sub_Records">
+                        <a class="pull-left thumb-sm avatar">
+                          <span class="text-muted m-l-sm pull-right">
+                            <p>{{ game_record.time.split(' ')[0] }}<br>
+                            {{ game_record.time.split(' ')[1] }}</p>
+                          </span>
+                        </a>
+                        <div class="m-l-xxl panel b-a">
+                          <div class="panel-heading pos-rlt">
+                            <span class="arrow left pull-up"></span>
+                            <!--button class="close" style="line-height: 0;">
+                              <span style="font-size:25px;">&times;</span>
+                            </button-->
+                            당신이 {{game_record.gamename}}에서 ${{game_record.money}}   {{ game_record.type }}습니다.
+                          </div>
+                        </div>
+                      </div>
+                      <!-- / .a message -->
+                  
+                  </div>
+                </div>
+
+                <!-- ---------------page -->
+                <div class="row">
+                
+                  <div class="col-sm-3 hidden-xs">
+
+                  </div>
+                  <div class="col-sm-6 text-center">
+                    <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="pageChanged()"></ul>
+                  </div>
+                  <div class="col-sm-3 text-right text-center-xs">                
+                   
+                  </div>
+                </div>
+                <!-- -------------page -->
+              </div>
+              <div class="tab-pane fade " id="b">
+                <div class="padder">      
+                  <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
+                    <!-- .a message -->
+                    <div class="m-l-lg" ng-repeat="one_charge in sub_Records">
+                      <a class="pull-left thumb-sm avatar">
+                        <span class="text-muted m-l-sm pull-right">
+                          <p>{{ one_charge.time.split(' ')[0] }}<br>
+                          {{ one_charge.time.split(' ')[1] }}</p>
+                        </span>
+                      </a>
+                      <div class="m-l-xxl panel b-a">
+                        <div class="panel-heading pos-rlt">
+                          <span class="arrow left pull-up"></span>
+                          <!--button class="close" style="line-height: 0;">
+                            <span style="font-size:25px;">&times;</span>
+                          </button-->
+                          {{one_charge.bank}}을 통해서 ID : {{one_charge.ID}}로 ${{one_charge.money}}를 충전{{one_charge.type}} 하였습니다.
+                        </div>
+                      </div>
+                    </div>
+                    <!-- / .a message --> 
+                  </div>
+                </div>
+                <!-- ---------------page -->
+                <div class="row">
+                  <div class="col-sm-3 hidden-xs">
+                  </div>
+                  <div class="col-sm-6 text-center">
+
+                    <!--ul uib-pagination total-items="175" max-size="3" class="pagination-sm" boundary-link-numbers="true"></ul-->
+                    <nav>
+                      <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="pageChanged()"></ul>
+                    </nav>
+
+                  </div>
+                  <div class="col-sm-3 text-right text-center-xs">                
+                   
+                  </div>
+                </div>
+                <!-- -------------page -->
+              </div>
+              <div class="tab-pane fade" id="c">
+                <div class="padder">      
+                  <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
+                    <!-- .a message -->
+                    <div class="m-l-lg" ng-repeat="one_withdraw in withdrawRecords">
+                      <a class="pull-left thumb-sm avatar">
+                        <span class="text-muted m-l-sm pull-right">
+                          <p>{{ one_withdraw.time.split(' ')[0] }}<br>
+                          {{ one_withdraw.time.split(' ')[1] }}</p>
+                        </span>
+                      </a>          
+                      <div class="m-l-xxl panel b-a">
+                        <div class="panel-heading pos-rlt">
+                          <span class="arrow left pull-up"></span>
+                          <!--button class="close" style="line-height: 0;">
+                            <span style="font-size:25px;">&times;</span>
+                          </button-->
+                          {{one_withdraw.bank}}을 통해서 ID : {{one_withdraw.ID}}로 ${{one_withdraw.money}}를 환전{{one_withdraw.type}} 하였습니다.
+                        </div>
+                      </div>
+                    </div>
+                    <!-- / .a message --> 
+                <!-- ---------------page -->
+                <div class="row">
+                  <div class="col-sm-3 hidden-xs">
+                  </div>
+                  <div class="col-sm-6 text-center">
+
+                    <!--ul uib-pagination total-items="175" max-size="3" class="pagination-sm" boundary-link-numbers="true"></ul-->
+                    <nav>
+                      <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="pageChanged()"></ul>
+                    </nav>
+
+                  </div>
+                  <div class="col-sm-3 text-right text-center-xs">                
+                   
+                  </div>
+                </div>
+                <!-- -------------page -->
+                  </div>
+                </div>
+              </div>
+            
+          </div>
+      
+        <!-- / tab -->
+
+      </div>
+       <!-- -----------------------right start--------------------------- -->
+      <div class="col-lg-3" ng-show="$root.is_logged">
+          
+                <div class="wrapper">
+           
+                  <div class="panel b-a" ng-show="$root.showNotices.length != 0">
+                    <h4 class="font-thin padder"><a href class="text-info"><strong>Notice</strong></a></h4>
+                    <ul class="list-group">
+                      <li class="list-group-item" ng-repeat="one_notice in showNotices">
+                          <p ng-click="showNoticeDetails()"><em><a style="text-decoration: underline;">{{ one_notice.show_m }}</a></em></p>
+                          <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{ one_notice.time }}</small>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div class="panel b-a">
+                    <h4 class="font-thin padder"><a href class="text-info"><strong>News</strong></a></h4>
+                      <ul class="list-group">
+                      <li class="list-group-item" ng-repeat="one_news in showNews">
+                          <p ng-click="showNewsDetails(one_news)"><em><a style="text-decoration: underline;">{{ one_news.show_m }}</a></em></p>
+                          <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>{{ one_news.time }}</small>
+                      </li>
+                    </ul>
+                  </div>
+         
+                </div>
+           
+      </div>
+      <!-- ---------------------------right end---------------------------------------- -->
+    </div>
+
+
+
+
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="modal-body" id="modal-body">
+    <form name="registerForm" class="form-horizontal" ng-init="initRegisterForm()" >
+        <span class="heading">
+            <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+            <span style="vertical-align:bottom;">&nbsp;{{$root.translation.REGISTER_DIALOG_TITLE}}</span>
+            <button type="button" class="close" style="line-height: 0;" ng-click="exitMsg()">
+                <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+			</button>
+        </span>
+
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="text" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_USERNAME}} ng-model="register_username" style="float: left; width: 85%;" ng-blur="loseFocusUsername()" required>
+            <i class="fa fa-user"></i>
+            <img src={{path_username}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_username" />
+        </div>
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="text" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_NICKNAME}} ng-model="register_nickname" style="float: left; width: 85%;" ng-blur="loseFocusNickname()" required>
+            <i class="fa fa-user"></i>
+            <img src={{path_nickname}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_nickname" />
+        </div>
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="password" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_PASSWORD}} ng-model="register_password" style="float: left; width: 85%;" ng-blur="loseFocusConfirmPass()" required>
+            <i class="fa fa-lock"></i>
+        </div>
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="password" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_CONFIRM}} ng-model="register_confirm_password" style="float: left; width: 85%;" ng-blur="loseFocusConfirmPass()" required>
+            <i class="fa fa-lock"></i>
+            <img src={{path_password}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_password" />
+        </div>
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="email" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_EMAIL}} ng-model="register_email" style="float: left; width: 85%;" ng-blur="loseFocusEmail()" required>
+            <i class="fa fa-envelope"></i>
+            <img src={{path_email}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_email" />
+        </div>
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="text" class="form-control"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' pattern=".{10,}"  placeholder={{$root.translation.REGISTER_DIALOG_MOBILE}} ng-model="register_mobile" style="float: left; width: 85%;"  ng-blur="loseFocusMobile()" required>
+            <i class="fa fa-mobile-phone" ></i>
+            <img src={{path_mobile}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_mobile" />
+        </div>
+  
+        <div class="form-group">
+            <div style="float:left;">
+                {{$root.translation.REGISTER_DIALOG_CHECK_WAY}} &nbsp;&nbsp;&nbsp;
+                <label><input type="radio" ng-value="1"  name="check" style="width:20px;" ng-click="select_Checkway()" ng-model="register_check"/>&nbsp;{{$root.translation.REGISTER_DIALOG_RADIO_EMAIL}}</label>
+                &nbsp;&nbsp;&nbsp;<label><input type="radio" ng-value="2"  name="check" ng-click="select_Checkway()" ng-model="register_check" />&nbsp;{{$root.translation.REGISTER_DIALOG_RADIO_MOBILE}}</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default"  style="background-color:white; margin-left: 35px;" ng-click="select_userphoto()">{{$root.translation.REGISTER_DIALOG_PHOTO}}</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default"  style="background-color:white;" ng-click="register_sendVerify()"  ng-disabled="send_Btn">{{btn_name}}</button>
+            <img src={{path_code}} style="width: 8%; float: right; margin-top: 6px; margin-right: 30px;" ng-show="is_code" />
+            <input type="text" class="form-control"  placeholder="Code" style="width:50%;" ng-model="register_code" ng-disabled="!is_verified">
+        </div>
+        <div class="form-group">
+            <span class="text"><a ng-click="gotoLogin()"><em style="color:#58666e;text-decoration: underline;">{{$root.translation.REGISTER_DIALOG_LOGIN}}</em></a></span>
+            <button type="submit" class="btn btn-default" style="font-size:16px;color:white!important;" ng-click="register_sendRequest()" ng-disabled="!is_verified">{{$root.translation.REGISTER_DIALOG_REGISTER}}</button>
+        </div>
+    </form>
+</div>

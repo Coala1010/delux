@@ -1,0 +1,74 @@
+<div class="app-content" >
+
+
+    <div class="bg-light lter b-b wrapper-md">
+      <h1 class="m-n font-thin h3">{{$root.translation.BILLBOARD_TITLE}}</h1>
+    </div>
+    <div class="wrapper-md">
+
+    
+        <div class="panel panel-default" ng-init="getInitBills()">
+          <div class="panel-heading" style="height: 54px;">
+            <label style="margin-top: 7px;">{{$root.translation.BILLBOARD_TITLE}}</label>
+            <select name="num_bill" ng-model="num_bill" ng-init="num_bill = '10'" ng-change="onChangeBillBoard_Number()" style="margin-top: 5px; float: right;">
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+            </select> 
+            <label style="margin-top: 5px; margin-right: 10px; float: right;">{{$root.translation.MESSAGE_ITEM_PAGE}} : </label>
+            <select name="cat_bill" ng-model="cat_bill" ng-change="onChangeBillBoard_Category()" style="margin-top: 5px; margin-right: 10px; float: right;">
+              <option>{{$root.translation.BILLBOARD_CATEGORY1}}</option>
+              <option>{{$root.translation.BILLBOARD_CATEGORY2}}</option>
+              <option>{{$root.translation.BILLBOARD_CATEGORY3}}</option>
+              <option>{{$root.translation.BILLBOARD_CATEGORY4}}</option>
+              <option>{{$root.translation.BILLBOARD_CATEGORY5}}</option>
+              <option>{{$root.translation.BILLBOARD_CATEGORY6}}</option>
+            </select> 
+            <label style="margin-top: 7px; margin-right: 10px; float: right;">{{$root.translation.NEW_OPINION_TYPE}} : </label>
+            <button type="button" class="btn btn-info" style="margin-right:20px; float: right;" ng-click="newBill()" >{{$root.translation.BILLBOARD_NEW_BILL}}</button>
+          </div>
+    
+          <div class="table-responsive">
+            <table class="table table-striped b-t b-light">
+              <thead>
+                <tr>
+           
+                  <th style="width: 4%;">{{$root.translation.BILLBOARD_TABLE_NUMBER}}</th>
+                  <th>{{$root.translation.BILLBOARD_TABLE_CONTENT}}</th>
+                  <th>{{$root.translation.BILLBOARD_TABLE_AUTHOR}}</th>
+                  <th style="width: 6%;">{{$root.translation.BILLBOARD_TABLE_DATE}}</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr ng-repeat="one_bill in $root.showBills">
+                  <td>{{ one_bill.showNumber }}</td>
+                  <td><span class="text"><a ng-click="showBillComments(one_bill)"><em style="color:#58666e;text-decoration: underline;">{{ one_bill.title }}</em></a></span></td>
+                  <td>{{ one_bill.user_name }}</td>
+                  <td>{{ one_bill.time.split(' ')[0] }}</td>
+                </tr>
+                                
+              </tbody>
+            </table>
+          </div>
+          <footer class="panel-footer">
+            <div class="row">
+              <div class="col-sm-4 hidden-xs">
+                                 
+              </div>
+              <div class="col-sm-4 text-center">
+                  <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="onChangeBillBoard_Number()"></ul>
+              </div>
+              <div class="col-sm-4 text-right text-center-xs">                
+               
+              </div>
+            </div>
+          </footer>
+        </div>
+      
+    </div>
+
+
+</div>

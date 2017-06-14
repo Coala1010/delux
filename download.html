@@ -1,0 +1,134 @@
+<!--link rel="stylesheet" href="./download-img/index_38d96b8.css"-->
+<div class="app-content" style="">
+  <div ui-butterbar></div>
+  <a href class="off-screen-toggle hide" data-toggle="class:off-screen" data-target=".app-aside" ></a>
+  <div class="app-content-body fade-in-up" ng-init="getPopularGameList()">
+    <!-- COPY the content from "tpl/" -->
+      <div class="hbox hbox-auto-xs hbox-auto-sm">
+        <div class="col">
+          <div style="background:url(img/bg2.jpg) center center; background-size:cover">
+          </div>
+
+        <div class="col-sm-12">
+            <div class="panel b-a">
+              
+            <div class="blog-post">                   
+              <div class="panel" style="margin-bottom:0px;">
+                <div>
+                  <img src="img/download-bg.jpg" class="img-full">
+                </div>
+                    <div class="hbox text-center b-b b-light text-sm " style="background-color:#23b7e5;">          
+                <a ng-click="notReady()" class="col padder-v text-white b-r b-light" data-toggle="modal" data-dismiss="modal" data-target="#dlcheck">
+                  <i class="fa fa-laptop block m-b-xs fa-4x"></i>
+                  <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
+                </a>
+                <a ng-click="notReady()" class="col padder-v text-white b-r b-light">
+                  <i class="fa fa-apple block m-b-xs fa-4x"></i>
+                  <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
+                </a>
+                <a href="http://101.102.224.50:10008/gameapks/Casino_Poker.apk" class="col padder-v text-white">
+                  <i class="fa fa-android block m-b-xs fa-4x"></i>
+                  <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
+                </a>
+              </div>
+              </div>
+              
+            </div>
+          </div>
+   
+      <div class="panel b-a">
+        <div class="panel-heading b-b b-light">
+          <!-- <span class="badge bg-warning pull-right">10</span> -->
+          <h2 class="font-bold">{{$root.translation.DOWNLOAD_SINGLE}}</h2>
+        </div>
+        <div class="clearfix panel-footer">
+           <div class="col-sm-6">
+           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="card_game()">{{ $root.translation.SIDE_MENU_CARD }}</button>
+           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="orak_game()">{{ $root.translation.SIDE_MENU_ORAK }}</button>
+           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="sport_game()">{{ $root.translation.SIDE_MENU_SPORT }}</button>
+           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="horse_game()">{{ $root.translation.SIDE_MENU_HORSE }}</button>
+           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="live_game()">{{ $root.translation.SIDE_MENU_LIVE }}</button>
+        </div>
+          <div class="input-group col-sm-4">
+            <input type="text" class="form-control input-sm btn-rounded" ng-model="game_search" placeholder={{$root.translation.TOP_MENU_SEARCH}}>
+            <span class="input-group-btn">
+              <button type="button" ng-click="search_Games()" class="btn btn-default btn-sm btn-rounded"><i class="fa fa-search"></i></button>
+            </span>
+          </div>
+        </div>
+      </div>
+      
+<div class="panel b-a">
+
+  <div class="col-lg-3" ng-repeat="one_show in show_gameList">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="clearfix text-center ">
+            <div class="inline">
+            
+              <div class="thumb-xl">
+                <img src={{one_show.game_photolink}}   width="100%"/>
+              </div>
+            
+              <div class="h4 m-t m-b-xs" ng-if="$root.currentLanguage == 'en'">{{one_show.gamename.ga_en}}</div>
+              <div class="h4 m-t m-b-xs" ng-if="$root.currentLanguage == 'ko'">{{one_show.gamename.ga_kr}}</div>
+              <small class="text-muted m-b">{{one_show.game_online_count}}</small>
+            </div>                      
+          </div>
+        </div>
+      
+         <div class="hbox text-center b-b b-light text-sm " style="background-color:#23b7e5;">          
+          <a ng-click="notReady()" class="col padder-v text-white b-r b-light">
+            <i class="fa fa-laptop block m-b-xs fa-2x"></i>
+            <span >{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
+          </a>
+          <a ng-click="notReady()" class="col padder-v text-white b-r b-light">
+            <i class="fa fa-apple block m-b-xs fa-2x"></i>
+            <span>{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
+          </a>
+          <a ng-click="notReady()" class="col padder-v text-white">
+            <i class="fa fa-android block m-b-xs fa-2x"></i>
+            <span>{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
+          </a>
+        </div>
+   
+      </div>
+  </div>
+
+   
+      </div>       
+    </div>
+
+
+
+             
+            </div>
+            <div class="col w-lg bg-light lter b-l bg-auto">
+              <div class="wrapper">
+         
+                <div class="panel b-a">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>{{$root.translation.DOWNLOAD_SIDE}}</strong></a></h4>
+                  <ul class="list-group">
+                 
+                    <li class="list-group-item" ng-repeat="one_popular in popular_gameLists">
+                       <a href="#" class="thumb pull-left m-r">
+                        <img src={{one_popular.game_photolink}}  />
+                      </a>
+                      <div class="clear">
+                        <a href="#" class="text-info" ng-if="$root.currentLanguage == 'en'">{{one_popular.gamename.ga_en}} ({{one_popular.game_online_count}})</a>
+                        <a href="#" class="text-info" ng-if="$root.currentLanguage == 'ko'">{{one_popular.gamename.ga_kr}} ({{one_popular.game_online_count}})</a>
+                        <small class="block text-muted"></small>
+                        <a href="#" class="btn btn-xs btn-success m-t-xs">{{$root.translation.DOWNLOAD_DOWNLOAD}} <i class="fa fa-download"></i></a>
+                      </div>
+                    </li>
+
+                  </ul>
+                </div>
+              
+       
+              </div>
+            </div>
+          </div>
+        <!-- PASTE above -->
+      </div>
+    </div>

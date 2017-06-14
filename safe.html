@@ -1,0 +1,99 @@
+<!--link rel="stylesheet" href="./download-img/index_38d96b8.css"-->
+<div class="app-content" style="">
+      <div ui-butterbar></div>
+      <a href class="off-screen-toggle hide" data-toggle="class:off-screen" data-target=".app-aside" ></a>
+      <div class="app-content-body fade-in-up">
+        <!-- COPY the content from "tpl/" -->
+          <div class="hbox hbox-auto-xs hbox-auto-sm">
+            <div class="col">
+              <div class="wrapper-md">
+                  <div>
+                   
+                    <div class="row">
+                      <!--div class="col-sm-3">
+                      </div-->
+                      <div class="col-sm-12" style="margin-top:20px; min-width: 500px;">
+                        <form name="pocketForm" class="form-horizontal form-validation">
+                          <div class="panel panel-default">
+                            <div class="panel-heading bg-light lter"  style="text-align:left;">
+                              <h2 style="margin-left:80px;"><strong>{{$root.translation.PCOKET_TITLE}}</strong></h2>
+                            </div>
+                            <div class="panel-body">                    
+                             
+                              <div class="form-group">
+                                <label class="col-sm-1 control-label">{{$root.translation.PCOKET_BALANCE}}</label>
+                                <div class="col-sm-6">
+                                   <label class="control-label" style="float: left; margin-left: 30px;">   {{ $root.userInfo.user_balance }}</label>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b line-lg pull-in"></div>
+                              <div class="form-group">
+                                <label class="col-sm-1 control-label">{{$root.translation.PCOKET_SAFE}}</label>
+                                <div class="col-sm-6">
+                                   <label class="control-label" style="float: left; margin-left: 30px;">   {{ $root.userInfo.user_pocketmoney }}</label>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b line-lg pull-in"></div>
+                              <div class="form-group">
+                                <label class="col-sm-1 control-label">{{$root.translation.PCOKET_MONEY}}</label>
+                                <div class="col-sm-6">
+                                  <input type="number" class="form-control" placeholder="" ng-model="pocket_money"  required >
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b line-lg pull-in"></div>
+
+                            </div>
+                            <footer class="panel-footer  bg-light lter" style="height:65px;">
+                              <div class="col-sm-2">
+                                <span class="text"><a ng-click="resetPocketPassword()"><em style="color:#58666e;text-decoration: underline;">{{$root.translation.PCOKET_CHANGE_PASSWORD}}</em></a></span>
+                              </div>
+                              <div class="col-sm-6">
+                                <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="sendPocketDraw()" >{{$root.translation.PCOKET_DRAW}}</button>
+                                <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="sendPocketDeposit()" >{{$root.translation.PCOKET_DEPOSIT}}</button>
+                                <button type="reset" class="btn btn-info" style="margin-right:20px; float: none;">{{$root.translation.PCOKET_RESET}}</button>
+                              </div>
+                            </footer>
+                          </div>
+                        </form>
+                      </div>
+
+
+
+                    </div>
+                   
+                  </div>
+              </div>
+            </div>
+
+            <!-- ----------------------------------------------- -->
+            <div class="col w-lg bg-light lter b-l bg-auto" ng-show="$root.is_logged" ng-controller="loadPageCtrl">
+              <div class="wrapper">
+         
+                <div class="panel b-a" ng-show="$root.showNotices.length != 0">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>Notice</strong></a></h4>
+                  <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_notice in showNotices">
+                        <p ng-click="showNoticeDetails()"><em><a style="text-decoration: underline;">{{ one_notice.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{ one_notice.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+
+
+                <div class="panel b-a">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>News</strong></a></h4>
+                    <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_news in showNews">
+                        <p ng-click="showNewsDetails(one_news)"><em><a style="text-decoration: underline;">{{ one_news.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>{{ one_news.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+       
+              </div>
+            </div>
+             <!-- ----------------------------------------------- -->
+          </div>
+        <!-- PASTE above -->
+      </div>
+</div>

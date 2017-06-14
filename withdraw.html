@@ -1,0 +1,237 @@
+<!--link rel="stylesheet" href="./download-img/index_38d96b8.css"-->
+<div class="app-content" style="">
+      <div ui-butterbar></div>
+      <a href class="off-screen-toggle hide" data-toggle="class:off-screen" data-target=".app-aside" ></a>
+      <div class="app-content-body fade-in-up">
+        <!-- COPY the content from "tpl/" -->
+          <div class="hbox hbox-auto-xs hbox-auto-sm">
+            <div class="col">
+              <div class="wrapper-md">
+  <div>
+    <div class="row">
+      <!--div class="col-sm-3">
+      </div-->
+      <div class="col-sm-12" style="margin-top:20px; min-width: 500px;">
+        <form name="withdrawlForm" class="form-horizontal form-validation" ng-init="Fill_Form_Info()">
+          <div class="panel panel-default">
+            <div class="panel-heading bg-light lter"  style="text-align:left;">
+              <h2 style="margin-left:80px;"><strong>{{$root.translation.WITHDRAW_TITLE}}</strong></h2>
+            </div>
+            <div class="panel-body">  
+              <div class="form-group" ng-show="!is_saved">
+                <label class="col-sm-7 control-label" style="text-align:left;color:red;">&nbsp;&nbsp;&nbsp;&nbsp;{{$root.translation.WITHDRAW_CONTENT1}}<br>{{$root.translation.WITHDRAW_CONTENT2}}</label>
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in" ng-show="!is_saved"></div>                  
+              <div class="form-group">
+                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_COUNTRY_NAME}}</label>
+                <div class="col-sm-6">
+                    <select name="account" class="form-control m-b" ng-model="country_sel" ng-change="onCountryChange_w()" ng-disabled="is_saved">
+                      <option>{{$root.translation.CHARGE_COUNTRY_CHINA}}</option>
+                      <option>{{$root.translation.CHARGE_COUNTRY_KOREA}}</option>
+                      <option>{{$root.translation.CHARGE_COUNTRY_OTHERS}}</option>
+                    </select> 
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in"></div>
+              <div style="padding: 0 40px;margin: 0 0 25px 0;" ng-disabled="is_saved">
+                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_PAYWAY}}</label>
+                <div class="col-sm-6 form-inline" style="text-align:left;">
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_1" ng-click="setOfflineWithdraw()">
+                    <label class="i-checks i-checks-sm">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="10">
+                      <i ></i>
+                      <img src="./img/unionpay.png" style="width:50px;"/>
+                    </label>
+                  </div>
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_2" ng-click="setOnlineWithdraw()">
+                    <label class="i-checks i-checks-sm">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="3">
+                      <i></i>
+                      <img src="./img/alipay.png" style="width:50px;"/>
+                    </label>
+                  </div>
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_3" ng-click="setOnlineWithdraw()">
+                    <label class="i-checks i-checks-sm">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="2">
+                      <i></i>
+                      <img src="./img/wxpay.png" style="width:50px;"/>
+                    </label>
+                  </div>
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_4" ng-click="setOnlineWithdraw()">
+                    <label class="i-checks i-checks-sm">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="4">
+                      <i></i>
+                      <img src="./img/tenpay.png" style="width:50px;"/>
+                    </label>
+                  </div>
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_5" ng-click="setOnlineWithdraw()">
+                    <label class="i-checks i-checks-sm">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="1">
+                      <i></i>
+                      <img src="./img/paypalpay.png" style="width:50px;"/>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_bankname"></div>
+              <div class="form-group" ng-show="show_bankname">
+                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKNAME}}</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" placeholder={{$root.translation.CHARGE_BANKNAME}} ng-disabled="offline_withdraw" ng-model="bank_Name"  required >
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_bankid"></div>
+              <div class="form-group" ng-show="show_bankid">
+                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKID}}</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" placeholder={{$root.translation.CHARGE_BANKID}} ng-model="bank_ID" ng-disabled="is_saved" required >
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_username"></div>
+              <div class="form-group" ng-show="show_username">
+                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_USERNAME}}</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" placeholder={{$root.translation.CHARGE_USERNAME}} ng-disabled="offline_withdraw" ng-model="bank_UserName"  required >
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in"></div>
+              <div class="form-group">
+                <label class="col-sm-1 control-label">{{$root.translation.WITHDRAW_MONEY}}</label>
+                <div class="col-sm-6">
+                  <select ng-model="money_select" ng-init="money_select='100k'" class="form-control m-b" ng-change="onMoneyChange()">
+                    <option>100k</option>
+                    <option>200k</option>
+                    <option>500k</option>
+                    <option>1M</option>
+                    <option>2M</option>
+                    <option>5M</option>
+                    <option>10M</option>
+                    <option>20M</option>
+                    <option>50M</option>
+                    <option>100M</option>
+                    <option>200M</option>
+                    <option>500M</option>
+                  </select> 
+                </div>
+              </div>
+                <label class="col-sm-6">{{$root.translation.CHARGE_GAMEMONEY}} 10k : 1 USD : {{currentBalance}}{{currency}}&nbsp;×&nbsp;{{real_money}}&nbsp;=&nbsp;{{currentMoney}}{{currency}} </label>
+              <div class="line line-dashed b-b line-lg pull-in"></div>
+              <div class="form-group">
+                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_GAMEMONEY}}</label>
+                <label class="col-sm-6 control-label" style="text-align: left; margin-left: 30px;">   {{$root.userInfo.user_balance}}</label>
+              <!--   <div class="col-sm-9" style="text-align:left;">
+                  412,432
+                </div> -->
+              </div>
+              <div class="line line-dashed b-b line-lg pull-in"></div>
+
+            </div>
+            <footer class="panel-footer  bg-light lter" style="height:65px;">
+              <div class="col-sm-2">
+                <span class="text"><a ng-click="resetWithdrawlPassword()"><em style="color:#58666e;text-decoration: underline;">{{$root.translation.WITHDRAW_CHANGE_PASSWORD}}</em></a></span>
+              </div>
+              <div class="col-sm-6">
+                <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="sendWithdrawRequest()" ng-disabled="disable_Withdraw" >{{$root.translation.WITHDRAW_OK}}</button>
+              </div>
+            
+            </footer>
+          </div>
+        </form>
+      </div>
+    </div>
+   
+  </div>
+</div>
+
+      <div class="wrapper-md">
+
+    
+        <div class="panel panel-default" ng-init="getWithdrawRecord()">
+          <div class="panel-heading" style="height: 54px;">
+            <label style="margin-top: 5px; font-size: 20px; font-weight: 500;">{{$root.translation.WITHDRAW_RECORD_TITLE}}</label>
+            <select name="num_bill" ng-model="num_record" ng-init="num_record = '10'" ng-change="onChangeWithdraw_Number()" style="margin-top: 6px; float: right;">
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+            </select> 
+            <label style="margin-top: 7px; margin-right: 10px; float: right;">{{$root.translation.MESSAGE_ITEM_PAGE}} : </label>
+          </div>
+    
+          <div class="table-responsive">
+            <table class="table table-striped b-t b-light">
+              <thead>
+                <tr style="text-align: center;">
+           
+                  <th style="width: 6%; text-align: center;">{{$root.translation.BILLBOARD_TABLE_NUMBER}}</th>
+                  <th style="text-align: center;">{{$root.translation.CHARGE_RECORD_DATE}}</th>
+                  <th style="text-align: center;">{{$root.translation.CHARGE_RECORD_GAMEMONEY}}</th>
+                  <th style="text-align: center;">{{$root.translation.CHARGE_RECORD_REALMONEY}}</th>
+                  <th style="width: 6%; text-align: center;">{{$root.translation.CHARGE_RECORD_REQUEST}}</th>
+                 
+                </tr>
+              </thead>
+              <tbody style="text-align: center;">
+
+                <tr ng-repeat="one_record in $root.sub_withdrawRecords">
+                  <td>{{ one_record.showNumber }}</td>
+                  <td>{{ one_record.time }}</td>
+                  <td>{{ one_record.money }}</td>
+                  <td>{{ one_record.real_money | setDecimal:4 }}&nbsp;{{ one_record.currency }}</td>
+                  <td ng-if="one_record.is_cancel">{{ one_record.status }}</td>
+                  <td ng-if="!one_record.is_cancel"><button type="button" class="btn btn-info" ng-click="cancelWithdraw(one_record)" >{{$root.translation.CHARGE_RECORD_CANCEL}}</button></td>
+                </tr>
+                                
+              </tbody>
+            </table>
+          </div>
+          <footer class="panel-footer">
+            <div class="row">
+              <div class="col-sm-4 hidden-xs">
+                                 
+              </div>
+              <div class="col-sm-4 text-center">
+                  <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="onChangeWithdraw_Number()"></ul>
+              </div>
+              <div class="col-sm-4 text-right text-center-xs">                
+               
+              </div>
+            </div>
+          </footer>
+        </div>
+      
+    </div>
+            </div>
+
+            <!-- ----------------------------------------------- -->
+            <div class="col w-lg bg-light lter b-l bg-auto" ng-show="$root.is_logged" ng-controller="loadPageCtrl">
+              <div class="wrapper">
+         
+                <div class="panel b-a" ng-show="$root.showNotices.length != 0">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>Notice</strong></a></h4>
+                  <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_notice in showNotices">
+                        <p ng-click="showNoticeDetails()"><em><a style="text-decoration: underline;">{{ one_notice.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{ one_notice.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+
+
+                <div class="panel b-a">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>News</strong></a></h4>
+                    <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_news in showNews">
+                        <p ng-click="showNewsDetails(one_news)"><em><a style="text-decoration: underline;">{{ one_news.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>{{ one_news.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+       
+              </div>
+            </div>
+             <!-- ----------------------------------------------- -->
+          </div>
+        <!-- PASTE above -->
+      </div>
+</div>

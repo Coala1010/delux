@@ -1,0 +1,153 @@
+
+<div class="app-content" style="">
+      <div ui-butterbar></div>
+      <a href class="off-screen-toggle hide" data-toggle="class:off-screen" data-target=".app-aside" ></a>
+      <div class="app-content-body fade-in-up">
+        <!-- COPY the content from "tpl/" -->
+          <div class="hbox hbox-auto-xs hbox-auto-sm">
+            <div class="col">
+              <div class="wrapper-md">
+                  <div>
+                   
+                    <div class="row">
+                      <!--div class="col-sm-3">
+                      </div-->
+                      <div class="col-sm-12" style="margin-top:20px; min-width: 600px;">
+                        <form name="chargeForm" action="#" class="form-horizontal form-validation" ng-init="getBalanceInfo()">
+                          <div class="panel panel-default">
+                            <div class="panel-heading bg-light lter"  style="text-align:left;">
+                              <h2 style="margin-left:160px;"><strong>{{$root.translation.PROFILE_POPUP_PROFILE}}</strong></h2>
+                            </div>
+                            <div class="panel-body">  
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_USER_ID}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">{{ $root.userInfo.u_id }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_NICKNAME}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">{{ $root.userInfo.user_nickname }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_EMAIL}} : </label>
+                                <div class="col-sm-6">
+                                  <label class="col-sm-8 control-label" style="text-align: left;">{{ $root.userInfo.user_email }}</label>
+                                  <button type="button" class="btn btn-info" ng-click="resetUserEmail()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_MOBILE}} : </label>
+                                <div class="col-sm-6">
+                                  <label class="col-sm-8 control-label" style="text-align: left;">{{ $root.userInfo.user_phone }}</label>
+                                  <button type="button" class="btn btn-info" ng-click="resetUserMobile()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_LEVEL}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">Lv {{ $root.userInfo.user_level }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_REGISTER_DATE}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">{{ $root.userInfo.user_add_time }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_LAST_LOGIN_DATE}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">{{ $root.userInfo.last_login_time }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_LAST_LOGIN_IP}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">{{ $root.userInfo.last_login_ip }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_LOGIN_IP}} : </label>
+                                <div class="col-sm-6">
+                                  <label class="col-sm-8 control-label" style="text-align: left;">{{ $root.userInfo.login_ip }}</label>
+                                  <button type="button" class="btn btn-info" style="" ng-click="resetUserInfo()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_POCKET_MONEY}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">   {{ $root.userInfo.user_balance }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_SAFE_MONEY}} : </label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">   {{ $root.userInfo.user_pocketmoney }}</label>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_USER_PASSWORD}} : </label>
+                                <div class="col-sm-6">
+                                  <button type="button" class="btn btn-info" style="float: left; margin-left: 30px;" ng-click="resetUserPassword()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_SAFE_PASSWORD}} : </label>
+                                <div class="col-sm-6">
+                                  <button type="button" class="btn btn-info" style="float: left; margin-left: 30px;" ng-click="resetPocketPassword()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_WITHDRAW_PASSWORD}} : </label>
+                                <div class="col-sm-6">
+                                  <button type="button" class="btn btn-info" style="float: left; margin-left: 30px;" ng-click="resetWithdrawlPassword()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                              <div class="line line-dashed b-b"></div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label">{{$root.translation.PROFILE_USER_PHOTO}} : </label>
+                                <div class="col-sm-6">
+                                  <button type="button" class="btn btn-info" style="float: left; margin-left: 30px;" ng-click="resetUserPhoto()">{{$root.translation.PROFILE_USER_UPDATE}}</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                    </div>
+                  </div>
+              </div>
+            </div>
+
+            <!-- ----------------------------------------------- -->
+           <div class="col w-lg bg-light lter b-l bg-auto">
+              <div class="wrapper">
+         
+                <div class="panel b-a" ng-show="$root.showNotices.length != 0">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>Notice</strong></a></h4>
+                  <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_notice in showNotices">
+                        <p ng-click="showNoticeDetails()"><em><a style="text-decoration: underline;">{{ one_notice.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{ one_notice.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div class="panel b-a">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>News</strong></a></h4>
+                    <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_news in showNews">
+                        <p ng-click="showNewsDetails(one_news)"><em><a style="text-decoration: underline;">{{ one_news.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>{{ one_news.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+       
+              </div>
+            </div>
+             <!-- ----------------------------------------------- -->
+          </div>
+        <!-- PASTE above -->
+      </div>
+</div>

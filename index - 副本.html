@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Be Angular | Bootstrap Admin Web App with AngularJS</title>
+  <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="css/font.css" type="text/css" />
+  <link rel="stylesheet" href="css/app.css" type="text/css" />
+
+  <style type="text/css">
+    .form-bg{
+        background: #00b4ef;
+    }
+    .form-horizontal{
+        background: #fff;
+        padding-bottom: 0px;
+        border-radius: 50px;
+        text-align: center;
+    }
+    .form-horizontal .heading{
+        display: block;
+        font-size: 30px;
+        font-weight: 600;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 30px;
+    }
+    .form-horizontal .form-group{
+        padding: 0 40px;
+        margin: 0 0 25px 0;
+        position: relative;
+    }
+    .form-horizontal .form-control{
+        background: #f0f0f0;
+        border: none;
+        border-radius: 20px;
+        box-shadow: none;
+        padding: 0 20px 0 45px;
+        height: 40px;
+        transition: all 0.3s ease 0s;
+    }
+    .form-horizontal .form-control:focus{
+        background: #e0e0e0;
+        box-shadow: none;
+        outline: 0 none;
+    }
+    .form-horizontal .form-group i{
+        position: absolute;
+        top: 12px;
+        left: 60px;
+        font-size: 17px;
+        color: #c8c8c8;
+        transition : all 0.5s ease 0s;
+    }
+    .form-horizontal .form-control:focus + i{
+        color: #00b4ef;
+    }
+    .form-horizontal .fa-question-circle{
+        display: inline-block;
+        position: absolute;
+        top: 12px;
+        right: 60px;
+        font-size: 20px;
+        color: #808080;
+        transition: all 0.5s ease 0s;
+    }
+    .form-horizontal .fa-question-circle:hover{
+        color: #000;
+    }
+    .form-horizontal .main-checkbox{
+        float: left;
+        width: 20px;
+        height: 20px;
+        background: #11a3fc;
+        border-radius: 50%;
+        position: relative;
+        margin: 5px 0 0 5px;
+        border: 1px solid #11a3fc;
+    }
+    .form-horizontal .main-checkbox label{
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .form-horizontal .main-checkbox label:after{
+        content: "";
+        width: 10px;
+        height: 5px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .form-horizontal .main-checkbox input[type=redio]{
+        visibility: hidden;
+    }
+    .form-horizontal .main-checkbox input[type=redio]:checked + label:after{
+        opacity: 1;
+    }
+    .form-horizontal .text{
+        float: left;
+        margin-left: 7px;
+        line-height: 20px;
+        padding-top: 5px;
+        text-transform: capitalize;
+    }
+    .form-horizontal .btn{
+        float: right;
+        font-size: 14px;
+        color: #fff;
+        background: #00b4ef;
+        border-radius: 30px;
+        padding: 10px 25px;
+        
+    }
+    @media only screen and (max-width: 479px){
+        .form-horizontal .form-group{
+            padding: 0 25px;
+        }
+        .form-horizontal .form-group i{
+            left: 45px;
+        }
+        .form-horizontal .btn{
+            padding: 10px 20px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+    <!-- --------------------注册----------------------------- -->
+  <div id="register" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+           
+               
+                <div class="modal-body" >
+                   <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;REGISTER</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="username">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="nickname">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="form-group ">
+                                <input type="password" class="form-control"  placeholder="password">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                            <div class="form-group ">
+                                <input type="password" class="form-control"  placeholder="comfirm password">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                            <div class="form-group ">
+                                <input type="email" class="form-control"  placeholder="email">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="mobile-phone">
+                                <i class="fa fa-mobile-phone" ></i>
+                            </div>
+                      
+                           <div class="form-group" >
+                                <div style="float:left;">
+                                Check way &nbsp;&nbsp;&nbsp;
+                                 <input type="radio" value="1"  name="check" style="width:20px;"/>&nbsp;&nbsp;&nbsp;Email
+                                 &nbsp;&nbsp;&nbsp;<input type="radio" value="2"  name="check" />&nbsp;&nbsp;&nbsp;Mobile-phone
+                             </div>
+                            </div>
+                            <div class="form-group">
+                               <button type="submit" class="btn btn-default"  style="background-color:white;" onclick="return false;"> Verify Code</button>
+                                <input type="text" class="form-control"  placeholder="" style="width:50%;" >
+                                
+                            </div>
+                            <div class="form-group">
+                          
+                                <span class="text"><a href="" data-toggle="modal" data-dismiss="modal" data-target="#login"><em style="color:#58666e;text-decoration: underline;">login now</em></a></span>
+                                <button type="submit" class="btn btn-default"  style="font-size:16px;color:white!important;">Register</button>
+                            </div>
+                        </form>
+               
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- ----------------------------登录---------------------------------------------- -->
+      <div id="login" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+           
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;LOGIN</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="username">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                        
+                                <span class="text"><a href="" data-toggle="modal" data-dismiss="modal" data-target="#register"><em style="color:#58666e;text-decoration: underline;">Create an account</em></a></span>
+                                <button type="submit" class="btn btn-default" data-toggle="modal" data-dismiss="modal" data-target="#ydcheck" style="font-size:16px;color:white!important;">Login</button>
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- -----------------------异地验证--------------------------- -->
+      <div id="ydcheck" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h2 class="text-center">异地验证</h2>
+                </div>
+                <div class="modal-body" style="padding-left:40px;padding-right:40px;">
+                    <div class="form-group">
+                                <label for="" style="font-size:16px;font-weight: bold;">检测当前登录为异地登录，请到绑定邮箱3142***432@qq.com,获取验证</label>
+                               
+                            </div>
+                    <form class="form-group" action="">
+                            <div class="form-group">
+                                 <button class="btn btn-default col-sm-3"  onclick="return false;">获取验证码</button>
+                                 <div class="col-sm-9" style="padding-left:0px;padding-right:0px;margin-bottom:20px;">
+                                  <input class="form-control" type="password" placeholder="" >
+                                 </div>
+                            </div>
+                            <div class="text-right">
+                                <button class="btn btn-primary btn-lg" type="submit">验证</button>
+                                <button class="btn btn-default btn-lg" data-dismiss="modal">取消</button>
+                            </div>
+                           
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- -------------------------登录验证---------------------------------------------- -->
+   <div id="dlcheck" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+      
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Notice</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                            <div class="form-group">
+                               <h3>Please login before downloading</h3>
+                            </div>
+                            <div class="form-group help">
+                              
+                                
+                            </div>
+                            <div class="form-group">
+
+                                <button type="submit" class="btn btn-default" data-toggle="modal" data-dismiss="modal" data-target="#register" style="font-size:16px;color:white!important;">Register</button>
+                               
+                                <button type="submit" class="btn btn-default" data-toggle="modal" data-dismiss="modal" data-target="#login" style="font-size:16px;color:white!important;float:left;">Login</button>
+                            </div>
+                        </form>
+                 
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <!-- --------------------提现密码验证------------------------------ -->
+
+       <div id="txmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+           
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                          
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="withdraw" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- --------------------提现新密码设置-------------把上面的注释,打开下面的注释----------------- -->
+
+     <!--   <div id="txmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+           
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                          
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="withdraw" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div> -->
+      <!-- ------------------------------提现密码修改----------------------------------------------- -->
+
+    <div id="txmmxg" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Midify Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Original withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Midify</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ------------------------------保管箱密码验证----------------------------------------------- -->
+
+    <div id="bgxmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------保管箱新密码设置------------------把上面的注释,打开下面的注释----------------------------- -->
+
+  <!--   <div id="bgxmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- ------------------------------保管箱密码修改----------------------------------------------- -->
+
+    <div id="bgxmmxg" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Midify Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Original safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Midify</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<!-- --------------------------------------------------- -->
+
+  <div class="app app-header-fixed" id="app">
+    <!-- navbar -->
+    <div class="app-header navbar">
+      <!-- navbar header -->
+      <div class="navbar-header bg-dark">
+        <button class="pull-right visible-xs dk" data-toggle="class:show" data-target=".navbar-collapse">
+          <i class="glyphicon glyphicon-cog"></i>
+        </button>
+        <button class="pull-right visible-xs" data-toggle="class:off-screen" data-target=".app-aside" ui-scroll="app">
+          <i class="glyphicon glyphicon-align-justify"></i>
+        </button>
+        <!-- brand -->
+        <a href="#/" class="navbar-brand text-lt">
+          <!-- <i class="fa fa-btc"></i> -->
+          <i><img src="img/logo1.png" alt="." style="max-height: 28px !important;"></i>
+          <!-- <img src="img/logo1.png" alt="." class="hide"> -->
+          <span class="hidden-folded ">
+            <!-- DELUX CASIO -->
+            <img src="img/logo2.png" alt="." style="max-height: 15px !important;" >
+          </span>
+        </a>
+        <!-- / brand -->
+      </div>
+      <!-- / navbar header -->
+
+      <!-- navbar collapse -->
+      <div class="collapse pos-rlt navbar-collapse box-shadow bg-white-only">
+        <!-- buttons -->
+       
+        <div class="nav navbar-nav hidden-xs">
+          <a href="#" class="btn no-shadow navbar-btn" data-toggle="class:app-aside-folded" data-target=".app">
+            <i class="fa fa-dedent fa-fw text"></i>
+            <i class="fa fa-indent fa-fw text-active"></i>
+          </a>
+          <a href class="btn no-shadow navbar-btn" data-toggle="class:show" data-target="#aside-user">
+
+            <i class="icon-user fa-fw"></i>&nbsp;&nbsp;&nbsp;John.Smith
+          </a>
+        </div>
+        <!-- / buttons -->
+
+        <!-- link and dropdown -->
+        <ul class="nav navbar-nav hidden-sm">
+          <li class="dropdown pos-stc">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle"  id="home">
+              <span>Home</span> 
+            
+            </a>
+     
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="download">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">Download</span>
+             
+            </a>
+        
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="charge">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">충전</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#"   data-toggle="modal" data-dismiss="modal" data-target="#txmm">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">환전</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="modal" data-dismiss="modal" data-target="#bgxmm">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">보관함</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="record">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">게임리력</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="message">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">메쎄지</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="liuyan">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">게시판</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="notice">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">공지사항</span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="help">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">도움말</span>
+            </a>
+          </li>
+
+        </ul>
+        <!-- / link and dropdown -->
+
+        <!-- search form -->
+        <form class="navbar-form navbar-form-sm navbar-left shift" ui-shift="prependTo" data-target=".navbar-collapse" role="search" ng-controller="TypeaheadDemoCtrl">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search games...">
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </div>
+        </form>
+        <!-- / search form -->
+
+        <!-- nabar right -->
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+              <i class="icon-bell fa-fw"></i>
+              <span class="visible-xs-inline">Notifications</span>
+              <span class="badge badge-sm up bg-danger pull-right-xs">2</span>
+            </a>
+            <!-- dropdown -->
+            <div class="dropdown-menu w-xl animated fadeInUp">
+              <div class="panel bg-white">
+                <div class="panel-heading b-light bg-light">
+                  <strong>You have <span>2</span> notifications</strong>
+                </div>
+                <div class="list-group">
+                  <a href class="media list-group-item">
+                
+                    <span class="media-body block m-b-none">
+                     Thank you for your recent transaction on DELUX<br>
+                      <small class="text-muted">10 minutes ago</small>
+                    </span>
+                  </a>
+                  <a href class="media list-group-item">
+                    <span class="media-body block m-b-none">
+                      Thank you for your recent transaction on DELUX<br>
+                      <small class="text-muted">1 hour ago</small>
+                    </span>
+                  </a>
+                </div>
+                <div class="panel-footer text-sm">
+                  <a href class="pull-right"><i class="fa fa-cog"></i></a>
+                  <a href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a>
+                </div>
+              </div>
+            </div>
+            <!-- / dropdown -->
+          </li>
+        
+        </ul>
+        <!-- / navbar right -->
+
+      </div>
+      <!-- / navbar collapse -->
+    </div>
+    <!-- / navbar -->
+
+    <!-- menu -->
+    <div class="app-aside hidden-xs bg-dark">
+      <div class="aside-wrap">
+        <div class="navi-wrap">
+          <!-- user -->
+          <div class="clearfix hidden-xs text-center hide" id="aside-user">
+            <div class="dropdown wrapper">
+              <a ui-sref="app.page.profile">
+                <span class="thumb-lg w-auto-folded avatar m-t-sm">
+                  <img src="img/a0.jpg" class="img-full" alt="...">
+                </span>
+              </a>
+              <a href="#" data-toggle="dropdown" class="dropdown-toggle hidden-folded">
+                <span class="clear">
+                  <span class="block m-t-sm">
+                    <strong class="font-bold text-lt">John.Smith</strong> 
+                    <b class="caret"></b>
+                  </span>
+                  <span class="text-muted text-xs block">Lv29</span>
+                </span>
+              </a>
+              <!-- dropdown -->
+              <ul class="dropdown-menu animated fadeInRight w hidden-folded">
+                <li class="wrapper b-b m-b-sm bg-info m-t-n-xs">
+                  <span class="arrow top hidden-folded arrow-info"></span>
+                  <div>
+                    <p>Cash&nbsp;&nbsp;&nbsp;&nbsp;$454,458,103</p>
+                  </div>
+                  <progressbar value="60" type="white" class="progress-xs m-b-none dker"></progressbar>
+                </li>
+                <li>
+                  <a href>Settings</a>
+                </li>
+                <li>
+                  <a ui-sref="app.page.profile">Profile</a>
+                </li>
+                <li>
+                  <a href>
+                    <span class="badge bg-danger pull-right">2</span>
+                    Notifications
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ui-sref="access.signin">Logout</a>
+                </li>
+              </ul>
+              <!-- / dropdown -->
+            </div>
+            <div class="line dk hidden-folded"></div>
+          </div>
+          <!-- / user -->
+          <br>
+          <!-- nav -->
+          <nav ui-nav class="navi">
+
+          
+            <ul class="nav">
+
+            
+              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span translate="aside.nav.HEADER">카드게임</span>
+                 <b class="badge bg-info pull-right">6</b>
+              </li>
+           
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar" class="game_detail">
+                 
+                  <img src="img/1-1.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;포카</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                 <img src="img/1-2.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;홀덤포카</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 
+                 <img src="img/1-3.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;맞고</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/1-4.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;바둑이</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/1-5.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;마작</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/1-6.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;떠우띠주</span>
+                </a>
+              </li>
+              <li class="line dk"></li>
+
+
+
+              
+              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span translate="aside.nav.HEADER">오락장</span>
+                <b class="badge bg-info pull-right">5</b>
+              </li>
+           
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                  <img src="img/2-1.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;바다이야기</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                   <img src="img/2-2.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;황금성</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                  
+                   <img src="img/2-3.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;3D경마</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/2-4.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;물고기 낚시</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/2-5.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;Ladders board</span>
+                </a>
+              </li>
+              
+              <li class="line dk"></li>
+
+
+              
+              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span translate="aside.nav.HEADER">스포츠게임</span>
+                <b class="badge bg-info pull-right">6</b>
+              </li>
+           
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar" class="game_detail2">
+                  <img src="img/3-1.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;핸디캡</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                  <img src="img/3-2.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;승무패</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                  
+                  <img src="img/3-3.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;라이브스포츠</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/3-4.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;경주시합</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                   <i class="glyphicon glyphicon-list icon text-info-dker"></i>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;경기결과</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                   <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;배팅결과</span>
+                </a>
+              </li>
+              <li class="line dk"></li>
+
+
+
+              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span translate="aside.nav.HEADER">경마</span>
+                 <b class="badge bg-info pull-right">7</b>
+              </li>
+           
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                   <img src="img/4-1.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;한국경마</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                  <img src="img/4-2.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;일본경마</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 
+                 <img src="img/4-3.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;홍콩경마</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                <img src="img/4-4.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;마카오경마</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <img src="img/4-5.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;유럽경마</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <i class="glyphicon glyphicon-list icon text-info-lter"></i>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;경기결과</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.mail.list">
+                 <i class="glyphicon glyphicon-calendar icon text-info-lter"></i>
+                  <span class="font-bold" translate="aside.nav.EMAIL">&nbsp;&nbsp;&nbsp;&nbsp;배팅결과</span>
+                </a>
+              </li>
+              <li class="line dk"></li>
+
+
+
+              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                <span translate="aside.nav.HEADER">라이브게임</span>
+                 <b class="badge bg-info pull-right">3</b>
+              </li>
+           
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                  <img src="img/5-1.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;라이브바카라</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                 <img src="img/5-2.png" height="35px" style="margin-top:5px;"/>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;라이브바둑이</span>
+                </a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="app.calendar">
+                  <i class="glyphicon glyphicon-more icon text-info-dker"></i>
+                  <span class="font-bold" translate="aside.nav.CALENDAR">&nbsp;&nbsp;&nbsp;&nbsp;라이브...</span>
+                </a>
+              </li>
+             
+              <li class="line dk"></li>
+
+
+
+
+
+          
+            </ul>
+          </nav>
+          <!-- nav -->
+
+       
+        </div>
+      </div>
+    </div>
+    <!-- / menu -->
+ 
+ 
+    <!-- content -->
+    <div id="contentpage">
+      
+    </div>
+    <!-- /content -->
+
+    
+  </div>
+  <!-- jQuery -->
+   <script src="vendor/jquery/jquery.min.js"></script>
+   <script src="vendor/jquery/bootstrap.js"></script>
+ <!-- jQuery -->
+
+  <script type="text/javascript">
+    +function ($) {
+      $(function(){
+        // class
+         $('#contentpage').load('home.html'); 
+           $(document).on('click','#home',function(e){
+            $('#contentpage').load('home.html'); 
+         }) 
+           $(document).on('click','#download',function(e){
+            $('#contentpage').load('download.html'); 
+         })
+           $(document).on('click','#charge',function(e){
+            $('#contentpage').load('charge.html'); 
+         })
+           $(document).on('click','#withdraw',function(e){
+            $('#contentpage').load('withdraw.html'); 
+         })
+           $(document).on('click','#liuyan',function(e){
+            $('#contentpage').load('liuyan.html'); 
+         })
+           $(document).on('click','#notice',function(e){
+            $('#contentpage').load('notice.html'); 
+         })
+           $(document).on('click','#help',function(e){
+            $('#contentpage').load('help.html'); 
+         })
+           $(document).on('click','#message',function(e){
+            $('#contentpage').load('message.html'); 
+         })
+           $(document).on('click','#record',function(e){
+            $('#contentpage').load('record.html'); 
+         })
+           $(document).on('click','#safe',function(e){
+            $('#contentpage').load('safe.html'); 
+         })
+           $(document).on('click','.game_detail',function(e){
+            $('#contentpage').load('game.html'); 
+         })
+           $(document).on('click','.game_detail2',function(e){
+            $('#contentpage').load('game2.html'); 
+         })
+          
+        $(document).on('click', '[data-toggle^="class"]', function(e){
+          e && e.preventDefault();
+          console.log('abc');
+          var $this = $(e.target), $class , $target, $tmp, $classes, $targets;
+          !$this.data('toggle') && ($this = $this.closest('[data-toggle^="class"]'));
+          $class = $this.data()['toggle'];
+          $target = $this.data('target') || $this.attr('href');
+          $class && ($tmp = $class.split(':')[1]) && ($classes = $tmp.split(','));
+          $target && ($targets = $target.split(','));
+          $classes && $classes.length && $.each($targets, function( index, value ) {
+            if ( $classes[index].indexOf( '*' ) !== -1 ) {
+              var patt = new RegExp( '\\s' + 
+                  $classes[index].
+                    replace( /\*/g, '[A-Za-z0-9-_]+' ).
+                    split( ' ' ).
+                    join( '\\s|\\s' ) + 
+                  '\\s', 'g' );
+              $($this).each( function ( i, it ) {
+                var cn = ' ' + it.className + ' ';
+                while ( patt.test( cn ) ) {
+                  cn = cn.replace( patt, ' ' );
+                }
+                it.className = $.trim( cn );
+              });
+            }
+            ($targets[index] !='#') && $($targets[index]).toggleClass($classes[index]) || $this.toggleClass($classes[index]);
+          });
+          $this.toggleClass('active');
+        });
+
+        // collapse nav
+        $(document).on('click', 'nav a', function (e) {
+          var $this = $(e.target), $active;
+          $this.is('a') || ($this = $this.closest('a'));
+          
+          $active = $this.parent().siblings( ".active" );
+          $active && $active.toggleClass('active').find('> ul:visible').slideUp(200);
+          
+          ($this.parent().hasClass('active') && $this.next().slideUp(200)) || $this.next().slideDown(200);
+          $this.parent().toggleClass('active');
+          
+          $this.next().is('ul') && e.preventDefault();
+
+          setTimeout(function(){ $(document).trigger('updateNav'); }, 300);      
+        });
+        // collapse nav
+        $(document).on('click', '#fullscreen_b', function (e) {
+            var aaa=document.getElementById("fullscreen");
+           if(aaa.requestFullscreen) {
+              aaa.requestFullscreen();
+             } else if(aaa.mozRequestFullScreen) {
+              aaa.mozRequestFullScreen();
+             } else if(aaa.webkitRequestFullscreen) {
+              aaa.webkitRequestFullscreen();
+             } else if(aaa.msRequestFullscreen) {
+              aaa.msRequestFullscreen();
+             }   
+        });
+      });
+    }(jQuery);
+  </script>
+</body>
+</html>

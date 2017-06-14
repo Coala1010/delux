@@ -1,0 +1,139 @@
+<div class="app-content" style="margin-top:20px;">
+  <div ui-butterbar></div>
+  <a href class="off-screen-toggle hide" data-toggle="class:off-screen" data-target=".app-aside" ></a>
+  <div class="app-content-body fade-in-up">
+    <!-- COPY the content from "tpl/" -->
+      <div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="getGameList()">
+        <div class="col">
+          <div >
+            <!-- <div style="background:url(img/bg.jpg) center center; background-size:cover"> -->
+            <img src="img/bg.jpg" width="100%" height="100%">
+          </div>
+
+          <div class="padder" ng-if="show_searchResults">      
+            <div class="  m-b padder-v">
+              <div class="m-b-lg ">
+                <div class="m-b-xs">
+                  <a href class="h3 text-info"><strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ $root.translation.HOME_SEARCH_GAMES }}</strong></a>
+                </div>
+                <br/>
+                  
+                <div class="m-b col-xs-2" ng-repeat="one_search in searched_gameLists" >
+                  <img src={{one_search.game_photolink}}  width="100%" />
+                  <div style="text-align:center;">
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_search.gamename.ga_en}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_search.gamename.ga_kr}}</strong>
+                  </div>
+                  <div style="text-align:center;">
+                    ({{one_search.game_online_count}})
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br style="clear: both;" ng-if="show_searchResults">
+    
+          <div class="padder" ng-if="!show_searchResults">      
+            <div class="  m-b padder-v">
+              <div class="m-b-lg ">
+                <div class="m-b-xs">
+                  <a href class="h3 text-info"><strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ $root.translation.HOME_POPULAR_GAMES }}</strong></a>
+                </div>
+                <br>
+		  
+                <div class="m-b col-xs-2" ng-repeat="one_popular in popular_gameLists">
+                  <img src={{one_popular.game_photolink}}  width="100%" />
+                  <div style="text-align:center;">
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_popular.gamename.ga_en}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_popular.gamename.ga_kr}}</strong>
+                  </div>
+                  <div style="text-align:center;">
+                    ({{one_popular.game_online_count}})
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br style="clear: both;" ng-if="!show_searchResults">
+
+          <div class="padder" ng-if="!show_searchResults">      
+            <div class="  m-b padder-v">
+              <div class="m-b-lg ">
+                <div class="m-b-xs">
+                  <a href class="h3 text-info"><strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ $root.translation.HOME_MY_GAMES }}</strong></a>
+                </div>
+                <br>
+                  
+                <div class="m-b col-xs-2" ng-repeat="one_my in my_gameLists" >
+                  <img src={{one_my.game_photolink}}  width="100%" />
+                  <div style="text-align:center;">
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_my.gamename.ga_en}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_my.gamename.ga_kr}}</strong>
+                  </div>
+                  <div style="text-align:center;">
+                    ({{one_my.game_online_count}})
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br style="clear: both;" ng-if="!show_searchResults">
+
+          <div class="padder" ng-if="!show_searchResults">      
+            <div class="  m-b padder-v">
+              <div class="m-b-lg ">
+                <div class="m-b-xs">
+                  <a href class="h3 text-info" style="text-align: left;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ $root.translation.HOME_NEWEST_GAMES }}</strong></a>
+                </div>
+                <br>
+                <div class="m-b col-xs-2" ng-repeat="one_new in newest_gameLists">
+                  <img src={{one_new.game_photolink}}  width="100%" />
+                  <div style="text-align:center;">
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_new.gamename.ga_en}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_new.gamename.ga_kr}}</strong>
+                  </div>
+                  <div style="text-align:center;">
+                    ({{one_new.game_online_count}})
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+
+        <div class="col w-lg bg-light lter b-l bg-auto" ng-show="$root.is_logged">
+          <div class="wrapper">
+     
+            <div class="panel b-a" ng-show="$root.showNotices.length != 0">
+              <h4 class="font-thin padder"><a href class="text-info"><strong>Notice</strong></a></h4>
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="one_notice in showNotices">
+                    <p ng-click="showNoticeDetails()"><em><a style="text-decoration: underline;">{{ one_notice.show_m }}</a></em></p>
+                    <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{ one_notice.time }}</small>
+                </li>
+              </ul>
+            </div>
+
+            <div class="panel b-a">
+              <h4 class="font-thin padder"><a href class="text-info"><strong>News</strong></a></h4>
+                <ul class="list-group">
+                <li class="list-group-item" ng-repeat="one_news in showNews">
+                    <p ng-click="showNewsDetails(one_news)"><em><a style="text-decoration: underline;">{{ one_news.show_m }}</a></em></p>
+                    <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>{{ one_news.time }}</small>
+                </li>
+              </ul>
+            </div>
+   
+          </div>
+        </div>
+
+      </div>
+    <!-- PASTE above -->
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="app-content" >
+
+
+    <div class="bg-light lter b-b wrapper-md">
+      <h1 class="m-n font-thin h3" style="font-weight: 500;">{{$root.translation.NOTIFYCATION_NOTIFY}}</h1>
+    </div>
+    <div class="wrapper-md">
+    
+        <div class="panel panel-default" ng-init="getInitBillComments()">
+          <div class="panel-heading" style="height: 54px;">
+            <label style="margin-top: 5px; margin-left: 20px; font-size: 20px;">{{$root.translation.NOTIFYCATION_NOTIFY}}</label>
+          </div>
+    
+          <div class="table-responsive">
+
+            <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left: 30px; margin-right: 30px;">
+
+              <!-- .a message -->
+              <div class="m-l-lg" ng-repeat="one_comment in showNotices">
+                <a class="pull-left thumb-sm avatar">
+                  <span class="text-muted m-l-sm pull-right">
+                    <p>{{ one_comment.time.split(' ')[0] }}<br>
+                    {{ one_comment.time.split(' ')[1] }}</p>
+                  </span>
+                  </a>
+                <div class="m-l-xxl panel b-a">
+                  <div class="panel-heading pos-rlt">
+                    <span class="arrow left pull-up"></span>
+                    <!--button class="close" style="line-height: 0;">
+                      <span style="font-size:25px;">&times;</span>
+                    </button-->
+                    <label style="font-size: 18px;">{{ one_comment.message }}</label>
+                  </div>
+                </div>
+              </div>
+              <!-- / .a message -->
+
+            </div>
+
+          </div>
+
+
+          <footer class="panel-footer">
+
+            <div class="row">
+              <div class="col-sm-4 hidden-xs">
+                                 
+              </div>
+              <div class="col-sm-4 text-center">
+                  <!--ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="onChangeBillBoard_Number()"></ul-->
+              </div>
+              <div class="col-sm-4 text-right text-center-xs">                
+               
+              </div>
+            </div>
+          </footer>
+        </div>
+      
+    </div>
+</div>

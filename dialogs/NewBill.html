@@ -1,0 +1,51 @@
+<div class="modal-body" id="modal-body">
+    <form name="newBill">
+        <div class="form-horizontal">
+            <span class="form-horizontal heading">
+                <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                <span style="vertical-align:bottom;">&nbsp;{{$root.translation.NEW_BILL_DIALOG_TITLE}}</span>
+                <button type="button" class="close" data-dismiss="modal" style="line-height: 0;" ng-click="exitMsg()">
+                    <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                </button>
+            </span>
+        </div>
+
+        <div class="form-horizontal">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label style="float: left; margin-left: 30px;">{{$root.translation.NEW_OPINION_TYPE}}:</label>
+                <br/>
+                <select ng-model="bill_type" ng-init="init_BillType()" ng-change="onBillTypeChange()" class="form-control m-b">
+                    <option>{{$root.translation.BILLBOARD_CATEGORY1}}</option>
+                    <option>{{$root.translation.BILLBOARD_CATEGORY2}}</option>
+                    <option>{{$root.translation.BILLBOARD_CATEGORY3}}</option>
+                    <option>{{$root.translation.BILLBOARD_CATEGORY4}}</option>
+                    <option>{{$root.translation.BILLBOARD_CATEGORY5}}</option>
+                </select> 
+            </div>
+        </div>
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder={{$root.translation.BILLBOARD_TABLE_CONTENT}} ng-model="bill_title" required />
+            </div>
+        </div>
+
+        <!--div >
+            <textarea class="form-control" placeholder="Content" rows="40" cols="50" style="height: 240px; padding-top: 10px;"  ng-model="bill_content" required></textarea>
+        </div-->
+        <div style="margin-bottom: 15px;">
+            <div text-angular ng-model="bill_content"></div>
+            <!--pre ng-bind="bill_content" class="white-box ng-binding"></pre-->
+        </div>
+
+        <div class="form-horizontal">
+            <div class="form-group"> 
+                <button type="button" ng-Click="sendNewBill()" class="btn btn-default" style="font-size:16px;color:white!important;" ng-disabled="newBill.$invalid || newBill.$pristine">{{$root.translation.NEW_BILL_DIALOG_OK}}
+                </button>
+                <button type="button" ng-Click="uploadNewImage()" class="btn btn-default" style="font-size:16px; margin-right: 20px; color:white!important;">{{$root.translation.NEW_BILL_DIALOG_UPLOAD}}
+                </button>
+                <input type="file" name="file" class="btn btn-default" style="font-size:16px; margin-right: 20px; color:white!important;" ngf-select="selectNewImage($files)" multiple>
+            </div>
+        </div>
+    </form>
+</div>

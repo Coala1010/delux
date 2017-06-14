@@ -1,0 +1,426 @@
+    <!-- --------------------注册----------------------------- -->
+  <div id="register" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+               
+                <div class="modal-body" >
+                   <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;REGISTER</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="username">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="nickname">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="form-group ">
+                                <input type="password" class="form-control"  placeholder="password">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                            <div class="form-group ">
+                                <input type="password" class="form-control"  placeholder="comfirm password">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                            <div class="form-group ">
+                                <input type="email" class="form-control"  placeholder="email">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="mobile-phone">
+                                <i class="fa fa-mobile-phone" ></i>
+                            </div>
+                      
+                           <div class="form-group" >
+                                <div style="float:left;">
+                                Check way &nbsp;&nbsp;&nbsp;
+                                 <input type="radio" value="1"  name="check" style="width:20px;"/>&nbsp;&nbsp;&nbsp;Email
+                                 &nbsp;&nbsp;&nbsp;<input type="radio" value="2"  name="check" />&nbsp;&nbsp;&nbsp;Mobile-phone
+                             </div>
+                            </div>
+                            <div class="form-group">
+                               <button type="submit" class="btn btn-default"  style="background-color:white;" onclick="return false;"> Verify Code</button>
+                                <input type="text" class="form-control"  placeholder="" style="width:50%;" >
+                                
+                            </div>
+                            <div class="form-group">
+                          
+                                <span class="text"><a href="" data-toggle="modal" data-dismiss="modal" data-target="#login"><em style="color:#58666e;text-decoration: underline;">login now</em></a></span>
+                                <button type="submit" class="btn btn-default"  style="font-size:16px;color:white!important;">Register</button>
+                            </div>
+                        </form>
+               
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- ----------------------------登录---------------------------------------------- -->
+      <div id="login" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                         
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" name="loginForm">
+                    <span class="heading">
+                      <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                      <span style="vertical-align:bottom;">&nbsp;LOGIN</span>
+                      <button class="close" data-dismiss="modal" style="line-height: 0;">
+                          <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                      </button>
+                    </span>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="logininfo.u_id" required>
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="form-group help">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="logininfo.u_pw" required>
+                        <i class="fa fa-lock"></i>
+                        
+                    </div>
+                    <div class="form-group">
+                
+                        <span class="text">
+                          <a href="" data-toggle="modal" data-dismiss="modal" data-target="#register">
+                            <em style="color:#58666e;text-decoration: underline;">Create an account</em>
+                          </a>
+                        </span>
+                        <!--button type="button" ng-Click="sendLoginInfo()" class="btn btn-default" data-toggle="modal"   data-dismiss="modal" data-target="#ydcheck" style="font-size:16px;color:white!important;" ng-disabled="loginForm.$invalid">Login
+                        </button-->
+                        <button type="button" ng-Click="sendLoginInfo()" class="btn btn-default"style="font-size:16px;color:white!important;" ng-disabled="loginForm.$invalid || loginForm.$pristine">Login
+                        </button>
+                    </div>
+                  </form>                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- -----------------------异地验证--------------------------- -->
+      <div id="ydcheck" class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h2 class="text-center">异地验证</h2>
+                </div>
+                <div class="modal-body" style="padding-left:40px;padding-right:40px;">
+                    <div class="form-group">
+                        <label for="" style="font-size:16px;font-weight: bold;">检测当前登录为异地登录，请到绑定邮箱3142***432@qq.com, 获取验证</label>                       
+                    </div>
+
+                    <form class="form-group" name="loginVerifyForm">
+                      <div class="form-group">
+                           <button class="btn btn-default col-sm-3" onclick="return false;">获取验证码</button>
+                           <div class="col-sm-9" style="padding-left:0px;padding-right:0px;margin-bottom:20px;">
+                           <input class="form-control" type="password" placeholder="" ng-model="loginVerify.code">
+                           </div>
+                      </div>
+                      <div class="text-right">
+                        <!--button class="btn btn-primary btn-lg" type="submit">验证</button-->
+                        <button type="button" ng-Click="sendLoginVerificationCode()" class="btn btn-primary btn-lg"  data-toggle="class:show" data-target="#aside-user" data-dismiss="modal" ng-disabled="loginVerifyForm.$invalid || loginVerifyForm.$pristine">验证</button>
+                        <button class="btn btn-default btn-lg" data-dismiss="modal">取消</button>
+                      </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- -------------------------登录验证---------------------------------------------- -->
+   <div id="dlcheck" class="modal fade" modal="showModal" close="cancel()">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                    <span class="heading">
+                      <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                      <span style="vertical-align:bottom;">&nbsp;Notice</span>
+                      <button class="close" data-dismiss="modal" style="line-height: 0;">
+                          <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                      </button>
+                    </span>
+
+                    <div class="form-group">
+                       <h3>Please login before downloading</h3>
+                    </div>
+                    <div class="form-group help">
+                        
+                    </div>
+                    <div class="form-group">
+
+                        <button type="submit" class="btn btn-default" data-toggle="modal" data-dismiss="modal" data-target="#register" style="font-size:16px;color:white!important;">Register</button>
+                       
+                        <button type="submit" class="btn btn-default" data-toggle="modal" data-dismiss="modal" data-target="#login" style="font-size:16px;color:white!important;float:left;">
+                        Login
+                        </button>
+                    </div>
+                  </form>                 
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <!-- --------------------提现密码验证------------------------------ -->
+
+       <div id="txmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+           
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                          
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="withdraw" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- --------------------提现新密码设置-------------把上面的注释,打开下面的注释----------------- -->
+
+     <!--   <div id="txmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+           
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                          
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="withdraw" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div> -->
+      <!-- ------------------------------提现密码修改----------------------------------------------- -->
+
+    <div id="txmmxg" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Midify Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Original withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New withdraw password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Midify</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ------------------------------保管箱密码验证----------------------------------------------- -->
+
+    <div id="bgxmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------保管箱新密码设置------------------把上面的注释,打开下面的注释----------------------------- -->
+
+  <!--   <div id="bgxmm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Next</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- ------------------------------保管箱密码修改----------------------------------------------- -->
+
+    <div id="bgxmmxg" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+       
+              
+                <div class="modal-body" style="border-radius: 15px!important;">
+                  <form class="form-horizontal" >
+                            <span class="heading">
+                              <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+                              <span style="vertical-align:bottom;">&nbsp;Midify Password</span>
+                              <button class="close" data-dismiss="modal" style="line-height: 0;">
+                                  <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+                              </button>
+                            </span>
+
+                           
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Original safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="New safe password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group help">
+                                <input type="password" class="form-control"  placeholder="Confirm password">
+                                <i class="fa fa-lock"></i>
+                                
+                            </div>
+                            <div class="form-group">
+                           
+                               
+                                <button type="reset" class="btn btn-default"  style="font-size:16px;color:white!important;float:left;">Reset</button>
+
+                                <a href="#" class="btn btn-default"  data-dismiss="modal" id="safe" style="font-size:16px;color:white!important;float:right;">Midify</a>
+                             
+                            </div>
+                        </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

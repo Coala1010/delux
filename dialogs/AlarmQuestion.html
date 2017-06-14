@@ -1,0 +1,20 @@
+<div class="modal-body" id="modal-body">
+    <form class="form-horizontal" >
+        <span class="heading">
+            <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+            <span style="vertical-align:bottom;">&nbsp;{{ $root.translation.ALERT_DIALOG_TITLE }}</span>
+            <button type="button" class="close" style="line-height: 0;" ng-click="exitMsg()">
+              <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+            </button>
+        </span>
+
+        <div class="form-group">
+           <h3 style="text-align: left;">{{$root.q_time}}</h3>
+           <h3>{{$root.q_content}}</h3>
+           <br/>
+           <h3 style="text-align: left;">{{$root.qr_time}}</h3>
+           <h3>{{$root.qr_content}}</h3>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,20 @@
+<div class="modal-body" id="modal-body">
+    <form class="form-horizontal" name="newBillComment">
+        <span class="heading">
+            <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+            <span style="vertical-align:bottom;">&nbsp;게시물 Comment</span>
+            <button type="button" class="close" data-dismiss="modal" style="line-height: 0;" ng-click="exitMsg()">
+                <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+            </button>
+        </span>
+
+        <div class="form-group">
+            <textarea class="form-control" placeholder="Content" rows="40" cols="50" style="height: 240px; padding-top: 10px; padding-left: 25px;"  ng-model="comment_content" required></textarea>
+        </div>
+
+        <div class="form-group"> 
+            <button type="button" ng-Click="sendNewBillComment()" class="btn btn-default" style="font-size:16px;color:white!important;" ng-disabled="newBillComment.$invalid || newBillComment.$pristine">OK
+            </button>
+        </div>
+    </form>
+</div>

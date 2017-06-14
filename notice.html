@@ -1,0 +1,64 @@
+<div class="app-content" >
+
+
+    <div class="bg-light lter b-b wrapper-md">
+      <h1 class="m-n font-thin h3">{{$root.translation.NOTICE_PAGE_TITLE}}</h1>
+    </div>
+    <div class="wrapper-md" ng-init="getAllNotice()">
+
+    
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            {{$root.translation.NOTICE_PAGE_TITLE}}
+            <select name="num_notice" ng-model="num_notice" ng-init="num_notice = '10'" ng-change="onChangeNotice()" style="float: right;">
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+            </select> 
+            <label style="margin-right: 10px; float: right;">{{$root.translation.MESSAGE_ITEM_PAGE}} : </label>
+          </div>
+    
+          <div class="table-responsive">
+            <table class="table table-striped b-t b-light">
+              <thead>
+                <tr>
+           
+                  <th>{{$root.translation.BILLBOARD_TABLE_NUMBER}}</th>
+                  <th>{{$root.translation.BILLBOARD_TABLE_CONTENT}}</th>
+                  <th>{{$root.translation.BILLBOARD_TABLE_AUTHOR}}</th>
+                  <th>{{$root.translation.BILLBOARD_TABLE_DATE}}</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr ng-repeat="one_notice in subNotice">
+                  <td> {{ one_notice.showNumber }} </td>
+                  <td><span class="text"><a ng-click="showNoticeDetails(one_notice)"><em style="color:#58666e;text-decoration: underline;">{{ one_notice.title }}</em></a></span></td>
+                  <td> {{ one_notice.author }} </td>
+                  <td> {{ one_notice.time.split(' ')[0] }} </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <footer class="panel-footer">
+            <div class="row">
+              <div class="col-sm-4 hidden-xs">
+                                 
+              </div>
+              <div class="col-sm-4 text-center">
+                  <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="onChangeNotice()"></ul>
+              </div>
+              <div class="col-sm-4 text-right text-center-xs">                
+               
+              </div>
+            </div>
+          </footer>
+        </div>
+     
+    </div>
+
+
+</div>

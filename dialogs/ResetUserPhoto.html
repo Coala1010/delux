@@ -1,0 +1,30 @@
+<div class="modal-body" id="modal-body">
+    <form class="form-horizontal" name="resetUserPhoto" ng-init="getAllPhotos()">
+        <span class="heading">
+            <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+            <span style="vertical-align:bottom;">&nbsp;{{$root.translation.RESET_USER_PHOTO}}</span>
+            <button type="button" class="close" data-dismiss="modal" style="line-height: 0;" ng-click="exitMsg()">
+                <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+            </button>
+        </span>
+
+        <div class="form-group">
+            <div class="row">
+                <div ng-repeat="product in photoAvatar">
+                    <div class="clearfix" ng-if="$index % 5 == 0"></div>
+                    <div class="col col-sm-3" style="width: 20%;">
+                        <label>
+                            <input type="radio" name="fb" id={{product.photoindex}} ng-model="photo_value" value={{product.photoindex}} ng-value={{product.photoindex}} ng-click="selectPhoto(photo_value)"/>
+                            <img src={{product.photourl}} style="width: 120px; height: 200px; margin-bottom: 40px;">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group"> 
+            <button type="button" ng-Click="resetUserPhotoFunc()" class="btn btn-default" style="font-size:16px;color:white!important;">{{$root.translation.RESET_USER_EMAIL_OK}}
+            </button>
+        </div>
+    </form>
+</div>

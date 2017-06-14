@@ -1,0 +1,26 @@
+<div class="modal-body" id="modal-body">
+    <form class="form-horizontal" name="resetUserPhone" ng-init="initResetUserMobile()">
+        <span class="heading">
+            <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
+            <span style="vertical-align:bottom;">&nbsp;{{$root.translation.RESET_USER_MOBILE_TITLE}}</span>
+            <button type="button" class="close" data-dismiss="modal" style="line-height: 0;" ng-click="exitMsg()">
+                <span style="font-size:50px;vertical-align:text-top;">&times;</span>
+            </button>
+        </span>
+
+        <div class="form-group" style="padding-right: 20px;">
+            <input type="text" class="form-control"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' pattern=".{10,}"  style="float: left; width: 85%;" ng-disabled="dis_mobile"  placeholder={{$root.translation.REGISTER_DIALOG_MOBILE}} ng-model="reset_mobile" required>
+            <i class="fa fa-mobile-phone" ></i>
+            <img src={{path_resetMobile}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_resetMobile" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default"  style="background-color:white;" ng-click="send_mobileVerifyCode()"  ng-disabled="resetUserPhone.$invalid || resetUserPhone.$pristine">{{btn_name}}</button>
+            <input type="text" class="form-control"  placeholder={{$root.translation.RESET_USER_EMAIL_CODE}} style="width:50%;" ng-model="reset_code" ng-disabled="is_verified">
+        </div>
+
+        <div class="form-group"> 
+            <button type="button" ng-Click="resetUserMobileFunc()" class="btn btn-default" style="font-size:16px;color:white!important;" ng-disabled="!is_verified">{{$root.translation.RESET_USER_EMAIL_OK}}
+            </button>
+        </div>
+    </form>
+</div>

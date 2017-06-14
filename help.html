@@ -1,0 +1,140 @@
+<div class="app-content" >
+
+
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">{{$root.translation.HELP_PAGE_TITLE}}<!-- <span class="badge">16</span> --></h1>
+  </div>
+  <div class="wrapper-md">
+    <div class="row" ng-init="getFAQHelp()">
+   	
+      <div class="col-lg-9">
+  
+
+        <!-- tab -->
+        <ul class="nav nav-tabs" style="max-height:40px!important;">
+          <li class="active" ng-click="getFAQHelp()"> <a data-toggle="tab" data-target="#a">{{$root.translation.HELP_PAGE_CATEGORY1}}</a></li>
+          <li ng-click="getSiteRuleHelp()"><a  data-toggle="tab" data-target="#b">{{$root.translation.HELP_PAGE_CATEGORY2}}</a></li>
+          <li ng-click="getUserPolicyHelp()"><a  data-toggle="tab" data-target="#c">{{$root.translation.HELP_PAGE_CATEGORY3}}</a></li>
+          <li ng-click="getPokerHelp()"><a  data-toggle="tab" data-target="#d">{{$root.translation.HELP_PAGE_CATEGORY4}}</a></li>
+   　　   </ul>
+
+<script type="text/ng-template" id="group-template.html">
+  <div class="panel {{panelClass || 'panel-default'}}">
+    <div class="panel-heading">
+      <h4 class="panel-title" style="color:#7266ba;">
+        <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading">
+          <span ng-class="{'text-muted': isDisabled}" style="font-size: 18px;">{{heading}}</span>
+        </a>
+      </h4>
+    </div>
+    <div class="panel-collapse collapse" uib-collapse="!isOpen">
+      <div class="panel-body" ng-transclude></div>
+    </div>
+  </div>
+</script>
+
+        <div class="tab-content">
+
+
+
+              <div class="panel" style="background: transparent;" ng-show="tempData.category == 1">
+                    <div class="padder">      
+
+                      <div style="margin-left:18px; margin-right:18px; margin-top: 18px;">
+                        <uib-accordion close-others="oneAtATime">
+                          <uib-accordion-group heading="{{one_faq.title}}" heading="Custom template" template-url="group-template.html" ng-repeat="one_faq in allFAQs">
+                            {{one_faq.message}}
+                          </uib-accordion-group>
+                        </uib-accordion>
+                      </div>
+                      
+                    </div>
+              </div>
+
+              <div class="panel" style="background: transparent;" ng-show="tempData.category == 2">
+                    <div class="padder">      
+
+                      <div style="margin-left:18px; margin-right:18px; margin-top: 18px;">
+                        <uib-accordion close-others="oneAtATime">
+                          <uib-accordion-group heading="{{one_site.title}}" heading="Custom template" template-url="group-template.html" ng-repeat="one_site in siteHelps">
+                            {{one_site.message}}
+                          </uib-accordion-group>
+                        </uib-accordion>
+                      </div>
+                      
+                    </div>
+              </div>
+
+              <div class="panel" style="background: transparent;" ng-show="tempData.category == 3">
+                    <div class="padder">      
+
+                      <div style="margin-left:18px; margin-right:18px; margin-top: 18px;">
+                        <uib-accordion close-others="oneAtATime">
+                          <uib-accordion-group heading="{{one_user.title}}" heading="Custom template" template-url="group-template.html" ng-repeat="one_user in userHelps">
+                            {{one_user.message}}
+                          </uib-accordion-group>
+                        </uib-accordion>
+                      </div>
+                      
+                    </div>
+              </div>
+
+              <div class="panel" style="background: transparent;" ng-show="tempData.category == 4">
+                    <div class="padder">      
+
+                      <div style="margin-left:18px; margin-right:18px; margin-top: 18px;">
+                        <uib-accordion close-others="oneAtATime">
+                          <uib-accordion-group heading="{{one_poker.title}}" heading="Custom template" template-url="group-template.html" ng-repeat="one_poker in pokerHelps">
+                            {{one_poker.message}}
+                          </uib-accordion-group>
+                        </uib-accordion>
+                      </div>
+                      
+                    </div>
+              </div>
+
+
+
+        </div>
+      <!-- / tab -->
+
+    </div>
+    <!-- -----------------------right start--------------------------- -->
+    <div class="col-lg-3" ng-show="$root.is_logged">
+    	  
+              <div class="wrapper">
+                
+                <div class="panel b-a" ng-show="$root.showNotices.length != 0">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>Notice</strong></a></h4>
+                  <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_notice in showNotices">
+                        <p ng-click="showNoticeDetails()"><em><a style="text-decoration: underline;">{{ one_notice.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i> {{ one_notice.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div class="panel b-a">
+                  <h4 class="font-thin padder"><a href class="text-info"><strong>News</strong></a></h4>
+                    <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="one_news in showNews">
+                        <p ng-click="showNewsDetails(one_news)"><em><a style="text-decoration: underline;">{{ one_news.show_m }}</a></em></p>
+                        <small class="block text-muted"><i class="fa fa-fw fa-clock-o"></i>{{ one_news.time }}</small>
+                    </li>
+                  </ul>
+                </div>
+       
+              </div>
+         
+    </div>
+    <!-- ---------------------------right end---------------------------------------- -->
+
+
+
+
+
+    </div>
+  </div>
+
+
+</div>
