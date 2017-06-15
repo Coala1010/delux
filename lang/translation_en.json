@@ -211,5 +211,7 @@
 	"ALERT_DIALOG_TITLE" 				: "Notice",
 	"ALARM_DIALOG_TIME" 				: "Time",
 	"ALARM_QUESTION_UPLOAD_CONTENT"		: "Question : ",
-	"ALARM_QUESTION_REPLY_CONTENT"		: "Reply : "
+	"ALARM_QUESTION_REPLY_CONTENT"		: "Reply : ",
+	"USER_REGISTERED_SUCCESS"			: "User registered successfully.",
+	"USER_REGISTERED_FAILED"			: "User register failed."
 }

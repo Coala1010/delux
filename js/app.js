@@ -368,7 +368,10 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                     }
                 }
             for(var i=0; i<6; i++)
-                $scope.popular_gameLists[i] = $scope.gameLists[i];
+            {
+                if($scope.gameLists[i] != null)
+                    $scope.popular_gameLists[i] = $scope.gameLists[i];
+            }
 
             for(var i=0; i<$scope.gameLists.length; i++)
                 for(var j=i+1; j<$scope.gameLists.length; j++)
@@ -382,7 +385,8 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                     }
                 }
             for(var i=0; i<6; i++)
-                $scope.newest_gameLists[i] = $scope.gameLists[i];
+                if($scope.gameLists[i] != null)
+                    $scope.newest_gameLists[i] = $scope.gameLists[i];
 
         });
     }
@@ -980,10 +984,12 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                         {
                             console.log("successfully sent");
                             $uibModalInstance.dismiss('cancel');
+                            alert($rootScope.translation.USER_REGISTERED_SUCCESS);
                         }
                         else
                         {
                             console.log(success.data.reason);
+                            alert($rootScope.translation.USER_REGISTERED_FAILED);
                         }
                     });
                 }
@@ -3456,7 +3462,10 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
                     }
                 }
             for(var i=0; i<10; i++)
-                $scope.popular_gameLists[i] = $scope.gameLists[i];
+            {
+                if($scope.gameLists[i] != null)
+                    $scope.popular_gameLists[i] = $scope.gameLists[i];
+            }
  
         });
         $scope.getGameList();

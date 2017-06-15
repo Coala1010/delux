@@ -211,5 +211,7 @@
 	"ALERT_DIALOG_TITLE" 				: "알림",
 	"ALARM_DIALOG_TIME" 				: "시간",
 	"ALARM_QUESTION_UPLOAD_CONTENT"		: "의견 : ",
-	"ALARM_QUESTION_REPLY_CONTENT"		: "처리 : "
+	"ALARM_QUESTION_REPLY_CONTENT"		: "처리 : ",
+	"USER_REGISTERED_SUCCESS"			: "회원가입이 성과적으로 진행되였습니다.",
+	"USER_REGISTERED_FAILED"			: "회원가입이 실패하였습니다."
 }
