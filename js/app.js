@@ -1899,6 +1899,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                                 $scope.payMethod_value = 3;
                             else if($scope.infos[i].sru_paygate == 4)
                                 $scope.payMethod_value = 4;
+                            $scope.is_hidden = true;
                         }
                         else
                             $scope.is_hidden = false;
