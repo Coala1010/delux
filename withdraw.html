@@ -36,37 +36,37 @@
               <div style="padding: 0 40px;margin: 0 0 25px 0;" ng-disabled="is_saved">
                 <label class="col-sm-1 control-label">{{$root.translation.CHARGE_PAYWAY}}</label>
                 <div class="col-sm-6 form-inline" style="text-align:left;">
-                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_1" ng-click="setOfflineWithdraw()">
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_1" ng-click="showInputForm()">
                     <label class="i-checks i-checks-sm">
-                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="10">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="10" ng-value="10">
                       <i ></i>
                       <img src="./img/unionpay.png" style="width:50px;"/>
                     </label>
                   </div>
-                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_2" ng-click="setOnlineWithdraw()">
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_2" ng-click="showInputForm()">
                     <label class="i-checks i-checks-sm">
-                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="3">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="3" ng-value="3">
                       <i></i>
                       <img src="./img/alipay.png" style="width:50px;"/>
                     </label>
                   </div>
-                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_3" ng-click="setOnlineWithdraw()">
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_3" ng-click="showInputForm()">
                     <label class="i-checks i-checks-sm">
-                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="2">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="2" ng-value="2">
                       <i></i>
                       <img src="./img/wxpay.png" style="width:50px;"/>
                     </label>
                   </div>
-                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_4" ng-click="setOnlineWithdraw()">
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_4" ng-click="showInputForm()">
                     <label class="i-checks i-checks-sm">
-                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="4">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="4" ng-value="4">
                       <i></i>
                       <img src="./img/tenpay.png" style="width:50px;"/>
                     </label>
                   </div>
-                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_5" ng-click="setOnlineWithdraw()">
+                  <div class="radio" style="margin-right:10px;" ng-show="withdrawMethod_5" ng-click="showInputForm()">
                     <label class="i-checks i-checks-sm">
-                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="1">
+                      <input type="radio" name="a" ng-model="withdrawMethod_value" value="1" ng-value="1">
                       <i></i>
                       <img src="./img/paypalpay.png" style="width:50px;"/>
                     </label>

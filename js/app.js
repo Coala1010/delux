@@ -232,18 +232,12 @@ app.factory('socket', function ($rootScope) {
         },
         reconnect: function (id) {
             console.log('socket.reconnect()');
-            //socket.io.reconnect();
-             //   socket = io.connect('http://101.102.224.50/');
             socket = io.connect('http://101.102.224.50/',{'forceNew': true });
             socket.emit('CLIENT_LOGGED_IN', {u_id: id });
-             /*   socket.on('connect', function(){
-                  socket.emit('authentication', {uid: id, accessToken: accesstoken });
-                });*/
             },
         disconnect: function () {
             $rootScope.is_socket = true;
             socket.io.disconnect();
-        //    socket.disconnect();
         },
         socket: socket
     };
@@ -252,7 +246,6 @@ app.factory('socket', function ($rootScope) {
 app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket) {
 
     console.log("loadPageCtrl");
-
 
     $scope.billBoard_portNumber = 10006;
     $rootScope.billBoard_Url = 'http://101.102.224.50:' + $scope.billBoard_portNumber;
@@ -276,8 +269,8 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
         console.log(success);
         if(success.data.result == 'success')
         {
-            $rootScope.temp_userInfo = {};
-            $rootScope.temp_userInfo.u_id = success.data.u_id;
+            $scope.temp_userInfo = {}
+            $scope.temp_userInfo.u_id = success.data.u_id;
 
             $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
                 console.log(success);
@@ -286,17 +279,17 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                     $rootScope.userInfo = success.data;
                     $rootScope.login_title = $rootScope.userInfo.user_nickname;
                     $rootScope.is_logged = true;
+                    $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
 
                     $scope.tempData = {}
-                    $scope.tempData.u_id = $rootScope.userInfo.u_id;
+                    $scope.tempData.u_id = $rootScope.userInfo.userKey;
                     if($rootScope.is_socket == null)
                     {
                         socket.init();
                         socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
                     }
                     else
-                        socket.reconnect($rootScope.userInfo.u_id);
-                    $rootScope.$emit("turnAlarm", {});
+                        socket.reconnect($rootScope.userInfo.userKey);
                 }
                 else
                 {
@@ -310,7 +303,7 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
     $scope.logout = function()
     {
         $scope.temp_myID = {}
-        $scope.temp_myID.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/userlogout', $scope.temp_myID).then(function(success) {
             console.log(success);
@@ -550,7 +543,7 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
         if($rootScope.showNotices.length != 0)
         {
             $scope.tempData = {}
-            $scope.tempData.u_id = $rootScope.userInfo.u_id;
+            $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
             $http.post($rootScope.serverUrl + '/noticecheck', $scope.tempData).then(function(success) {
                 console.log(success);
@@ -664,10 +657,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         $uibModalInstance.dismiss('cancel');
     }
 
-   /* if(!$scope.loginForm.$invalid) {
-        console.log("valid");
-     }*/
-
     $scope.sendLoginInfo = function () {
         console.log("Send Login Info...");
         console.log($scope.logininfo);
@@ -676,8 +665,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
             console.log(success);
             if(success.data.result == "success")
             {
-                $rootScope.temp_userInfo = {};
-                $rootScope.temp_userInfo.u_id = success.data.u_id;
+                $scope.temp_userInfo = {};
+                $scope.temp_userInfo.u_id = success.data.u_id;
                 $uibModalInstance.dismiss('cancel');
 
                 $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
@@ -686,21 +675,23 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                     if(success.data.result == "success")
                     {
                         $rootScope.userInfo = success.data;
-/*
-                        $uibModalInstance.dismiss('cancel');
+                        $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
+
+                    /*    $uibModalInstance.dismiss('cancel');
                         $rootScope.login_title = $rootScope.userInfo.user_nickname;
                         $rootScope.is_logged = true;
 
                         $scope.tempData = {}
-                        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+                        $scope.tempData.u_id = $rootScope.userInfo.userKey;
+                        socket.init();
                         socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
                         $scope.turnOnNotify();
 
                         console.log($rootScope.userInfo);
 
                         $scope.getLatestNews();
-                        $scope.getLatestNotice();
-*/
+                        $scope.getLatestNotice();*/
+
 
                         if($rootScope.myCurrentIP == $rootScope.userInfo.last_login_ip)
                         {
@@ -710,7 +701,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                             console.log($rootScope.is_logged);
 
                             $scope.tempData = {}
-                            $scope.tempData.u_id = $rootScope.userInfo.u_id;
+                            $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
                             console.log("init socket");
                             console.log($rootScope.is_socket);
@@ -720,11 +711,10 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                                 socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
                             }
                             else
-                                socket.reconnect($rootScope.userInfo.u_id);
+                                socket.reconnect($rootScope.userInfo.userKey);
                             $scope.turnOnNotify();
 
                             $rootScope.is_logged = true;
-
 
                             $scope.getLatestNews();
                             $scope.getLatestNotice();
@@ -830,7 +820,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     $scope.getLatestNews = function()
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/requestnews', $scope.tempData).then(function(success) {
             console.log(success);
@@ -855,7 +845,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     $scope.getLatestNotice = function()
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/latestnotice', $scope.tempData).then(function(success) {
             console.log(success);
@@ -1204,7 +1194,7 @@ app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModal
 
         $scope.verifyinfo = {}
         $scope.verifyinfo.verify_code = $scope.loginVerify.code;
-        $scope.verifyinfo.u_id = $rootScope.userInfo.u_id;
+        $scope.verifyinfo.u_id = $rootScope.userInfo.userKey;
         $scope.verifyinfo.v_flag = 0;
         console.log($scope.verifyinfo);
 
@@ -1220,18 +1210,18 @@ app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModal
             console.log(success);
             if(success.data.result == "success")
             {
-            //    $rootScope.userInfo = $rootScope.temp_userInfo;
                 $rootScope.is_logged = true;
 
                 $scope.tempData = {}
-                $scope.tempData.u_id = $rootScope.userInfo.u_id;
+                $scope.tempData.u_id = $rootScope.userInfo.userKey;
                 if($rootScope.is_socket == null)
                 {
+                    socket.init();
                     socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
-                    $rootScope.$emit("turnAlarm", {});
+                //    $rootScope.$emit("turnAlarm", {});
                 }
                 else
-                    socket.reconnect($rootScope.userInfo.u_id);
+                    socket.reconnect($rootScope.userInfo.userKey);
 
                 $rootScope.login_title = $rootScope.userInfo.user_nickname;
                 console.log("Login Verified Matched!!!");
@@ -1255,16 +1245,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
     console.log("Charge Infomation");
 
- //   $scope.payMethod_value = 1;
- //   $scope.payment_history = {}
- //   $scope.online = true;
     $scope.chargeForm_disable = true;
-    $scope.disable_bankName = true;
-    $scope.disable_bankPass = true;
-    $scope.disable_bankID = true;
-    $scope.disable_bankUser = true;
-
- //   console.log($scope.online);
 
     $scope.setAutoPay_Method = function() {
 
@@ -1339,6 +1320,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         {
             if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
             {
+                $scope.payMethod_value = 10;
                 $scope.payMethod_1 = true;
                 $scope.payMethod_2 = true;
                 $scope.payMethod_3 = true;
@@ -1617,7 +1599,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.disable_Charge = true;
 
         $scope.requestPay_Array = {}
-        $scope.requestPay_Array.u_id = $rootScope.userInfo.u_id;
+        $scope.requestPay_Array.u_id = $rootScope.userInfo.userKey;
 
         if($scope.money_select == '100k')
             $scope.requestPay_Array.u_game_money = 100000;
@@ -1832,12 +1814,13 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
     $scope.Reget_userinfo = function()
     {
         $scope.temp_userInfo = {}
-        $scope.temp_userInfo.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_userInfo.u_id = $rootScope.userInfo.userKey;
         $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
             console.log(success);
             if(success.data.result == "success")
             {
                 $rootScope.userInfo = success.data;
+                $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
                 $rootScope.is_logged = true;
                 console.log("Reget_userinfo");
                 console.log($rootScope.userInfo);
@@ -1859,7 +1842,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.Reget_userinfo();
 
         $scope.myUserID = {}
-        $scope.myUserID.u_id = $rootScope.userInfo.u_id;
+        $scope.myUserID.u_id = $rootScope.userInfo.userKey;
         console.log("Get Balance Info");
 
         $scope.payMethod_1 = false;
@@ -1905,12 +1888,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                             $scope.bank_ID = $scope.infos[i].sru_bank_id;
                             $scope.bank_pass = $scope.infos[i].sru_bank_pw;
                             $scope.bank_UserName = $scope.infos[i].sru_bank_username;
-                            if($scope.infos[i].sru_country == 0)
-                                $scope.country_select = $rootScope.translation.CHARGE_COUNTRY_CHINA;
-                            else if($scope.infos[i].sru_country == 1)
-                                $scope.country_select = $rootScope.translation.CHARGE_COUNTRY_KOREA;
-                            else
-                                $scope.country_select = $rootScope.translation.CHARGE_COUNTRY_OTHERS;
 
                             if($scope.infos[i].sru_paygate == 10)
                                 $scope.payMethod_value = 10;
@@ -1922,9 +1899,14 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                                 $scope.payMethod_value = 3;
                             else if($scope.infos[i].sru_paygate == 4)
                                 $scope.payMethod_value = 4;
-
                         }
+                        else
+                            $scope.is_hidden = false;
                     }
+                    $scope.disable_bankName = true;
+                    $scope.disable_bankPass = true;
+                    $scope.disable_bankID = true;
+                    $scope.disable_bankUser = true;
 
                     console.log($scope.payMethod_value);
                 }
@@ -1932,6 +1914,10 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                 {
                     $scope.payMethod_value = 10;
                     $scope.autopay = false;
+                    $scope.disable_bankName = false;
+                    $scope.disable_bankPass = false;
+                    $scope.disable_bankID = false;
+                    $scope.disable_bankUser = false;
                     $scope.setAutoPay_Method();
                 }
 
@@ -2025,7 +2011,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.bigCurrentPage = 1;
 
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/rechargeinfo', $scope.tempData).then(function(success) {
             console.log(success);
@@ -2122,7 +2108,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
     $scope.cancelCharge = function(record)
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.record_id = record.id;
         console.log($scope.tempData);
 
@@ -2229,7 +2215,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         if($scope.pass.first == $scope.pass.second)
         {
             $scope.tempPassword = {}
-            $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+            $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.u_withdrawlpw = $scope.pass.first;
 
             $http.post($rootScope.serverUrl + '/setwithdrawlpass', $scope.tempPassword).then(function(success) {
@@ -2248,7 +2234,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
     $scope.loginWithdrawPass = function()
     {
         $scope.tempPassword = {}
-        $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+        $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
         $scope.tempPassword.u_withdrawlpw = $scope.withdrawl_pass;
         console.log($scope.tempPassword);
 
@@ -2292,7 +2278,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         if($scope.resetpass.first == $scope.resetpass.second && $scope.resetpass.first != $scope.resetpass.old)
         {
             $scope.tempPassword = {}
-            $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+            $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.u_withdrawlpwafter = $scope.resetpass.first;
             $scope.tempPassword.u_withdrawlpwbefore = $scope.resetpass.old;
 
@@ -2311,9 +2297,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         }
     }
 
-    $scope.show_bankname = false;
-    $scope.show_bankid = false;
-    $scope.show_username = false;
     $scope.Fill_Form_Info = function()
     {
         console.log("init Withdrawl Form");
@@ -2322,6 +2305,9 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
 
         if($rootScope.loginWithdrawResult.is_withdrawl == 0)
         {
+            $scope.show_bankname = true;
+            $scope.show_bankid = true;
+            $scope.show_username = true;
             $scope.withdrawMethod_1 = true;
             $scope.withdrawMethod_2 = true;
             $scope.withdrawMethod_3 = true;
@@ -2330,23 +2316,37 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.offline_withdraw = false;
             $scope.is_saved = false;
             $scope.country_sel = $rootScope.translation.CHARGE_COUNTRY_CHINA;
+            $scope.withdrawMethod_value = 10;
         }
         else
         {
             $scope.is_saved = true;
             $scope.offline_withdraw = true;
-            $scope.withdrawMethod_value = $rootScope.loginWithdrawResult.u_withdrawlmethod;
-            if($scope.withdrawMethod_value == 10)
+            if($rootScope.loginWithdrawResult.u_withdrawlmethod == 10)
+            {
                 $scope.withdrawMethod_1 = true;
-            else if($scope.withdrawMethod_value == 3)
+                $scope.withdrawMethod_value = 10;
+            }
+            else if($rootScope.loginWithdrawResult.u_withdrawlmethod == 3)
+            {
                 $scope.withdrawMethod_2 = true;
-            else if($scope.withdrawMethod_value == 2)
+                $scope.withdrawMethod_value = 3;
+            }
+            else if($rootScope.loginWithdrawResult.u_withdrawlmethod == 2)
+            {
                 $scope.withdrawMethod_3 = true;
-            else if($scope.withdrawMethod_value == 4)
+                $scope.withdrawMethod_value = 2;
+            }
+            else if($rootScope.loginWithdrawResult.u_withdrawlmethod == 4)
+            {
                 $scope.withdrawMethod_4 = true;
-            else if($scope.withdrawMethod_value == 1)
+                $scope.withdrawMethod_value = 4;
+            }
+            else if($rootScope.loginWithdrawResult.u_withdrawlmethod == 1)
+            {
                 $scope.withdrawMethod_5 = true;
-            $scope.withdrawMethod_value = $rootScope.loginWithdrawResult.u_withdrawlmethod;
+                $scope.withdrawMethod_value = 1;
+            }
 
             if($rootScope.loginWithdrawResult.u_withdrawlcountry == 0)
                 $scope.country_sel = $rootScope.translation.CHARGE_COUNTRY_CHINA;
@@ -2363,7 +2363,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $rootScope.$emit("ReGet_UserInfo", {});
 
         $scope.requestBalance = {}
-        $scope.requestBalance.u_id = $rootScope.userInfo.u_id;
+        $scope.requestBalance.u_id = $rootScope.userInfo.userKey;
         $http.post($rootScope.serverUrl + '/onlybalance', $scope.requestBalance).then(function(success) {
             console.log(success);
             if(success.data.result == "success")
@@ -2437,6 +2437,8 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.withdrawMethod_3 = true;
             $scope.withdrawMethod_4 = true;
             $scope.withdrawMethod_5 = true;
+            $scope.currentBalance = $scope.balances[0].balance;
+            $scope.currency = "¥";
         }
         else if($scope.country_sel == $rootScope.translation.CHARGE_COUNTRY_KOREA)
         {
@@ -2446,6 +2448,8 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.withdrawMethod_3 = true;
             $scope.withdrawMethod_4 = false;
             $scope.withdrawMethod_5 = true;
+            $scope.currentBalance = $scope.balances[1].balance;
+            $scope.currency = "원";
         }
         else if($scope.country_sel == $rootScope.translation.CHARGE_COUNTRY_OTHERS)
         {
@@ -2455,44 +2459,17 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.withdrawMethod_3 = true;
             $scope.withdrawMethod_4 = false;
             $scope.withdrawMethod_5 = true;
-        }
-
-        if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-        {
-            $scope.currentBalance = $scope.balances[0].balance;
-            $scope.currency = "¥";
-        }
-        else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-        {
-            $scope.currentBalance = $scope.balances[1].balance;
-            $scope.currency = "원";
-        }
-        else
-        {
             $scope.currentBalance = $scope.balances[2].balance;
             $scope.currency = "$";
         }
-
+        $scope.showInputForm();
     }
 
-    $scope.setOfflineWithdraw = function()
-    {
-        $scope.offline_withdraw = false;
-        if($rootScope.loginWithdrawResult.is_withdrawl == 1)
-            $scope.offline_withdraw = true;
-    }
-
-    $scope.setOnlineWithdraw = function()
-    {
-        $scope.offline_withdraw = true;
-        if($rootScope.loginWithdrawResult.is_withdrawl == 1)
-            $scope.offline_withdraw = true;
-    }
     $scope.sendWithdrawRequest = function()
     {
         $scope.disable_Withdraw = true;
         $scope.requestWithdraw_Array = {}
-        $scope.requestWithdraw_Array.u_id = $rootScope.userInfo.u_id;
+        $scope.requestWithdraw_Array.u_id = $rootScope.userInfo.userKey;
 
         if($scope.money_select == '100k')
             $scope.requestWithdraw_Array.u_game_money = 100000;
@@ -2547,8 +2524,9 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             {
                 console.log("Offline Withdraw");
                 $scope.requestWithdraw_Array.u_withdrawlbank = $scope.bank_Name;  
-                $scope.requestWithdraw_Array.u_withdrawlbankname = $scope.bank_UserName;  
-                if($scope.requestWithdraw_Array.u_withdrawlid != null && $scope.requestWithdraw_Array.u_withdrawlbank != null && $scope.requestWithdraw_Array.u_withdrawlbankname != null)
+                $scope.requestWithdraw_Array.u_withdrawlbankname = $scope.bank_UserName; 
+                console.log($scope.requestWithdraw_Array);
+                if($scope.requestWithdraw_Array.u_withdrawlid != "" && $scope.requestWithdraw_Array.u_withdrawlbank != "" && $scope.requestWithdraw_Array.u_withdrawlbankname != "")
                 {
                     $http.post($rootScope.serverUrl + '/requestwithdrawl', $scope.requestWithdraw_Array).then(function(success) {
                         console.log(success);
@@ -2639,16 +2617,16 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
 
     $scope.showInputForm = function()
     {
-        if($scope.payMethod_value == 10)
+        if($scope.withdrawMethod_value == 10)
         {
             $scope.show_bankname = true;
             $scope.show_bankid = true;
             $scope.show_username = true;
 
-            $scope.title_bankname = "은행이름";
-            $scope.title_bankid = "카드번호";
-            $scope.title_bankpass = "암호";
-            $scope.title_username = "소유자이름";
+            $scope.title_bankname = $rootScope.translation.CHARGE_BANKNAME;
+            $scope.title_bankid = $rootScope.translation.WITHDRAW_CARDNUMBER;
+            $scope.title_bankpass = $rootScope.translation.SET_WITHDRAW_DIALOG_PASSWORD;
+            $scope.title_username = $rootScope.translation.CHARGE_USERNAME;
         }
         else
         {
@@ -2656,10 +2634,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.show_bankid = true;
             $scope.show_username = false;
 
-            $scope.title_bankname = "은행이름";
             $scope.title_bankid = "ID";
-            $scope.title_bankpass = "암호";
-            $scope.title_username = "소유자이름";
         }
     }
 
@@ -2671,7 +2646,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $scope.bigCurrentPage = 1;
 
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/withdrawlinfo', $scope.tempData).then(function(success) {
             console.log(success);
@@ -2764,7 +2739,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
     $scope.cancelWithdraw = function(record)
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.record_id = record.id;
         console.log($scope.tempData);
 
@@ -2820,7 +2795,7 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         console.log("loginPocketPass");
         $scope.tempPassword = {}
-        $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+        $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
         $scope.tempPassword.u_pocketpw = $scope.pocket_pass;
         console.log($scope.tempPassword);
 
@@ -2858,7 +2833,7 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
         if($scope.reset_pocketpass_first == $scope.reset_pocketpass_second && $scope.reset_pocketpass_first != $scope.reset_pocketpass_old)
         {
             $scope.tempPassword = {}
-            $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+            $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.u_pocketpw = $scope.reset_pocketpass_first;
             $scope.tempPassword.passbefore = $scope.reset_pocketpass_old;
             console.log($scope.tempPassword);
@@ -2882,7 +2857,7 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
         if($scope.pocketpass.first == $scope.pocketpass.second)
         {
             $scope.tempPassword = {}
-            $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+            $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.u_pocketpw = $scope.pocketpass.first;
             console.log($scope.tempPassword.u_pocketpw);
 
@@ -2903,7 +2878,7 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         console.log("sendPocketDraw");
         $scope.depositPocket = {}
-        $scope.depositPocket.u_id = $rootScope.userInfo.u_id;
+        $scope.depositPocket.u_id = $rootScope.userInfo.userKey;
         $scope.depositPocket.money_change = $scope.pocket_money;
         $scope.depositPocket.change_way = 1;
 
@@ -2956,7 +2931,7 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         console.log("sendPocketDeposit");
         $scope.depositPocket = {}
-        $scope.depositPocket.u_id = $rootScope.userInfo.u_id;
+        $scope.depositPocket.u_id = $rootScope.userInfo.userKey;
         $scope.depositPocket.money_change = $scope.pocket_money;
         $scope.depositPocket.change_way = 0;
 
@@ -3075,7 +3050,7 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         console.log("Get Recharge Record");
         $scope.tempRecharge = {}
-        $scope.tempRecharge.u_id = $rootScope.userInfo.u_id;
+        $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
         $scope.chargeRecords = {}
 
         $http.post($rootScope.serverUrl + '/rechargerecord', $scope.tempRecharge).then(function(success) {
@@ -3105,7 +3080,7 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         console.log("Get Withdrawl Record");
         $scope.tempRecharge = {}
-        $scope.tempRecharge.u_id = $rootScope.userInfo.u_id;
+        $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
         $scope.withdrawRecords = {}
 
         $http.post($rootScope.serverUrl + '/withdrawlrecord', $scope.tempRecharge).then(function(success) {
@@ -3135,7 +3110,7 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         console.log("Get Withdrawl Record");
         $scope.tempRecharge = {}
-        $scope.tempRecharge.u_id = $rootScope.userInfo.u_id;
+        $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
         $scope.gameRecords = {}
 
         $http.post($rootScope.serverUrl + '/gamerecord', $scope.tempRecharge).then(function(success) {
@@ -3251,7 +3226,7 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.flag_page = 1;
 
         $scope.temp_myID = {}
-        $scope.temp_myID.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
         $scope.chargeMessage = {}
 
         $http.post($rootScope.serverUrl + '/rechargemessage', $scope.temp_myID).then(function(success) {
@@ -3273,7 +3248,7 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.flag_page = 2;
         
         $scope.temp_myID = {}
-        $scope.temp_myID.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
         $scope.chargeMessage = {}
 
         $http.post($rootScope.serverUrl + '/withdrawlmessage', $scope.temp_myID).then(function(success) {
@@ -3296,7 +3271,7 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.flag_page = 3;
 
         $scope.temp_myID = {}
-        $scope.temp_myID.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
         $scope.systemMessage = {}
 
         $http.post($rootScope.serverUrl + '/systemmessage', $scope.temp_myID).then(function(success) {
@@ -3318,7 +3293,7 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.flag_page = 4;
 
         $scope.temp_myID = {}
-        $scope.temp_myID.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
         $scope.otherMessage = {}
 
         $http.post($rootScope.serverUrl + '/othermessage', $scope.temp_myID).then(function(success) {
@@ -3340,7 +3315,7 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.flag_page = 5;
 
         $scope.temp_myID = {}
-        $scope.temp_myID.u_id = $rootScope.userInfo.u_id;
+        $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
         $scope.questionMessage = {}
 
         $http.post($rootScope.serverUrl + '/requestfeedback', $scope.temp_myID).then(function(success) {
@@ -3377,7 +3352,7 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
     $scope.sendNewQuestion = function()
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.m_title = $scope.question_title;
         $scope.tempData.m_content = $scope.question_content;
 
@@ -3557,7 +3532,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         if($scope.reset_userpass_first == $scope.reset_userpass_second && $scope.reset_userpass_first != $scope.reset_userpass_old)
         {
             $scope.tempPassword = {}
-            $scope.tempPassword.u_id = $rootScope.userInfo.u_id;
+            $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.passbefore = $scope.reset_userpass_old;
             $scope.tempPassword.u_pw = $scope.reset_userpass_first;
             console.log($scope.tempPassword);
@@ -3592,7 +3567,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         console.log($scope.reset_loginip);
 
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.u_loginip = $scope.reset_loginip;
 
         $http.post($rootScope.serverUrl + '/updateuserinfo', $scope.tempData).then(function(success) {
@@ -3632,7 +3607,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
                     $scope.path_resetEmail = "img/img_check.png";
 
                     $scope.tempData_ = {}
-                    $scope.tempData_.u_id = $rootScope.userInfo.u_id;
+                    $scope.tempData_.u_id = $rootScope.userInfo.userKey;
                     $scope.tempData_.verify_way = 0;
                     $scope.tempData_.address = $scope.reset_email;
                     console.log($scope.tempData_);
@@ -3654,7 +3629,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         else
         {
             $scope.tempData = {}
-            $scope.tempData.u_id = $rootScope.userInfo.u_id;
+            $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.verify_code = $scope.reset_code;
             $scope.tempData.v_flag = 1;
             console.log($scope.tempData);
@@ -3672,7 +3647,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
     $scope.resetUserEmailFunc = function()
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.u_email = $scope.reset_email;
 
         $http.post($rootScope.serverUrl + '/updateuserinfo', $scope.tempData).then(function(success) {
@@ -3728,7 +3703,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
                     $scope.path_resetMobile = "img/img_check.png";
 
                     $scope.tempData_ = {}
-                    $scope.tempData_.u_id = $rootScope.userInfo.u_id;
+                    $scope.tempData_.u_id = $rootScope.userInfo.userKey;
                     $scope.tempData_.verify_way = 1;
                     $scope.tempData_.address = $scope.reset_mobile;
                     console.log($scope.tempData_);
@@ -3750,7 +3725,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         else
         {
             $scope.tempData = {}
-            $scope.tempData.u_id = $rootScope.userInfo.u_id;
+            $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.verify_code = $scope.reset_code;
             $scope.tempData.v_flag = 1;
             console.log($scope.tempData);
@@ -3768,7 +3743,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
     $scope.resetUserMobileFunc = function()
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.u_phone = $scope.reset_mobile;
 
         $http.post($rootScope.serverUrl + '/updateuserinfo', $scope.tempData).then(function(success) {
@@ -3815,7 +3790,7 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         if($scope.photo_value　!= null)
         {
             $scope.tempData = {}
-            $scope.tempData.u_id = $rootScope.userInfo.u_id;
+            $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.u_photoindex = $scope.photo_value;
             console.log($scope.tempData);
 
@@ -3946,7 +3921,7 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
     $scope.sendNewBill = function()
     {
         $scope.tempData = {}
-        $scope.tempData.u_id = $rootScope.userInfo.u_id;
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.bbs_title = $scope.bill_title;
         $scope.tempData.bbs_contents = $scope.bill_content;
         if($scope.bill_type == $rootScope.translation.BILLBOARD_CATEGORY1)
@@ -4073,7 +4048,7 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
         if($scope.comment_content != null)
         {
             $scope.tempData = {}
-            $scope.tempData.u_id = $rootScope.userInfo.u_id;
+            $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.bbs_id = $rootScope.selected_bill.id;
             $scope.tempData.com_contents = $scope.comment_content;
 

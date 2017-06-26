@@ -110,6 +110,7 @@
 	"WITHDRAW_CONTENT1" 				: "환전시 은행카드와 련결하면 다시 변경시킬수 없습니다.",
 	"WITHDRAW_CONTENT2" 				: "주의해서 입력하십시오.",
 	"WITHDRAW_MONEY"					: "환전금액",
+	"WITHDRAW_CARDNUMBER"				: "카드번호",
 	"WITHDRAW_CHANGE_PASSWORD"			: "암호변경",
 	"WITHDRAW_OK"						: "확인",
 	"WITHDRAW_SUCCESS" 					: "환전요청이 성과적으로 진행되였습니다.",

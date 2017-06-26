@@ -23,7 +23,7 @@
                               <div class="form-group">
                                 <label class="col-sm-1 control-label">{{$root.translation.CHARGE_COUNTRY_NAME}}</label>
                                 <div class="col-sm-6">
-                                  <select name="account" ng-model="country_select" ng-init="country_select='China'" class="form-control m-b" ng-change="onCountryChange(country_select)">
+                                  <select name="account" ng-model="country_select" ng-init="country_select=$root.translation.CHARGE_COUNTRY_CHINA" class="form-control m-b" ng-change="onCountryChange(country_select)">
                                     <option>{{$root.translation.CHARGE_COUNTRY_CHINA}}</option>
                                     <option>{{$root.translation.CHARGE_COUNTRY_KOREA}}</option>
                                     <option>{{$root.translation.CHARGE_COUNTRY_OTHERS}}</option>
@@ -119,7 +119,8 @@
                                   </select> 
                                 </div>
                               </div>
-                                  <label class="col-sm-6">{{$root.translation.CHARGE_GAMEMONEY}} 10k : 1 USD : {{currentBalance}}{{currency}}&nbsp;×&nbsp;{{real_money}}&nbsp;=&nbsp;{{currentMoney}}{{currency}} </label>
+                                  <label class="col-sm-6">{{$root.translation.CHARGE_GAMEMONEY}} 10k : 1 USD : {{currentBalance}}{{currency}}&nbsp;×&nbsp;{{real_money}}&nbsp;=&nbsp;{{currentMoney}}{{currency}}
+                                  </label>
                                   
                               <div class="line line-dashed b-b line-lg pull-in"></div>
                               <div class="form-group">

@@ -110,6 +110,7 @@
 	"WITHDRAW_CONTENT1" 				: "Withdraw and bind the bank card. Once bound, can not be modified.",
 	"WITHDRAW_CONTENT2" 				: "Please fill in carafully",
 	"WITHDRAW_MONEY"					: "Money",
+	"WITHDRAW_CARDNUMBER"				: "Card Number",
 	"WITHDRAW_CHANGE_PASSWORD"			: "Change Password",
 	"WITHDRAW_OK"						: "Withdraw",
 	"WITHDRAW_SUCCESS" 					: "Withdraw request has sent successfully.",
