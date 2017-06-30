@@ -33,7 +33,7 @@
             <img src={{path_email}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_email" />
         </div>
         <div class="form-group" style="padding-right: 20px;">
-            <input type="text" class="form-control"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' pattern=".{10,}"  placeholder={{$root.translation.REGISTER_DIALOG_MOBILE}} ng-model="register_mobile" style="float: left; width: 85%;"  ng-blur="loseFocusMobile()" required>
+            <input type="text" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' pattern=".{10,}"  placeholder={{$root.translation.REGISTER_DIALOG_MOBILE}} ng-model="register_mobile" style="float: left; width: 85%;"  ng-blur="loseFocusMobile()" required>
             <i class="fa fa-mobile-phone" ></i>
             <img src={{path_mobile}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_mobile" />
         </div>

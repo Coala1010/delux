@@ -677,7 +677,9 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                         $rootScope.userInfo = success.data;
                         $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
 
-                    /*    $uibModalInstance.dismiss('cancel');
+                        
+
+                        $uibModalInstance.dismiss('cancel');
                         $rootScope.login_title = $rootScope.userInfo.user_nickname;
                         $rootScope.is_logged = true;
 
@@ -690,9 +692,9 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                         console.log($rootScope.userInfo);
 
                         $scope.getLatestNews();
-                        $scope.getLatestNotice();*/
+                        $scope.getLatestNotice();
 
-
+/*
                         if($rootScope.myCurrentIP == $rootScope.userInfo.last_login_ip)
                         {
                             $uibModalInstance.dismiss('cancel');
@@ -732,7 +734,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
                                 $log.info('Modal dismissed at: ' + new Date());
                             });
-                        }
+                        }*/
 
                     }
                     else

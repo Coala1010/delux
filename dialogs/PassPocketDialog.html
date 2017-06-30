@@ -9,7 +9,7 @@
         </span>
 
         <div class="form-group help">
-            <input type="password" class="form-control" placeholder={{$root.translation.PASS_WITHDRAW_DIALOG_PASSWORD}} ng-model="pocket_pass" required>
+            <input type="password" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" placeholder={{$root.translation.PASS_WITHDRAW_DIALOG_PASSWORD}} ng-model="pocket_pass" required>
             <i class="fa fa-lock"></i>                  
         </div>
 
