@@ -1,6 +1,5 @@
 var app = angular.module('delux', ['ngRoute','ngAnimate', 'ngResource', 'ngSanitize', 'ui.bootstrap','textAngular','angularSpectrumColorpicker','ui.bootstrap.dropdownToggle','ngFileUpload']);
 
-
 app.config(function($routeProvider, $locationProvider, $provide) {
     $routeProvider
     .when("/", {
@@ -59,8 +58,6 @@ app.config(function($routeProvider, $locationProvider, $provide) {
     });
 
     $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function(taRegisterTool, taOptions){
-        // $delegate is the taOptions we are decorating
-        // register the tool with textAngular
 
         taRegisterTool('backgroundColor', {
             display: "<div spectrum-colorpicker ng-model='color' on-change='!!color && action(color)' format='\"hex\"' options='options'></div>",
@@ -157,7 +154,6 @@ app.config(function($routeProvider, $locationProvider, $provide) {
             ]
         });
 
-
         // add the button to the default toolbar definition
         taOptions.toolbar[1].push('backgroundColor','fontColor','fontName','fontSize');
     taOptions.forceTextAngularSanitize = false;
@@ -169,11 +165,9 @@ app.service('translationService', function($resource, $rootScope) {
 
     this.getTranslation = function($scope, language) {
         var languageFilePath = 'lang/translation_' + language + '.json';
-        console.log(languageFilePath);
         $resource(languageFilePath).get(function (data) {
             $scope.translation = data.toJSON();
             $rootScope.translation = $scope.translation;
-            console.log($rootScope.translation);
             
             if($rootScope.is_logged == false)
                 $rootScope.login_title = $rootScope.translation.TOP_MENU_LOGIN;
@@ -197,7 +191,6 @@ app.controller("LanguageCtrl", function ($scope, $rootScope, translationService,
     //Run translation if selected language changes
     $scope.translateLanguage = function(lang){
         $rootScope.currentLanguage = lang;
-        console.log($scope.currentLanguage);
         translationService.getTranslation($scope, lang);
         $location.path( '/' );
     };
@@ -231,7 +224,6 @@ app.factory('socket', function ($rootScope) {
             })
         },
         reconnect: function (id) {
-            console.log('socket.reconnect()');
             socket = io.connect('http://101.102.224.50/',{'forceNew': true });
             socket.emit('CLIENT_LOGGED_IN', {u_id: id });
             },
@@ -245,35 +237,23 @@ app.factory('socket', function ($rootScope) {
 
 app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket) {
 
-    console.log("loadPageCtrl");
-
     $scope.billBoard_portNumber = 10006;
     $rootScope.billBoard_Url = 'http://101.102.224.50:' + $scope.billBoard_portNumber;
 
     $scope.portNumber = 10005;
-    $rootScope.serverUrl = 'http://101.102.224.50';// + $scope.portNumber;
+    $rootScope.serverUrl = 'http://101.102.224.50:';// + $scope.portNumber;
 
     $scope.resource_portNumber = 10008;
     $rootScope.resource_Url = 'http://101.102.224.50:' + $scope.resource_portNumber;
 
-    var json = 'http://ipv4.myexternalip.com/json';
-    $http.get(json).then(function(result) {
-        console.log(result.data.ip);
-        $rootScope.myCurrentIP = result.data.ip;
-    }, function(e) {
-        console.log("error");
-    });
-
     $scope.gameLists = {}
     $http.post($rootScope.serverUrl + '/sessioncheck').then(function(success) {
-        console.log(success);
         if(success.data.result == 'success')
         {
             $scope.temp_userInfo = {}
             $scope.temp_userInfo.u_id = success.data.u_id;
 
             $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $rootScope.userInfo = success.data;
@@ -293,7 +273,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                 }
                 else
                 {
-                    console.log(success.data.reason);
                 }
             });
         }
@@ -306,7 +285,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
         $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/userlogout', $scope.temp_myID).then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $rootScope.is_logged = false;
@@ -331,7 +309,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
         $scope.my_gameLists = []
         $scope.newest_gameLists = []
         $http.post($rootScope.serverUrl + '/sitestart').then(function(success) {
-            console.log(success);
             $scope.gameLists = success.data.games;
             for(var i=0; i<$scope.gameLists.length; i++)
             {
@@ -386,12 +363,10 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
     
     $scope.search_Games = function()
     {
-        console.log($rootScope.game_search);
         if($rootScope.game_search == '')
             $scope.show_searchResults = false;
         else
             $scope.show_searchResults = true;
-        console.log($scope.show_searchResults);
 
         $location.path( '/' );
         if($scope.show_searchResults == true)
@@ -435,7 +410,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                 resolve: {}
             });
             modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
     };
@@ -458,7 +432,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                 resolve: {}
             });
             modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
     };
@@ -472,7 +445,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     };
     
@@ -485,7 +457,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     };
     
@@ -507,7 +478,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                 resolve: {}
             });
             modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
     };
@@ -521,7 +491,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     };
     
@@ -534,7 +503,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     };
 
@@ -546,10 +514,8 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
             $http.post($rootScope.serverUrl + '/noticecheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
-                    console.log("Notice checked");
                     $location.path( '/notification' );
                 }
             });
@@ -558,7 +524,6 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
 
     $scope.showNewsDetails = function(one_element)
     {
-        console.log(one_element);
         $rootScope.msg = one_element.message;
         $rootScope.modalInstance = $uibModal.open({
             animation: true,
@@ -569,15 +534,12 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             }
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 });
 
 
 app.controller('loginCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location) {
-
-    console.log("loginCtrl");
 
     $scope.showLoginModal = function()
     {
@@ -590,7 +552,6 @@ app.controller('loginCtrl', function($uibModal, $log, $document, $scope, $rootSc
                 resolve: {}
             });
             modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Notice Modal dismissed at: ' + new Date());
             });
         }
         else
@@ -603,7 +564,6 @@ app.controller('loginCtrl', function($uibModal, $log, $document, $scope, $rootSc
 app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstance, $uibModal, $log, $document) {
 
     $scope.noticeRegister = function (size, parentSelector) {
-        console.log("Notice Register");
         $uibModalInstance.dismiss('cancel');
 
         var parentElem = parentSelector ? 
@@ -617,13 +577,11 @@ app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstan
             resolve: {}
         });
         modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Notice Modal dismissed at: ' + new Date());
         });
     };
 
     $scope.noticeLogin = function (size, parentSelector) {
 
-        console.log("Notice Login");
         $uibModalInstance.dismiss('cancel');
 
         var parentElem = parentSelector ? 
@@ -638,14 +596,11 @@ app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstan
             resolve: {}
         });
         modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Notice Modal dismissed at: ' + new Date());
         });
     };
 
     $scope.exitMsg = function()
     {
-        console.log("exitMsg");
-    //    $rootScope.modalInstance.close('cancel');
         $uibModalInstance.dismiss('cancel');
     }
 });
@@ -653,60 +608,30 @@ app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstan
 app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModalInstance, $uibModal, $log, $document, socket) {
 
     $scope.exitMsg = function() {
-        console.log("Login exitMsg");
         $uibModalInstance.dismiss('cancel');
     }
 
     $scope.sendLoginInfo = function () {
-        console.log("Send Login Info...");
-        console.log($scope.logininfo);
         $http.post($rootScope.serverUrl + '/userlogin', $scope.logininfo).then(function(success) {
-            // return genericSuccess(success);
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.temp_userInfo = {};
                 $scope.temp_userInfo.u_id = success.data.u_id;
                 $uibModalInstance.dismiss('cancel');
 
-                $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
-                    // return genericSuccess(success);
-                    console.log(success);
-                    if(success.data.result == "success")
-                    {
-                        $rootScope.userInfo = success.data;
-                        $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
-
-                        
-
-                        $uibModalInstance.dismiss('cancel');
-                        $rootScope.login_title = $rootScope.userInfo.user_nickname;
-                        $rootScope.is_logged = true;
-
-                        $scope.tempData = {}
-                        $scope.tempData.u_id = $rootScope.userInfo.userKey;
-                        socket.init();
-                        socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
-                        $scope.turnOnNotify();
-
-                        console.log($rootScope.userInfo);
-
-                        $scope.getLatestNews();
-                        $scope.getLatestNotice();
-
-/*
-                        if($rootScope.myCurrentIP == $rootScope.userInfo.last_login_ip)
+                if(success.data.send_email == 0)
+                {
+                    $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
+                        if(success.data.result == "success")
                         {
-                            $uibModalInstance.dismiss('cancel');
-                            $rootScope.login_title = $rootScope.userInfo.user_nickname;
+                            $rootScope.userInfo = success.data;
+                            $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
 
-                            console.log($rootScope.is_logged);
+                            $rootScope.login_title = $rootScope.userInfo.user_nickname;
 
                             $scope.tempData = {}
                             $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
-                            console.log("init socket");
-                            console.log($rootScope.is_socket);
                             if($rootScope.is_socket == null)
                             {
                                 socket.init();
@@ -720,34 +645,25 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
 
                             $scope.getLatestNews();
                             $scope.getLatestNotice();
-
-                            console.log($rootScope.userInfo);
                         }
-                        else
-                        {
-                            $rootScope.modalInstance = $uibModal.open({
-                                animation: true,
-                                templateUrl: 'dialogs/LoginVerify.html',
-                                controller: 'LoginVerifyCtrl',
-                                resolve: {}
-                            });
-                            $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $log.info('Modal dismissed at: ' + new Date());
-                            });
-                        }*/
-
-                    }
-                    else
-                    {
-                        console.log(success.data.reason);
-                        $scope.logininfo.u_id = "";
-                        $scope.logininfo.u_pw = "";
-                    }
-                });
+                    });
+                }
+                else if(success.data.send_email == 1)
+                {
+                    $rootScope.userInfo = {}
+                    $rootScope.userInfo.userKey = success.data.u_id;
+                    $rootScope.modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'dialogs/LoginVerify.html',
+                        controller: 'LoginVerifyCtrl',
+                        resolve: {}
+                    });
+                    $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                    });
+                }
             }
             else
             {
-                console.log(success.data.reason);
                 if(success.data.reason == 1)
                     alert($rootScope.translation.LOGIN_ERROR_TEXT1);
                 else if(success.data.reason == 2)
@@ -765,7 +681,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     $scope.turnOnNotify = function()
     {
         socket.on('PUSH_RW_RESULT', function (data) {
-            console.log(data);
             var snd = new Audio('audio/alarm.mp3');
             snd.play();
             if(data.rw_flag == 1)
@@ -787,12 +702,10 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                 }
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         });
 
         socket.on('PUSH_OP_RESULT', function (data) {
-            console.log(data);
             var snd = new Audio('audio/alarm.mp3');
             snd.play();
             $rootScope.q_time = $rootScope.translation.ALARM_QUESTION_UPLOAD_CONTENT + " " + data.time;
@@ -808,7 +721,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                 }
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         });
 
@@ -825,7 +737,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/requestnews', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $rootScope.showNews = success.data.messages;
@@ -839,7 +750,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                     else
                         $rootScope.showNews[i].show_m = $rootScope.showNews[i].message;
                 }
-                console.log($rootScope.showNews);
             }
         });        
     }
@@ -850,7 +760,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/latestnotice', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $rootScope.showNotices = success.data.messages;
@@ -869,7 +778,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     }
 
     $scope.gotoRegister = function (size, parentSelector) {
-        console.log("go to Register");
         $uibModalInstance.dismiss('cancel');
 
         var parentElem = parentSelector ? 
@@ -883,13 +791,11 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
             resolve: {}
         });
         modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Notice Modal dismissed at: ' + new Date());
         });
     };
 
 
     $scope.gotoLogin = function (size, parentSelector) {
-        console.log("go to Login");
         $uibModalInstance.dismiss('cancel');
 
         var parentElem = parentSelector ? 
@@ -904,7 +810,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
             resolve: {}
         });
         modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Notice Modal dismissed at: ' + new Date());
         });
     };
 
@@ -914,7 +819,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     {
         if($scope.btn_name == $rootScope.translation.REGISTER_DIALOG_SEND_CODE)
         {
-            console.log("Register Send Verify");
             $scope.reg_sendVerfy = {}
             $scope.reg_sendVerfy.u_id = $scope.register_username;
             $scope.reg_sendVerfy.verify_way = $scope.register_check-1;
@@ -922,10 +826,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                 $scope.reg_sendVerfy.address = $scope.register_email;
             else
                 $scope.reg_sendVerfy.address = $scope.register_mobile;
-            console.log($scope.reg_sendVerfy);
 
             $http.post($rootScope.serverUrl + '/sendverifycode', $scope.reg_sendVerfy).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.btn_name = $rootScope.translation.REGISTER_DIALOG_SENT;
@@ -948,12 +850,10 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         $scope.tempData.u_id = $scope.reg_sendVerfy.u_id;
         $scope.tempData.verify_code = $scope.register_code;
         $scope.tempData.v_flag = 1;
-        console.log($scope.tempData);
 
         if($scope.tempData.verify_code != null)
         {
             $http.post($rootScope.serverUrl + '/verifycode', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.reg_sendRequest = {}
@@ -966,21 +866,16 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                         $scope.reg_sendRequest.photoindex = 1;
 
                     $scope.reg_sendRequest.password = $scope.register_password;
-                    console.log($scope.reg_sendRequest);
 
                     $http.post($rootScope.serverUrl + '/userregister', $scope.reg_sendRequest).then(function(success) {
-                        // return genericSuccess(success);
-                        console.log(success);
                         $scope.path_code = "img/img_check.png";
                         if(success.data.result == "success")
                         {
-                            console.log("successfully sent");
                             $uibModalInstance.dismiss('cancel');
                             alert($rootScope.translation.USER_REGISTERED_SUCCESS);
                         }
                         else
                         {
-                            console.log(success.data.reason);
                             alert($rootScope.translation.USER_REGISTERED_FAILED);
                         }
                     });
@@ -996,7 +891,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
 
     $scope.select_userphoto = function()
     {
-        console.log("select_userphoto");
         $rootScope.modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'dialogs/ResetUserPhoto.html',
@@ -1005,48 +899,25 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
     $scope.getAllPhotos = function()
     {
-        console.log("getAllPhotos");
         $http.post($rootScope.resource_Url + '/requestphotos').then(function(success) {
             $scope.photoAvatar = {}
             $scope.photoAvatar = success.data.photos;
-            console.log($scope.photoAvatar);
         });
     }
 
     $scope.selectPhoto = function(photo_value)
     {
         $rootScope.photo_value　= photo_value;
-        console.log(photo_value);
     }
-
 
     $scope.resetUserPhotoFunc = function()
     {
-        console.log($scope.photo_value);
         $rootScope.modalInstance.close('cancel');
-      /*  if($scope.photo_value　!= null)
-        {
-            $scope.tempData = {}
-            $scope.tempData.u_id = $rootScope.userInfo.u_id;
-            $scope.tempData.u_photoindex = $scope.photo_value;
-            console.log($scope.tempData);
-
-            $http.post($rootScope.serverUrl + '/updateuserphoto', $scope.tempData).then(function(success) {
-                console.log(success);
-                if(success.data.result == 'success')
-                {
-                    $rootScope.userInfo.user_photo = success.data.photourl;
-                    $rootScope.modalInstance.close('cancel');
-                }
-            });
-
-        }*/
     }
 
     $scope.initRegisterForm = function()
@@ -1069,10 +940,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         {
             $scope.tempData = {}
             $scope.tempData.u_id = $scope.register_username;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/useridcheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                     $scope.path_username = "img/img_check.png";
                 else
@@ -1094,10 +963,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         {
             $scope.tempData = {}
             $scope.tempData.u_nickname = $scope.register_nickname;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/usernicknamecheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                     $scope.path_nickname = "img/img_check.png";
                 else
@@ -1129,10 +996,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         {
             $scope.tempData = {}
             $scope.tempData.u_email = $scope.register_email;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/useremailcheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                     $scope.path_email = "img/img_check.png";
                 else
@@ -1154,10 +1019,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
         {
             $scope.tempData = {}
             $scope.tempData.u_phone = $scope.register_mobile;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/userphonecheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                     $scope.path_mobile = "img/img_check.png";
                 else
@@ -1174,7 +1037,6 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
 
     $scope.select_Checkway = function()
     {
-        console.log($scope.register_check);
         $scope.enableSendCode_Btn();
     }
 
@@ -1189,52 +1051,46 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
 
 app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModalInstance, socket) {
 
-    console.log("Login Verify Dialog");
-
     $scope.sendLoginVerificationCode = function () {
-        console.log("Send Login Verification Code");
 
         $scope.verifyinfo = {}
         $scope.verifyinfo.verify_code = $scope.loginVerify.code;
         $scope.verifyinfo.u_id = $rootScope.userInfo.userKey;
         $scope.verifyinfo.v_flag = 0;
-        console.log($scope.verifyinfo);
-
-    /*    
-        $uibModalInstance.dismiss('cancel');
-        $rootScope.is_logged = true;
-        $rootScope.login_title = $rootScope.userInfo.user_nickname;
-
-        console.log($rootScope.userInfo);*/
 
         $http.post($rootScope.serverUrl + '/verifycode', $scope.verifyinfo).then(function(success) {
             // return genericSuccess(success);
-            console.log(success);
             if(success.data.result == "success")
             {
-                $rootScope.is_logged = true;
+                $scope.temp_userInfo = {};
+                $scope.temp_userInfo.u_id = $rootScope.userInfo.userKey;
+                $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
+                    if(success.data.result == "success")
+                    {
+                        $rootScope.userInfo = success.data;
+                        $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
 
-                $scope.tempData = {}
-                $scope.tempData.u_id = $rootScope.userInfo.userKey;
-                if($rootScope.is_socket == null)
-                {
-                    socket.init();
-                    socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
-                //    $rootScope.$emit("turnAlarm", {});
-                }
-                else
-                    socket.reconnect($rootScope.userInfo.userKey);
+                        $uibModalInstance.dismiss('cancel');
+                        $rootScope.login_title = $rootScope.userInfo.user_nickname;
 
-                $rootScope.login_title = $rootScope.userInfo.user_nickname;
-                console.log("Login Verified Matched!!!");
-                console.log($rootScope.userInfo);
+                        $scope.tempData = {}
+                        $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
-                $rootScope.$emit("GetLeftSideInfo", {});
+                        if($rootScope.is_socket == null)
+                        {
+                            socket.init();
+                            socket.emit('CLIENT_LOGGED_IN', $scope.tempData);
+                        }
+                        else
+                            socket.reconnect($rootScope.userInfo.userKey);
+                        $rootScope.$emit("turnAlarm", {});
 
-                $rootScope.modalInstance.close('cancel');
+                        $rootScope.is_logged = true;
+
+                        $rootScope.$emit("GetLeftSideInfo", {});
+                    }
+                });
             }
-            else
-                console.log(success.data.reason);
         });
     };
 
@@ -1245,23 +1101,19 @@ app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModal
 
 app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $log) {
 
-    console.log("Charge Infomation");
-
     $scope.chargeForm_disable = true;
 
     $scope.setAutoPay_Method = function() {
 
-        console.log($scope.payment_history_count);
-            $scope.bank_Name = "";
-            $scope.bank_ID = "";
-            $scope.bank_pass = "";
-            $scope.bank_UserName = "";
+        $scope.bank_Name = "";
+        $scope.bank_ID = "";
+        $scope.bank_pass = "";
+        $scope.bank_UserName = "";
 
         if($scope.payment_history_count == 0)
             $scope.autopay = false;
         if($scope.autopay == true)
         {
-            console.log("Set Auto Pay Method");
             $scope.disable_bankName = true;
             $scope.disable_bankPass = true;
             $scope.disable_bankID = true;
@@ -1288,9 +1140,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             {
                 if($scope.payment_history[i].sru_country == $scope.country_number)
                 {
-                    console.log("country matched");
-                    console.log($scope.payment_history[i]);
-                    console.log($scope.payment_history[i].sru_paygate);
                     if($scope.payment_history[i].sru_paygate == 10)
                         $scope.payMethod_1 = true;
                     else if($scope.payment_history[i].sru_paygate == 1)
@@ -1349,7 +1198,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             }
             if($scope.payMethod_value == 10)
             {
-                console.log("Set Offline Pay Method");
                 $scope.disable_bankName = false;
                 $scope.disable_bankPass = true;
                 $scope.disable_bankID = false;
@@ -1357,7 +1205,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             }
             else
             {
-                console.log("Set Online Pay Method");
                 $scope.disable_bankName = true;
                 $scope.disable_bankPass = false;
                 $scope.disable_bankID = false;
@@ -1372,13 +1219,10 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
     $scope.setUnionPay_Method = function() {
 
-        console.log("Set UnionPay");
-        console.log($scope.payMethod_value);
         if($scope.autopay == false)
         {
             if($scope.payMethod_value == 10)
             {
-                console.log("Set Offline Pay Method");
                 $scope.disable_bankName = false;
                 $scope.disable_bankPass = true;
                 $scope.disable_bankID = false;
@@ -1386,7 +1230,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             }
             else
             {
-                console.log("Set Online Pay Method");
                 $scope.disable_bankName = true;
                 $scope.disable_bankPass = false;
                 $scope.disable_bankID = false;
@@ -1405,7 +1248,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             {
                 if($scope.payment_history[i].sru_paygate == $scope.payMethod_value && $scope.payment_history[i].sru_country == $scope.country_number)
                 {
-                    console.log("pay matched");
                     $scope.bank_Name = $scope.payment_history[i].sru_bank_name;
                     $scope.bank_ID = $scope.payment_history[i].sru_bank_id;
                     $scope.bank_pass = $scope.payment_history[i].sru_bank_pw;
@@ -1468,7 +1310,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             {
                 if($scope.payment_history[i].sru_country == $scope.country_number)
                 {
-                    console.log("country matched");
                     $scope.bank_Name = "";
                     $scope.bank_ID = "";
                     $scope.bank_pass = "";
@@ -1589,15 +1430,11 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         }
 
         $scope.currentMoney = $scope.currentBalance * $scope.real_money;
-        console.log($scope.currentMoney);
 
     }
 
     $scope.sendPayRequest = function() {
 
-        console.log("Send Pay Request");
-        /////////////////////////////////////////////////////////////////
-        console.log($scope.country_select);
         $scope.disable_Charge = true;
 
         $scope.requestPay_Array = {}
@@ -1631,19 +1468,16 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
         {
             $scope.requestPay_Array.sru_country = 0;
-            console.log($scope.balances[0].balance);
             $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[0].balance;
         }
         else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
         {
             $scope.requestPay_Array.sru_country = 1;
-            console.log($scope.balances[1].balance);
             $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[1].balance;
         }
         else
         {
             $scope.requestPay_Array.sru_country = 2;
-            console.log($scope.balances[2].balance);
             $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[2].balance;
         }
 
@@ -1653,13 +1487,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         {     
             $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
 
-            console.log($scope.requestPay_Array);
-
             $http.post($rootScope.serverUrl + '/autocharge', $scope.requestPay_Array).then(function(success) {
-                // return genericSuccess(success);
-                console.log(success);
-
-                console.log("Autopay request sent successfully");
                 $scope.disable_Charge = false;
                 $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
                 $rootScope.modalInstance = $uibModal.open({
@@ -1670,7 +1498,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                     }
                 });
                 $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
                     $scope.autopay = true;
                     $scope.disable_Charge = false;
                     $scope.money_select = '100k';
@@ -1682,14 +1509,11 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         {
             if($scope.payMethod_value == 10)
             {
-                console.log("Offline Pay");
                 $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
                 $scope.requestPay_Array.sru_bank_name = $scope.bank_Name;
                 $scope.requestPay_Array.sru_bank_username = $scope.bank_UserName;
-                console.log($scope.requestPay_Array);
                 if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_name == "" || $scope.requestPay_Array.sru_bank_username == "")
                 {
-                    console.log("Please fill the form");
                     $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
                     $scope.disable_Charge = false;
                     $rootScope.modalInstance = $uibModal.open({
@@ -1700,7 +1524,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                         }
                     });
                     $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $log.info('Modal dismissed at: ' + new Date());
                         $scope.autopay = true;
                         $scope.chargeForm_disable = true;
                         $scope.disable_bankName = true;
@@ -1714,7 +1537,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                 else
                 {
                     $http.post($rootScope.serverUrl + '/offlinecharge', $scope.requestPay_Array).then(function(success) {
-                        console.log(success);
                         if(success.data.result == "success")
                         {
                             $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
@@ -1727,7 +1549,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                                 }
                             });
                             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $log.info('Modal dismissed at: ' + new Date());
                                 $scope.autopay = true;
                                 $scope.chargeForm_disable = true;
                                 $scope.disable_bankName = true;
@@ -1745,15 +1566,12 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
             }
             else
-            {
-                console.log("Online Pay");    
+            {  
                 $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
                 $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
                 $scope.requestPay_Array.sru_bank_pw = $scope.bank_pass;
-                console.log($scope.requestPay_Array);
                 if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_pw == "")
                 {
-                    console.log("Please fill the form");
                     $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
                     $scope.disable_Charge = false;
                     $rootScope.modalInstance = $uibModal.open({
@@ -1764,7 +1582,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                         }
                     });
                     $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $log.info('Modal dismissed at: ' + new Date());
                         $scope.autopay = true;
                         $scope.chargeForm_disable = true;
                         $scope.disable_bankName = true;
@@ -1778,7 +1595,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                 else
                 {
                     $http.post($rootScope.serverUrl + '/onlinecharge', $scope.requestPay_Array).then(function(success) {
-                        console.log(success);
                         if(success.data.result == "success")
                         {
                             $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
@@ -1791,7 +1607,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                                 }
                             });
                             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $log.info('Modal dismissed at: ' + new Date());
                                 $scope.autopay = true;
                                 $scope.chargeForm_disable = true;
                                 $scope.disable_bankName = true;
@@ -1818,17 +1633,12 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.temp_userInfo = {}
         $scope.temp_userInfo.u_id = $rootScope.userInfo.userKey;
         $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $rootScope.userInfo = success.data;
                 $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
                 $rootScope.is_logged = true;
-                console.log("Reget_userinfo");
-                console.log($rootScope.userInfo);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
@@ -1845,7 +1655,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
         $scope.myUserID = {}
         $scope.myUserID.u_id = $rootScope.userInfo.userKey;
-        console.log("Get Balance Info");
 
         $scope.payMethod_1 = false;
         $scope.payMethod_2 = false;
@@ -1853,10 +1662,8 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.payMethod_4 = false;
         $scope.payMethod_5 = false;
         $http.post($rootScope.serverUrl + '/requestbalanceinfo', $scope.myUserID).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
-                console.log("Enable Form");
                 $scope.balances = success.data.balances;
                 $scope.chargeForm_disable = false;
                 $scope.payment_history_count = success.data.infocount;
@@ -1867,9 +1674,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                     $scope.payment_history = {}
                     $scope.infos = success.data.infos;
                     $scope.payment_history = success.data.infos;
-                    console.log("Payment history");
-                    console.log($scope.payment_history);
-
 
                     for(var i=0; i<$scope.infos.length; i++)
                     {
@@ -1910,8 +1714,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                     $scope.disable_bankPass = true;
                     $scope.disable_bankID = true;
                     $scope.disable_bankUser = true;
-
-                    console.log($scope.payMethod_value);
                 }
                 else
                 {
@@ -1967,13 +1769,9 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                     $scope.currentBalance = $scope.balances[2].balance;
                     $scope.currency = "$";
                 }
-
                 $scope.currentMoney = $scope.currentBalance * $scope.real_money;
-                console.log($scope.currentMoney);
 
                 $scope.showInputForm();
-
-
             }
         });
     };
@@ -2017,7 +1815,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/rechargeinfo', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $rootScope.chargeRecords = success.data.record;
@@ -2047,7 +1844,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                     var tempDate = Date.parse($rootScope.chargeRecords[i].time, "yyyy-MM-dd HH:mm:ss");
                     var date2 = new Date(tempDate);
                     var diff = (date1.getTime() - date2.getTime()) / 60000;
-                //    console.log(diff);
 
                     if(diff > 5 || $rootScope.chargeRecords[i].type != 3)
                         $rootScope.chargeRecords[i].is_cancel = true;
@@ -2063,14 +1859,11 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                 }
                 $scope.onChangeRecord_Number();
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.onChangeRecord_Number = function()
     {
-        console.log("sub charge records");
         $rootScope.sub_chargeRecords = []
         $scope.bigTotalItems = 10*($rootScope.chargeRecords.length / $scope.num_record);
         for(var j = ($scope.bigCurrentPage - 1) * $scope.num_record; j < $scope.bigCurrentPage * $scope.num_record; j ++)
@@ -2113,10 +1906,8 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         $scope.tempData = {}
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.record_id = record.id;
-        console.log($scope.tempData);
 
         $http.post($rootScope.serverUrl + '/cancelrequest', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {                           
                 $rootScope.msg = $rootScope.translation.CHARGE_CANCEL;
@@ -2129,7 +1920,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                     }
                 });
                 $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
                     $scope.getChargeRecord();
                 });
             }
@@ -2140,8 +1930,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
     $scope.exitMsg = function()
     {
-        console.log("exit charge notice");
-
         $scope.autopay = true;
         $scope.chargeForm_disable = true;
         $scope.disable_bankName = true;
@@ -2160,7 +1948,6 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
 app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, $uibModal, $log, $document) {
 
-    console.log("WithdrawlCtrl");
     $scope.withdrawMethod_value = 10;
 
     $scope.onMoneyChange = function()
@@ -2209,12 +1996,10 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         }
 
         $scope.currentMoney = $scope.currentBalance * $scope.real_money;
-        console.log($scope.currentMoney);
     }
 
     $scope.setWithdrawlPass = function()
     {
-        console.log($scope.pass);
         if($scope.pass.first == $scope.pass.second)
         {
             $scope.tempPassword = {}
@@ -2222,14 +2007,11 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.tempPassword.u_withdrawlpw = $scope.pass.first;
 
             $http.post($rootScope.serverUrl + '/setwithdrawlpass', $scope.tempPassword).then(function(success) {
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $rootScope.userInfo.user_withdrawlpw = 1;
                     $rootScope.modalInstance.close('cancel');
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
     }
@@ -2239,16 +2021,13 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $scope.tempPassword = {}
         $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
         $scope.tempPassword.u_withdrawlpw = $scope.withdrawl_pass;
-        console.log($scope.tempPassword);
 
         $http.post($rootScope.serverUrl + '/withdrawlpasscode', $scope.tempPassword).then(function(success) {
             // return genericSuccess(success);
             if(success.data.result == "success")
             {
                 $rootScope.loginWithdrawResult = success.data;
-                console.log($rootScope.loginWithdrawResult);
                 $rootScope.modalInstance.close('cancel');
-                console.log("load withdrawl page");
 
                 $scope.disable_Withdraw = false;
                 $scope.Fill_Form_Info();
@@ -2256,15 +2035,13 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             }
             else
             {
-                console.log(success.data.reason);
-                alert("암호를 다시 입력하십시오.");
+                alert($rootScope.translation.WITHDRAW_PASS_ERROR);
             }
         });
 
     }
     $scope.resetWithdrawlPassword = function()
     {
-        console.log("reset withdraw password");
         $rootScope.modalInstance.close('cancel');
         $rootScope.modalInstance = $uibModal.open({
             animation: true,
@@ -2273,7 +2050,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
     $scope.resetWithdrawlPass = function()
@@ -2286,25 +2062,17 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.tempPassword.u_withdrawlpwbefore = $scope.resetpass.old;
 
             $http.post($rootScope.serverUrl + '/updatewithdrawlpass', $scope.tempPassword).then(function(success) {
-                // return genericSuccess(success);
-                console.log(success);
                 if(success.data.result == "success")
                 {
-                //    $uibModalInstance.dismiss('cancel');
                     $rootScope.modalInstance.close('cancel');
-
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
     }
 
     $scope.Fill_Form_Info = function()
     {
-        console.log("init Withdrawl Form");
         $scope.disable_Withdraw = false;
-        console.log($rootScope.loginWithdrawResult);
 
         if($rootScope.loginWithdrawResult.is_withdrawl == 0)
         {
@@ -2357,7 +2125,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                 $scope.country_sel = $rootScope.translation.CHARGE_COUNTRY_KOREA;
             else
                 $scope.country_sel = $rootScope.translation.CHARGE_COUNTRY_OTHERS;
-            console.log($scope.country_sel);
             $scope.bank_Name = $rootScope.loginWithdrawResult.u_withdrawlbank;
             $scope.bank_UserName = $rootScope.loginWithdrawResult.u_withdrawlbankname;
             $scope.bank_ID = $rootScope.loginWithdrawResult.u_withdrawlid;
@@ -2368,7 +2135,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $scope.requestBalance = {}
         $scope.requestBalance.u_id = $rootScope.userInfo.userKey;
         $http.post($rootScope.serverUrl + '/onlybalance', $scope.requestBalance).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.balances = success.data.balances;
@@ -2416,17 +2182,13 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                 }
 
                 $scope.currentMoney = $scope.currentBalance * $scope.real_money;
-                console.log($scope.currentMoney);
             }
-            else
-                console.log(success.data.reason);
         });
         $scope.showInputForm();
     }
 
     $scope.onCountryChange_w = function(country_sel)
     {
-        console.log($scope.country_sel);
         $scope.withdrawMethod_1 = false;
         $scope.withdrawMethod_2 = false;
         $scope.withdrawMethod_3 = false;
@@ -2505,19 +2267,16 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         if($scope.country_sel == $rootScope.translation.CHARGE_COUNTRY_CHINA)
         {
             $scope.requestWithdraw_Array.u_withdrawlcountry = 0;
-            console.log($scope.balances[0].balance);
             $scope.requestWithdraw_Array.u_money = $scope.requestWithdraw_Array.u_game_money / 10000 * $scope.balances[0].balance;
         }
         else if($scope.country_sel == $rootScope.translation.CHARGE_COUNTRY_KOREA)
         {
             $scope.requestWithdraw_Array.u_withdrawlcountry = 1;
-            console.log($scope.balances[1].balance);
             $scope.requestWithdraw_Array.u_money = $scope.requestWithdraw_Array.u_game_money / 10000 * $scope.balances[1].balance;
         }
         else
         {
             $scope.requestWithdraw_Array.u_withdrawlcountry = 2;
-            console.log($scope.balances[2].balance);
             $scope.requestWithdraw_Array.u_money = $scope.requestWithdraw_Array.u_game_money / 10000 * $scope.balances[2].balance;
         }
 
@@ -2525,17 +2284,13 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         {
             if($scope.requestWithdraw_Array.u_withdrawlmethod == 10)
             {
-                console.log("Offline Withdraw");
                 $scope.requestWithdraw_Array.u_withdrawlbank = $scope.bank_Name;  
                 $scope.requestWithdraw_Array.u_withdrawlbankname = $scope.bank_UserName; 
-                console.log($scope.requestWithdraw_Array);
                 if($scope.requestWithdraw_Array.u_withdrawlid != "" && $scope.requestWithdraw_Array.u_withdrawlbank != "" && $scope.requestWithdraw_Array.u_withdrawlbankname != "")
                 {
                     $http.post($rootScope.serverUrl + '/requestwithdrawl', $scope.requestWithdraw_Array).then(function(success) {
-                        console.log(success);
                         if(success.data.result == "success")
                         {
-                            console.log($rootScope.userInfo);
                             $rootScope.userInfo.user_balance = success.data.balance;
                             $rootScope.loginWithdrawResult.is_withdrawl = 1;
                             $scope.disable_Withdraw = false;
@@ -2549,27 +2304,21 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                                 }
                             });
                             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $log.info('Modal dismissed at: ' + new Date());
                                 $scope.disable_Withdraw = false;
                                 $scope.Fill_Form_Info();
                                 $scope.getWithdrawRecord();
                             });
                         }
-                        else
-                            console.log(success.data.reason);
                     });
                 }
             }
             else
             {
-                console.log("Online Withdraw"); 
                 if($scope.requestWithdraw_Array.u_withdrawlid != null)
                 {
                     $http.post($rootScope.serverUrl + '/requestwithdrawl', $scope.requestWithdraw_Array).then(function(success) {
-                        console.log(success);
                         if(success.data.result == "success")
                         {
-                            console.log($rootScope.userInfo);
                             $rootScope.userInfo.user_balance = success.data.balance;
                             $rootScope.loginWithdrawResult.is_withdrawl = 1;
                             $scope.disable_Withdraw = false;
@@ -2583,21 +2332,17 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                                 }
                             });
                             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $log.info('Modal dismissed at: ' + new Date());
                                 $scope.disable_Withdraw = false;
                                 $scope.Fill_Form_Info();
                                 $scope.getWithdrawRecord();
                             });
                         }
-                        else
-                            console.log(success.data.reason);
                     });
                 }
             }
         }
         else
         {
-            console.log("Your balance is not enough.");
             $scope.disable_Withdraw = false;
 
             $rootScope.msg = $rootScope.translation.WITHDRAW_ERORR_BALANCE;
@@ -2609,13 +2354,11 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                 }
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
                 $scope.disable_Withdraw = false;
                 $scope.Fill_Form_Info();
                 $scope.getWithdrawRecord();
             });
         }
-        console.log($scope.requestWithdraw_Array);
     }
 
     $scope.showInputForm = function()
@@ -2652,7 +2395,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
         $http.post($rootScope.serverUrl + '/withdrawlinfo', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $rootScope.withdrawRecords = success.data.record;
@@ -2679,7 +2421,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                     var tempDate = Date.parse($rootScope.withdrawRecords[i].time, "yyyy-MM-dd HH:mm:ss");
                     var date2 = new Date(tempDate);
                     var diff = (date1.getTime() - date2.getTime()) / 60000;
-                //    console.log(diff);
 
                     if(diff > 5 || $rootScope.withdrawRecords[i].type != 3)
                         $rootScope.withdrawRecords[i].is_cancel = true;
@@ -2695,8 +2436,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                 }
                 $scope.onChangeWithdraw_Number();
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
@@ -2744,10 +2483,8 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $scope.tempData = {}
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.record_id = record.id;
-        console.log($scope.tempData);
 
         $http.post($rootScope.serverUrl + '/cancelrequest', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             { 
                 $rootScope.msg = $rootScope.translation.WITHDRAW_CANCEL;
@@ -2759,7 +2496,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                     }
                 });
                 $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
                     $scope.disable_Withdraw = false;
                     $scope.Fill_Form_Info();
                     $scope.getWithdrawRecord();
@@ -2772,7 +2508,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
 
     $scope.exitMsg = function()
     {
-        console.log("exit notice message");
         if($rootScope.loginWithdrawResult != null)
             $scope.Fill_Form_Info();
         $scope.getWithdrawRecord();
@@ -2786,7 +2521,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
 app.controller("AlertCtrl", function ($scope, $rootScope) {
     $scope.exitMsg = function()
     {
-        console.log("exit alert message");
         $rootScope.modalInstance.close('cancel');
     }
 });
@@ -2796,22 +2530,17 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
 
     $scope.loginPocketPass = function()
     {
-        console.log("loginPocketPass");
         $scope.tempPassword = {}
         $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
         $scope.tempPassword.u_pocketpw = $scope.pocket_pass;
-        console.log($scope.tempPassword);
 
        $http.post($rootScope.serverUrl + '/pocketpasscode', $scope.tempPassword).then(function(success) {
             // return genericSuccess(success);
             if(success.data.result == "success")
             {
                 $rootScope.modalInstance.close('cancel');
-                console.log("Load Pocket Page");
                 $location.path( '/pocket' );
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
@@ -2826,66 +2555,51 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
     $scope.resetPocketPassFunc = function()
     {
-        console.log("resetPocketPassFunc");
         if($scope.reset_pocketpass_first == $scope.reset_pocketpass_second && $scope.reset_pocketpass_first != $scope.reset_pocketpass_old)
         {
             $scope.tempPassword = {}
             $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.u_pocketpw = $scope.reset_pocketpass_first;
             $scope.tempPassword.passbefore = $scope.reset_pocketpass_old;
-            console.log($scope.tempPassword);
 
             $http.post($rootScope.serverUrl + '/updatepocketpass', $scope.tempPassword).then(function(success) {
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $rootScope.modalInstance.close('cancel');
-
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
     }
 
     $scope.setPocketPassFunc = function()
     {
-        console.log("setPocketPass");
         if($scope.pocketpass.first == $scope.pocketpass.second)
         {
             $scope.tempPassword = {}
             $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.u_pocketpw = $scope.pocketpass.first;
-            console.log($scope.tempPassword.u_pocketpw);
 
             $http.post($rootScope.serverUrl + '/setpocketpass', $scope.tempPassword).then(function(success) {
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $rootScope.userInfo.user_pocketpw = 1;
                     $rootScope.modalInstance.close('cancel');
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
     }
 
     $scope.sendPocketDraw = function()
     {
-        console.log("sendPocketDraw");
         $scope.depositPocket = {}
         $scope.depositPocket.u_id = $rootScope.userInfo.userKey;
         $scope.depositPocket.money_change = $scope.pocket_money;
         $scope.depositPocket.change_way = 1;
-
-        console.log($scope.depositPocket);
 
         if($scope.pocket_money > $rootScope.userInfo.user_pocketmoney || $scope.pocket_money <= 0)
         {
@@ -2899,14 +2613,11 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
                 }
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
         else
         {
             $http.post($rootScope.serverUrl + '/requestpocketchange', $scope.depositPocket).then(function(success) {
-                // return genericSuccess(success);
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $scope.pocket_money = 0;
@@ -2921,24 +2632,19 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
                         }
                     });
                     $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $log.info('Modal dismissed at: ' + new Date());
                     });
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
     }
 
     $scope.sendPocketDeposit = function()
     {
-        console.log("sendPocketDeposit");
         $scope.depositPocket = {}
         $scope.depositPocket.u_id = $rootScope.userInfo.userKey;
         $scope.depositPocket.money_change = $scope.pocket_money;
         $scope.depositPocket.change_way = 0;
 
-        console.log($scope.depositPocket);
         if($scope.pocket_money > $rootScope.userInfo.user_balance || $scope.pocket_money <= 0)
         {
             $scope.pocket_money = 0;
@@ -2951,14 +2657,11 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
                 }
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
         else
         {
             $http.post($rootScope.serverUrl + '/requestpocketchange', $scope.depositPocket).then(function(success) {
-                // return genericSuccess(success);
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $scope.pocket_money = 0;
@@ -2973,11 +2676,8 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
                         }
                     });
                     $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $log.info('Modal dismissed at: ' + new Date());
                     });
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
 
@@ -3000,8 +2700,6 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
     $scope.flag_page = 1;
 
     $scope.pageChanged = function() {
-        $log.log('Page changed to: ' + $scope.currentPage);
-        console.log($scope.bigCurrentPage);
         $scope.onChangeNum_perPage();
     };
 
@@ -3014,7 +2712,6 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
             if($scope.gameRecords.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.gameRecords.length)
@@ -3027,7 +2724,6 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
             if($scope.chargeRecords.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.chargeRecords.length)
@@ -3040,7 +2736,6 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
             if($scope.withdrawRecords.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.withdrawRecords.length)
@@ -3051,13 +2746,11 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
 
     $scope.getRechargeRecord = function()
     {
-        console.log("Get Recharge Record");
         $scope.tempRecharge = {}
         $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
         $scope.chargeRecords = {}
 
         $http.post($rootScope.serverUrl + '/rechargerecord', $scope.tempRecharge).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.chargeRecords = success.data.record;
@@ -3072,22 +2765,17 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                 }
                 $scope.flag_page = 2;
                 $scope.onChangeNum_perPage();
-                console.log($scope.chargeRecords);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.getWithdrawalsRecord = function()
     {
-        console.log("Get Withdrawl Record");
         $scope.tempRecharge = {}
         $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
         $scope.withdrawRecords = {}
 
         $http.post($rootScope.serverUrl + '/withdrawlrecord', $scope.tempRecharge).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.withdrawRecords = success.data.record;
@@ -3102,22 +2790,17 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                 }
                 $scope.flag_page = 3;
                 $scope.onChangeNum_perPage();
-                console.log($scope.withdrawRecords);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.getGameRecord = function()
     {
-        console.log("Get Withdrawl Record");
         $scope.tempRecharge = {}
         $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
         $scope.gameRecords = {}
 
         $http.post($rootScope.serverUrl + '/gamerecord', $scope.tempRecharge).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.gameRecords = success.data.record;
@@ -3129,12 +2812,9 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                     else
                         $scope.gameRecords[i].type = "졌";
                 }
-                console.log($scope.gameRecords);
                 $scope.flag_page = 1;
                 $scope.onChangeNum_perPage();
             }
-            else
-                console.log(success.data.reason);
         });
     }
 });
@@ -3148,8 +2828,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
     $scope.flag_page = 1;
 
     $scope.pageChanged = function() {
-        $log.log('Page changed to: ' + $scope.currentPage);
-        console.log($scope.bigCurrentPage);
         $scope.onChangeNum_perPage();
     };
 
@@ -3162,7 +2840,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             if($scope.chargeMessage.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.chargeMessage.length)
@@ -3175,7 +2852,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             if($scope.withdrawMessage.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.withdrawMessage.length)
@@ -3188,7 +2864,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             if($scope.systemMessage.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.systemMessage.length)
@@ -3201,7 +2876,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             if($scope.otherMessage.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.otherMessage.length)
@@ -3214,7 +2888,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             if($scope.questionMessage.length % $scope.item_perPage != 0)
                 $scope.bigTotalItems = $scope.bigTotalItems + 10;
 
-            console.log($scope.bigCurrentPage);
             for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
             {
                 if(j < $scope.questionMessage.length)
@@ -3225,7 +2898,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
 
     $scope.getRechargeMessage = function()
     {
-        console.log("getRechargeMessage");
         $scope.flag_page = 1;
 
         $scope.temp_myID = {}
@@ -3233,21 +2905,16 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.chargeMessage = {}
 
         $http.post($rootScope.serverUrl + '/rechargemessage', $scope.temp_myID).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.chargeMessage = success.data.messages;
                 $scope.onChangeNum_perPage();
-                console.log($scope.chargeMessage);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.getWithdrawalsMessage = function()
     {
-        console.log("getWithdrawalsRecord");
         $scope.flag_page = 2;
         
         $scope.temp_myID = {}
@@ -3255,22 +2922,17 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.chargeMessage = {}
 
         $http.post($rootScope.serverUrl + '/withdrawlmessage', $scope.temp_myID).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.withdrawMessage = success.data.messages;
                 $scope.onChangeNum_perPage();
-                console.log($scope.withdrawMessage);
             }
-            else
-                console.log(success.data.reason);
         });
 
     }
 
     $scope.getSystemMessage = function()
     {
-        console.log("getSystemMessage");
         $scope.flag_page = 3;
 
         $scope.temp_myID = {}
@@ -3278,21 +2940,16 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.systemMessage = {}
 
         $http.post($rootScope.serverUrl + '/systemmessage', $scope.temp_myID).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.systemMessage = success.data.messages;
                 $scope.onChangeNum_perPage();
-                console.log($scope.systemMessage);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.getOtherMessage = function()
     {
-        console.log("getOtherMessage");
         $scope.flag_page = 4;
 
         $scope.temp_myID = {}
@@ -3300,21 +2957,16 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.otherMessage = {}
 
         $http.post($rootScope.serverUrl + '/othermessage', $scope.temp_myID).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.otherMessage = success.data.messages;
                 $scope.onChangeNum_perPage();
-                console.log($scope.otherMessage);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.getQuestionMessage = function()
     {
-        console.log("getQuestionMessage");
         $scope.flag_page = 5;
 
         $scope.temp_myID = {}
@@ -3322,15 +2974,11 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.questionMessage = {}
 
         $http.post($rootScope.serverUrl + '/requestfeedback', $scope.temp_myID).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.questionMessage = success.data.messages;
                 $scope.onChangeNum_perPage();
-                console.log($scope.questionMessage);
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
@@ -3348,7 +2996,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
@@ -3363,16 +3010,12 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             $scope.tempData.m_category = 0;
         else
             $scope.tempData.m_category = 1;
-        console.log($scope.tempData);
 
         $http.post($rootScope.serverUrl + '/uploadopinion', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $rootScope.modalInstance.close('cancel');
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
@@ -3387,10 +3030,6 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
 app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
 
     $scope.flag_gameList = 1;
-    $scope.notReady = function()
-    {
-        alert("준비중입니다.");
-    }
 
     $scope.card_game = function()
     {
@@ -3426,7 +3065,6 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
     {
         $scope.popular_gameLists = []
         $http.post($rootScope.serverUrl + '/sitestart').then(function(success) {
-            console.log(success);
             $scope.gameLists = success.data.games;
             for(var i=0; i<$scope.gameLists.length; i++)
                 for(var j=i+1; j<$scope.gameLists.length; j++)
@@ -3454,20 +3092,17 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
     {
         $scope.show_gameList = []
         $http.post($rootScope.serverUrl + '/sitestart').then(function(success) {
-            console.log(success);
             $scope.gameLists = success.data.games;
             for(var i=0; i<$scope.gameLists.length; i++)
             {
                 if($scope.gameLists[i].game_category == $scope.flag_gameList)
                     $scope.show_gameList.push($scope.gameLists[i]);
             }
-            console.log($scope.show_gameList);
         });
     }
     
     $scope.search_Games = function()
     {
-        console.log($scope.game_search);
         $scope.show_gameList = []
 
         for(var i=0; i<$scope.gameLists.length; i++)
@@ -3483,7 +3118,6 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
                     $scope.show_gameList.push($scope.gameLists[i]);
             }
         }
-        console.log($scope.show_gameList);
     }
 });
 
@@ -3491,7 +3125,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
 
     $scope.resetWithdrawlPassword = function()
     {
-        console.log("reset withdraw password");
         $rootScope.modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'dialogs/ResetWithdrawlPasswordDialog.html',
@@ -3499,7 +3132,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
@@ -3512,13 +3144,11 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
     $scope.resetUserPassword = function()
     {
-        console.log("resetUserPassword");
         $rootScope.modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'dialogs/ResetUserPasswordDialog.html',
@@ -3526,7 +3156,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
@@ -3538,16 +3167,12 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
             $scope.tempPassword.passbefore = $scope.reset_userpass_old;
             $scope.tempPassword.u_pw = $scope.reset_userpass_first;
-            console.log($scope.tempPassword);
 
             $http.post($rootScope.serverUrl + '/updateuserpassword', $scope.tempPassword).then(function(success) {
-                console.log(success);
                 if(success.data.result == "success")
                 {
                     $rootScope.modalInstance.close('cancel');
                 }
-                else
-                    console.log(success.data.reason);
             });
         }
     }
@@ -3561,20 +3186,16 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
     $scope.resetUserInfoFunc = function()
     {
-        console.log($scope.reset_loginip);
-
         $scope.tempData = {}
         $scope.tempData.u_id = $rootScope.userInfo.userKey;
         $scope.tempData.u_loginip = $scope.reset_loginip;
 
         $http.post($rootScope.serverUrl + '/updateuserinfo', $scope.tempData).then(function(success) {
-            console.log(success);
             $rootScope.userInfo.login_ip = $scope.tempData.u_loginip;
             $rootScope.modalInstance.close('cancel');
         });
@@ -3589,7 +3210,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
@@ -3598,13 +3218,10 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.is_resetEmail = true;
         if($scope.btn_name == $rootScope.translation.RESET_USER_EMAIL_SEND_CODE)
         {
-
             $scope.tempData = {}
             $scope.tempData.u_email = $scope.reset_email;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/useremailcheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.path_resetEmail = "img/img_check.png";
@@ -3613,10 +3230,8 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
                     $scope.tempData_.u_id = $rootScope.userInfo.userKey;
                     $scope.tempData_.verify_way = 0;
                     $scope.tempData_.address = $scope.reset_email;
-                    console.log($scope.tempData_);
 
                     $http.post($rootScope.serverUrl + '/sendverifycode', $scope.tempData_).then(function(success) {
-                        console.log(success);
                         if(success.data.result == 'success')
                         {
                             $scope.btn_name = $rootScope.translation.RESET_USER_EMAIL_SENT_CODE;
@@ -3635,10 +3250,8 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.verify_code = $scope.reset_code;
             $scope.tempData.v_flag = 1;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/verifycode', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.is_verified = true;
@@ -3654,7 +3267,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.tempData.u_email = $scope.reset_email;
 
         $http.post($rootScope.serverUrl + '/updateuserinfo', $scope.tempData).then(function(success) {
-            console.log(success);
             $rootScope.userInfo.user_email = $scope.tempData.u_email;
             $rootScope.modalInstance.close('cancel');
         });
@@ -3677,7 +3289,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
@@ -3697,10 +3308,8 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
 
             $scope.tempData = {}
             $scope.tempData.u_phone = $scope.reset_mobile;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/userphonecheck', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.path_resetMobile = "img/img_check.png";
@@ -3709,10 +3318,8 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
                     $scope.tempData_.u_id = $rootScope.userInfo.userKey;
                     $scope.tempData_.verify_way = 1;
                     $scope.tempData_.address = $scope.reset_mobile;
-                    console.log($scope.tempData_);
 
                     $http.post($rootScope.serverUrl + '/sendverifycode', $scope.tempData_).then(function(success) {
-                        console.log(success);
                         if(success.data.result == 'success')
                         {
                             $scope.btn_name = $rootScope.translation.RESET_USER_EMAIL_SENT_CODE;
@@ -3731,10 +3338,8 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.verify_code = $scope.reset_code;
             $scope.tempData.v_flag = 1;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/verifycode', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.is_verified = true;
@@ -3750,7 +3355,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
         $scope.tempData.u_phone = $scope.reset_mobile;
 
         $http.post($rootScope.serverUrl + '/updateuserinfo', $scope.tempData).then(function(success) {
-            console.log(success);
             $rootScope.userInfo.user_phone = $scope.tempData.u_phone;
             $rootScope.modalInstance.close('cancel');
         });
@@ -3766,39 +3370,31 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
     $scope.getAllPhotos = function()
     {
-        console.log("getAllPhotos");
         $http.post($rootScope.resource_Url + '/requestphotos').then(function(success) {
             $scope.photoAvatar = {}
             $scope.photoAvatar = success.data.photos;
-            console.log($scope.photoAvatar);
         });
     }
 
     $scope.selectPhoto = function(photo_value)
     {
         $scope.photo_value　= photo_value;
-        console.log(photo_value);
-
     }
 
     $scope.resetUserPhotoFunc = function()
     {
-        console.log($scope.photo_value);
         if($scope.photo_value　!= null)
         {
             $scope.tempData = {}
             $scope.tempData.u_id = $rootScope.userInfo.userKey;
             $scope.tempData.u_photoindex = $scope.photo_value;
-            console.log($scope.tempData);
 
             $http.post($rootScope.serverUrl + '/updateuserphoto', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $rootScope.userInfo.user_photo = success.data.photourl;
@@ -3807,7 +3403,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             });
         }
     }
-
 
     $scope.exitMsg = function()
     {
@@ -3831,7 +3426,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
         $scope.tempData.category = 0;
 
         $http.post($rootScope.billBoard_Url + '/requestbbslist', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $scope.bigTotalItems = success.data.count;
@@ -3841,14 +3435,12 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
                     if($rootScope.showBills[i] != null)
                         $rootScope.showBills[i].showNumber = i+1;
                 }
-                console.log($rootScope.showBills);
             }
         });
     };
 
 
     $scope.onChangeBillBoard_Number = function() {
-        console.log($scope.bigCurrentPage);
         $scope.onChangeBillBoard_Category();
     };
 
@@ -3857,7 +3449,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
         $scope.tempData = {};
         $scope.tempData.page_number = $scope.bigCurrentPage - 1;
         $scope.tempData.count = $scope.num_bill;
-        console.log($scope.cat_bill);
         if($scope.cat_bill == $rootScope.translation.BILLBOARD_CATEGORY1)
             $scope.tempData.category = 1;
         else if($scope.cat_bill == $rootScope.translation.BILLBOARD_CATEGORY2)
@@ -3871,7 +3462,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
         else
             $scope.tempData.category = 0;
         $http.post($rootScope.billBoard_Url + '/requestbbslist', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $scope.bigTotalItems = 10 * (success.data.count/$scope.num_bill);
@@ -3881,7 +3471,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
                     if(i < $rootScope.showBills.length)
                         $rootScope.showBills[i].showNumber = ($scope.bigCurrentPage-1)*$scope.num_bill+i+1;
                 }
-                console.log($rootScope.showBills);
             }
         });
     }
@@ -3898,7 +3487,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
                 resolve: {}
             });
             modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
         else
@@ -3911,7 +3499,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
                 resolve: {}
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });            
         }
     }
@@ -3937,62 +3524,34 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
             $scope.tempData.bbs_category = 4;
         else if($scope.bill_type == $rootScope.translation.BILLBOARD_CATEGORY5)
             $scope.tempData.bbs_category = 5;
-        console.log($scope.tempData);
 
         $http.post($rootScope.billBoard_Url + '/uploadbbs', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.getInitBills();
                 $rootScope.modalInstance.close('cancel');
             }
-            else
-                console.log(success.data.reason);
         });
     }
 
     $scope.uploadNewImage = function()
     {
-        console.log($scope.tempFile);
         Upload.upload({
             url: $rootScope.resource_Url + '/uploadbbsimage',
             data: {file: $scope.tempFile}            
             }).progress(function(e) {
             }).then(function(data) {
-            // file is uploaded successfully
-                console.log(data);
                 if(data.data.result == 'success')
                 {
                     $scope.bill_content = $scope.bill_content + '<img src="' + data.data.img_url +'" >';
                 }
-        }); 
-
-    }
-
-    $scope.selectNewImage = function($files)
-    {
-        console.log($files[0]);
-        console.log($rootScope.resource_Url + '/uploadbbsimage');
-        $scope.tempFile = $files[0];
-    /*    for (var i = 0; i < $files.length; i++) {
-            Upload.upload({
-                url: $rootScope.resource_Url + '/uploadbbsimage',
-                data: {file: $files[0]}            
-              }).progress(function(e) {
-              }).then(function(data) {
-                // file is uploaded successfully
-                    console.log(data);
-                if(data.data.error_code === 0)
-                    console.log("asdfasdfasdf");
-              }); 
-        }*/
+        });
     }
 
     $scope.showBillComments = function(one_bill)
     {
         $rootScope.selected_bill = one_bill;
-        $location.path( '/billcomment' );
-
+        $location.path('/billcomment');
     }
 
     $scope.getInitBillComments = function()
@@ -4001,10 +3560,7 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
         $scope.tempData.bbs_id = $rootScope.selected_bill.id;
         $scope.tempData.category = $rootScope.selected_bill.category;
 
-        console.log($rootScope.selected_bill);
-
         $http.post($rootScope.billBoard_Url + '/requestbbsdetail', $scope.tempData).then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $scope.details_title = success.data.bbs_contents;
@@ -4018,7 +3574,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
 
     $scope.newBillComment = function()
     {
-
         if($rootScope.is_logged != true)
         {
             var modalInstance = $uibModal.open({
@@ -4029,7 +3584,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
                 resolve: {}
             });
             modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         }
         else
@@ -4041,7 +3595,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
                 resolve: {}
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });            
         }
     }
@@ -4056,7 +3609,6 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
             $scope.tempData.com_contents = $scope.comment_content;
 
             $http.post($rootScope.billBoard_Url + '/uploadcomment', $scope.tempData).then(function(success) {
-                console.log(success);
                 if(success.data.result == 'success')
                 {
                     $scope.comment_content = "";
@@ -4085,14 +3637,12 @@ app.controller("NoticeCtrl", function ($scope, $rootScope, $location, $http, $ui
     {
         $scope.allNotice = {}
         $http.post($rootScope.serverUrl + '/requestnotice').then(function(success) {
-            console.log(success);
             if(success.data.result == 'success')
             {
                 $scope.allNotice = success.data.messages;
                 for(var i=0; i<$scope.allNotice.length; i++)
                     $scope.allNotice[i].showNumber = i+1;
                 $scope.onChangeNotice();
-                console.log($scope.allNotice);
             }
         });
     }
@@ -4100,7 +3650,6 @@ app.controller("NoticeCtrl", function ($scope, $rootScope, $location, $http, $ui
     $scope.onChangeNotice = function()
     {
         $scope.bigTotalItems = 10 * ($scope.allNotice.length / $scope.num_notice);
-        console.log($scope.bigTotalItems);
         $scope.subNotice = []
         for(var i=($scope.bigCurrentPage-1)*$scope.num_notice; i<($scope.bigCurrentPage)*$scope.num_notice; i++)
         {
@@ -4123,7 +3672,6 @@ app.controller("NoticeCtrl", function ($scope, $rootScope, $location, $http, $ui
             }
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-            $log.info('Modal dismissed at: ' + new Date());
         });
     }
 
@@ -4135,54 +3683,15 @@ app.controller("NoticeCtrl", function ($scope, $rootScope, $location, $http, $ui
 
 app.controller("HelpPageCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
 
- /*   $scope.oneAtATime = true;
-
-    $scope.groups = [
-        {
-          title: '비밀번호 분실문의/ 변경 요청은 어떻게 하나요?',
-          content: '비밀번호 분실문의/변경요청은 1대1 문의를 이용해 주세요.사이트 로그인시 필요한 비밀번호의 분실문의 및 변경요청을 원하실 경우 해당아이디로 1대1게시판으로 문의 및 요청해 주시면 확인즉시 쪽지나 이메일로 발송해드리겠습니다.'
-        },
-        {
-          title: '비밀번호 분실문의/ 변경 요청은 어떻게 하나요?',
-          content: '비밀번호 분실문의/변경요청은 1대1 문의를 이용해 주세요.사이트 로그인시 필요한 비밀번호의 분실문의 및 변경요청을 원하실 경우 해당아이디로 1대1게시판으로 문의 및 요청해 주시면 확인즉시 쪽지나 이메일로 발송해드리겠습니다.'
-        },
-        {
-          title: '비밀번호 분실문의/ 변경 요청은 어떻게 하나요?',
-          content: '비밀번호 분실문의/변경요청은 1대1 문의를 이용해 주세요.사이트 로그인시 필요한 비밀번호의 분실문의 및 변경요청을 원하실 경우 해당아이디로 1대1게시판으로 문의 및 요청해 주시면 확인즉시 쪽지나 이메일로 발송해드리겠습니다.'
-        },
-        {
-          title: '비밀번호 분실문의/ 변경 요청은 어떻게 하나요?',
-          content: '비밀번호 분실문의/변경요청은 1대1 문의를 이용해 주세요.사이트 로그인시 필요한 비밀번호의 분실문의 및 변경요청을 원하실 경우 해당아이디로 1대1게시판으로 문의 및 요청해 주시면 확인즉시 쪽지나 이메일로 발송해드리겠습니다.'
-        },
-        {
-          title: '비밀번호 분실문의/ 변경 요청은 어떻게 하나요?',
-          content: '비밀번호 분실문의/변경요청은 1대1 문의를 이용해 주세요.사이트 로그인시 필요한 비밀번호의 분실문의 및 변경요청을 원하실 경우 해당아이디로 1대1게시판으로 문의 및 요청해 주시면 확인즉시 쪽지나 이메일로 발송해드리겠습니다.'
-        }
-    ];
-
-    $scope.items = ['Item 1', 'Item 2', 'Item 3'];
-
-    $scope.addItem = function() {
-        var newItemNo = $scope.items.length + 1;
-        $scope.items.push('Item ' + newItemNo);
-    };
-
-    $scope.status = {
-        isFirstOpen: true,
-        isFirstDisabled: false
-    };*/
-
     $scope.getFAQHelp = function()
     {
         $scope.tempData = {}
         $scope.tempData.category = 1;
 
-        $http.post($rootScope.serverUrl + '/requestnotice', $scope.tempData).then(function(success) {
-            console.log(success);
+        $http.post($rootScope.serverUrl + '/requesthelp', $scope.tempData).then(function(success) {
             if(success.data.result == 'success')
             {
                 $scope.allFAQs = success.data.messages;
-                console.log($scope.allFAQs);
             }
         });
     }
@@ -4192,12 +3701,10 @@ app.controller("HelpPageCtrl", function ($scope, $rootScope, $location, $http, $
         $scope.tempData = {}
         $scope.tempData.category = 2;
 
-        $http.post($rootScope.serverUrl + '/requestnotice', $scope.tempData).then(function(success) {
-            console.log(success);
+        $http.post($rootScope.serverUrl + '/requesthelp', $scope.tempData).then(function(success) {
             if(success.data.result == 'success')
             {
                 $scope.siteHelps = success.data.messages;
-                console.log($scope.allFAQs);
             }
         });
     }
@@ -4207,12 +3714,10 @@ app.controller("HelpPageCtrl", function ($scope, $rootScope, $location, $http, $
         $scope.tempData = {}
         $scope.tempData.category = 3;
 
-        $http.post($rootScope.serverUrl + '/requestnotice', $scope.tempData).then(function(success) {
-            console.log(success);
+        $http.post($rootScope.serverUrl + '/requesthelp', $scope.tempData).then(function(success) {
             if(success.data.result == 'success')
             {
                 $scope.userHelps = success.data.messages;
-                console.log($scope.allFAQs);
             }
         });
     }
@@ -4222,12 +3727,10 @@ app.controller("HelpPageCtrl", function ($scope, $rootScope, $location, $http, $
         $scope.tempData = {}
         $scope.tempData.category = 4;
 
-        $http.post($rootScope.serverUrl + '/requestnotice', $scope.tempData).then(function(success) {
-            console.log(success);
+        $http.post($rootScope.serverUrl + '/requesthelp', $scope.tempData).then(function(success) {
             if(success.data.result == 'success')
             {
                 $scope.pokerHelps = success.data.messages;
-                console.log($scope.allFAQs);
             }
         });
     }

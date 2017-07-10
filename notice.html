@@ -24,10 +24,9 @@
               <thead>
                 <tr>
            
-                  <th>{{$root.translation.BILLBOARD_TABLE_NUMBER}}</th>
+                  <th style="width: 12%;">{{$root.translation.BILLBOARD_TABLE_NUMBER}}</th>
                   <th>{{$root.translation.BILLBOARD_TABLE_CONTENT}}</th>
-                  <th>{{$root.translation.BILLBOARD_TABLE_AUTHOR}}</th>
-                  <th>{{$root.translation.BILLBOARD_TABLE_DATE}}</th>
+                  <th style="width: 15%; text-align: center;">{{$root.translation.BILLBOARD_TABLE_DATE}}</th>
                  
                 </tr>
               </thead>
@@ -36,8 +35,7 @@
                 <tr ng-repeat="one_notice in subNotice">
                   <td> {{ one_notice.showNumber }} </td>
                   <td><span class="text"><a ng-click="showNoticeDetails(one_notice)"><em style="color:#58666e;text-decoration: underline;">{{ one_notice.title }}</em></a></span></td>
-                  <td> {{ one_notice.author }} </td>
-                  <td> {{ one_notice.time.split(' ')[0] }} </td>
+                  <td style="text-align: center;"> {{ one_notice.time.split(' ')[0] }} </td>
                 </tr>
 
               </tbody>

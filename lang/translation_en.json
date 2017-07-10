@@ -118,6 +118,7 @@
 	"WITHDRAW_RECORD_TITLE" 			: "Records",
 	"WITHDRAW_CANCEL" 					: "Withdraw request has cancelled successfully.",
 	"WITHDRAW_CANCEL_ERROR" 			: "Since the withdraw request has been over 5 minutes, we can not cancel it.",
+	"WITHDRAW_PASS_ERROR" 				: "Your Password is Wrong.",
 	"SET_POCKET_DIALOG_TITLE"			: "Set Pocket Password",
 	"RESET_POCKET_DIALOG_TITLE"			: "Change Pocket Password",
 	"PASS_PCOKET_DIALOG_TITLE" 			: "Pocket Password",

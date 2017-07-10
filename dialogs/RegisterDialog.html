@@ -9,12 +9,12 @@
         </span>
 
         <div class="form-group" style="padding-right: 20px;">
-            <input type="text" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_USERNAME}} ng-model="register_username" style="float: left; width: 85%;" ng-blur="loseFocusUsername()" required>
+            <input type="text" class="form-control" onkeypress='return event.charCode != 58 && event.charCode != 39 && event.charCode != 34 && event.charCode != 124' placeholder={{$root.translation.REGISTER_DIALOG_USERNAME}} ng-model="register_username" style="float: left; width: 85%;" ng-blur="loseFocusUsername()" required>
             <i class="fa fa-user"></i>
             <img src={{path_username}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_username" />
         </div>
         <div class="form-group" style="padding-right: 20px;">
-            <input type="text" class="form-control"  placeholder={{$root.translation.REGISTER_DIALOG_NICKNAME}} ng-model="register_nickname" style="float: left; width: 85%;" ng-blur="loseFocusNickname()" required>
+            <input type="text" class="form-control" onkeypress='return event.charCode != 58 && event.charCode != 39 && event.charCode != 34 && event.charCode != 124' placeholder={{$root.translation.REGISTER_DIALOG_NICKNAME}} ng-model="register_nickname" style="float: left; width: 85%;" ng-blur="loseFocusNickname()" required>
             <i class="fa fa-user"></i>
             <img src={{path_nickname}} style="width: 8%; float: right; margin-top: 6px;" ng-show="is_nickname" />
         </div>
