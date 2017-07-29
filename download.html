@@ -18,11 +18,11 @@
                   <img src="img/download-bg.jpg" class="img-full">
                 </div>
                     <div class="hbox text-center b-b b-light text-sm " style="background-color:#23b7e5;">          
-                <a ng-click="notReady()" class="col padder-v text-white b-r b-light" data-toggle="modal" data-dismiss="modal" data-target="#dlcheck">
+                <a class="col padder-v text-white b-r b-light">
                   <i class="fa fa-laptop block m-b-xs fa-4x"></i>
                   <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
                 </a>
-                <a ng-click="notReady()" class="col padder-v text-white b-r b-light">
+                <a class="col padder-v text-white b-r b-light">
                   <i class="fa fa-apple block m-b-xs fa-4x"></i>
                   <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
                 </a>
@@ -86,7 +86,7 @@
             <i class="fa fa-apple block m-b-xs fa-2x"></i>
             <span>{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
           </a>
-          <a ng-click="notReady()" class="col padder-v text-white">
+          <a href={{one_show.download_url}} class="col padder-v text-white">
             <i class="fa fa-android block m-b-xs fa-2x"></i>
             <span>{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
           </a>
