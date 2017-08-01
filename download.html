@@ -43,11 +43,11 @@
         </div>
         <div class="clearfix panel-footer">
            <div class="col-sm-6">
-           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="card_game()">{{ $root.translation.SIDE_MENU_CARD }}</button>
-           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="orak_game()">{{ $root.translation.SIDE_MENU_ORAK }}</button>
-           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="sport_game()">{{ $root.translation.SIDE_MENU_SPORT }}</button>
-           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="horse_game()">{{ $root.translation.SIDE_MENU_HORSE }}</button>
-           <button class="btn  btn-default btn-rounded" style="margin-right: 10px;" ng-click="live_game()">{{ $root.translation.SIDE_MENU_LIVE }}</button>
+           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="card_game()">{{ $root.translation.SIDE_MENU_CARD }}</button>
+           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="orak_game()">{{ $root.translation.SIDE_MENU_ORAK }}</button>
+           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="sport_game()">{{ $root.translation.SIDE_MENU_SPORT }}</button>
+           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="horse_game()">{{ $root.translation.SIDE_MENU_HORSE }}</button>
+           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="live_game()">{{ $root.translation.SIDE_MENU_LIVE }}</button>
         </div>
           <div class="input-group col-sm-4">
             <input type="text" class="form-control input-sm btn-rounded" ng-model="game_search" placeholder={{$root.translation.TOP_MENU_SEARCH}}>
@@ -118,7 +118,7 @@
                         <a href="#" class="text-info" ng-if="$root.currentLanguage == 'en'">{{one_popular.gamename.ga_en}} ({{one_popular.game_online_count}})</a>
                         <a href="#" class="text-info" ng-if="$root.currentLanguage == 'ko'">{{one_popular.gamename.ga_kr}} ({{one_popular.game_online_count}})</a>
                         <small class="block text-muted"></small>
-                        <a href="#" class="btn btn-xs btn-success m-t-xs">{{$root.translation.DOWNLOAD_DOWNLOAD}} <i class="fa fa-download"></i></a>
+                        <a href={{one_popular.download_url}} class="btn btn-xs btn-success m-t-xs">{{$root.translation.DOWNLOAD_DOWNLOAD}} <i class="fa fa-download"></i></a>
                       </div>
                     </li>
 
