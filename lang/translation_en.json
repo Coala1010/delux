@@ -63,6 +63,7 @@
 	"PROFILE_SAFE_PASSWORD" 		: "Safe Password",
 	"PROFILE_WITHDRAW_PASSWORD" 	: "Withdraw Password",
 	"PROFILE_USER_PHOTO" 			: "User Photo",
+	"PROFILE_USER_VERIFY" 			: "User Verfication",
 	"PROFILE_USER_UPDATE" 			: "Update",
 	"DOWNLOAD_DOWNLOAD" 			: "Download",
 	"DOWNLOAD_SINGLE" 				: "Download single game",
@@ -215,5 +216,13 @@
 	"ALARM_QUESTION_UPLOAD_CONTENT"		: "Question : ",
 	"ALARM_QUESTION_REPLY_CONTENT"		: "Reply : ",
 	"USER_REGISTERED_SUCCESS"			: "User registered successfully.",
-	"USER_REGISTERED_FAILED"			: "User register failed."
+	"USER_REGISTERED_FAILED"			: "User register failed.",
+	"ABOUT_US_TITLE"					: "About us",
+	"ABOUT_US_CONTENT1"					: "Macau's Delux Game is a legally registered gaming company in Macau and holds Macau casinos and online casino licenses issued by the Macao Special Administrative Region.",
+	"ABOUT_US_CONTENT2"					: "All products and services provided by the website are authorized and regulated by the Macao Special Administrative Region.",
+	"ABOUT_US_CONTENT3"					: "Macau Delux Game and BBIN, AG, MG, CT, OG, LEBO technical cooperation to jointly create high-quality gaming platform, currently has a special registration of the Macao Special Administrative Region of the gaming company.",
+	"ABOUT_US_CONTENT4"					: "All our gambling business practices are subject to the Gambling Treaty of the Macao Special Administrative Region.",
+	"ABOUT_US_CONTENT5"					: "We are in the increasingly hot online gaming market, constantly seeking new changes, looking for the latest ideas, uphold the best service. To bring customers high-quality services, products, entertainment, is the eternal purpose of our business.",
+	"ABOUT_US_CONTENT6"					: "Copyright © Delux Game Reserved",
+	"ABOUT_US_CONTENT7"					: "Business license 00853-65378808"
 }

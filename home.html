@@ -23,6 +23,7 @@
                   <div style="text-align:center;">
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_search.gamename.ga_en}}</strong>
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_search.gamename.ga_kr}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'cn'">{{one_search.gamename.ga_ch}}</strong>
                   </div>
                   <div style="text-align:center;">
                     ({{one_search.game_online_count}})
@@ -47,6 +48,7 @@
                   <div style="text-align:center;">
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_popular.gamename.ga_en}}</strong>
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_popular.gamename.ga_kr}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'cn'">{{one_popular.gamename.ga_ch}}</strong>
                   </div>
                   <div style="text-align:center;">
                     ({{one_popular.game_online_count}})
@@ -71,6 +73,7 @@
                   <div style="text-align:center;">
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_my.gamename.ga_en}}</strong>
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_my.gamename.ga_kr}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'cn'">{{one_my.gamename.ga_ch}}</strong>
                   </div>
                   <div style="text-align:center;">
                     ({{one_my.game_online_count}})
@@ -94,6 +97,7 @@
                   <div style="text-align:center;">
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'en'">{{one_new.gamename.ga_en}}</strong>
                     <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'ko'">{{one_new.gamename.ga_kr}}</strong>
+                    <strong style="font-size:16px;" ng-if="$root.currentLanguage == 'cn'">{{one_new.gamename.ga_ch}}</strong>
                   </div>
                   <div style="text-align:center;">
                     ({{one_new.game_online_count}})
@@ -103,6 +107,27 @@
             </div>
           </div>
 
+          <br style="clear: both;" ng-if="!show_searchResults">
+
+          <div style="background: #271e1f; width: 100%; height: 300px; margin-top: 50px;">
+            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
+              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
+              </p>
+            </div>
+            <center>
+              <img src="img/footerLogo.png" />
+            </center>
+            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
+              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
+              </p>
+            </div>
+          </div>
 
         </div>
 

@@ -369,6 +369,7 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             $scope.show_searchResults = true;
 
         $location.path( '/' );
+        
         if($scope.show_searchResults == true)
         {
             $scope.searched_gameLists = []
@@ -383,6 +384,11 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                 else if($rootScope.currentLanguage == 'ko')
                 {
                     if($scope.gameLists[i].gamename.ga_kr.indexOf($scope.game_search) !== -1)
+                        $scope.searched_gameLists.push($scope.gameLists[i]);
+                }
+                else if($rootScope.currentLanguage == 'cn')
+                {
+                    if($scope.gameLists[i].gamename.ga_ch.indexOf($scope.game_search) !== -1)
                         $scope.searched_gameLists.push($scope.gameLists[i]);
                 }
             }
@@ -1100,6 +1106,9 @@ app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModal
 });
 
 app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $log) {
+
+    if($rootScope.is_logged != true)
+        $location.path('/');
 
     $scope.chargeForm_disable = true;
 
@@ -1948,6 +1957,9 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
 app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, $uibModal, $log, $document) {
 
+    if($rootScope.is_logged != true)
+        $location.path('/');
+
     $scope.withdrawMethod_value = 10;
 
     $scope.onMoneyChange = function()
@@ -2528,6 +2540,9 @@ app.controller("AlertCtrl", function ($scope, $rootScope) {
 
 app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
 
+    if($rootScope.is_logged != true)
+        $location.path('/');
+
     $scope.loginPocketPass = function()
     {
         $scope.tempPassword = {}
@@ -2693,6 +2708,9 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
 
 app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
 
+    if($rootScope.is_logged != true)
+        $location.path('/');
+
     $scope.item_perPage = 5;
     $scope.maxSize = 3;
     $scope.bigTotalItems = 10;
@@ -2820,6 +2838,9 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
 });
 
 app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
+
+    if($rootScope.is_logged != true)
+        $location.path('/');
 
     $scope.item_perPage = 5;
     $scope.maxSize = 3;
@@ -3028,6 +3049,9 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
 });
 
 app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
+    
+    if($rootScope.is_logged != true)
+        $location.path('/');
 
     $scope.flag_gameList = 1;
 
@@ -3117,11 +3141,19 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
                 if($scope.gameLists[i].gamename.ga_kr.indexOf($scope.game_search) !== -1)
                     $scope.show_gameList.push($scope.gameLists[i]);
             }
+            else if($rootScope.currentLanguage == 'cn')
+            {
+                if($scope.gameLists[i].gamename.ga_ch.indexOf($scope.game_search) !== -1)
+                    $scope.show_gameList.push($scope.gameLists[i]);
+            }
         }
     }
 });
 
 app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
+
+    if($rootScope.is_logged != true)
+        $location.path('/');
 
     $scope.resetWithdrawlPassword = function()
     {
@@ -3402,6 +3434,31 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
                 }
             });
         }
+    }
+
+    console.log($rootScope.userInfo);
+    if($rootScope.userInfo.u_verifyflag == 1)
+        $scope.userVerify = true;
+    else
+        $scope.userVerify = false;
+    $scope.changeUserVerification = function()
+    {
+        $scope.tempData = {}
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
+        if($scope.userVerify == true)
+            $scope.tempData.verify_status = 1;
+        else
+            $scope.tempData.verify_status = 0;
+        $http.post($rootScope.serverUrl + '/changeverifystatus', $scope.tempData).then(function(success) {
+            if(success.data.result == 'success')
+            {
+                if($scope.userVerify == true)
+                    $rootScope.userInfo.u_verifyflag = 1;
+                else
+                    $rootScope.userInfo.u_verifyflag = 0;
+            }
+        });
+
     }
 
     $scope.exitMsg = function()
