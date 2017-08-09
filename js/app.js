@@ -3605,6 +3605,26 @@ app.controller("BillBoardCtrl", function ($scope, $rootScope, $location, $http, 
         });
     }
 
+
+    $scope.selectNewImage = function($files)
+    {
+        console.log($files[0]);
+        console.log($rootScope.resource_Url + '/uploadbbsimage');
+        $scope.tempFile = $files[0];
+    /*    for (var i = 0; i < $files.length; i++) {
+            Upload.upload({
+                url: $rootScope.resource_Url + '/uploadbbsimage',
+                data: {file: $files[0]}            
+              }).progress(function(e) {
+              }).then(function(data) {
+                // file is uploaded successfully
+                    console.log(data);
+                if(data.data.error_code === 0)
+                    console.log("asdfasdfasdf");
+              }); 
+        }*/
+    }
+
     $scope.showBillComments = function(one_bill)
     {
         $rootScope.selected_bill = one_bill;
