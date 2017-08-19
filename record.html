@@ -3,14 +3,14 @@
     <h1 class="m-n font-thin h3">{{$root.translation.RECORD_TITLE}}<!-- <span class="badge">16</span> --></h1> 
   </div>
   <div class="wrapper-md">
-    <div class="row" ng-init="getGameRecord()">
+    <div class="row" ng-init="getGameRecord(1, 10)">
       <div class="col-lg-9">
         <!-- tab -->
         <ul class="nav nav-tabs" style="max-height:40px!important;">
-          <li class="active" ng-click="getGameRecord()"> <a  data-toggle="tab" data-target="#a">{{$root.translation.RECORD_GAME_RECORD}}</a></li>
-          <li ng-click="getRechargeRecord()"><a data-toggle="tab" data-target="#b">{{$root.translation.RECORD_RECHARGE}}</a></li>
-          <li ng-click="getWithdrawalsRecord()"><a data-toggle="tab" data-target="#c">{{$root.translation.RECORD_WITHDRAW}}</a></li>
-          <select name="per_page" ng-model="num_per_page" ng-init="num_per_page = '10'" ng-change="onChangeNum_perPage()" style="margin-top: 8px; float: right;">
+          <li class="active" ng-click="getGameRecord(1, num_per_page)"> <a  data-toggle="tab" data-target="#a">{{$root.translation.RECORD_GAME_RECORD}}</a></li>
+          <li ng-click="getRechargeRecord(1, num_per_page)"><a data-toggle="tab" data-target="#b">{{$root.translation.RECORD_RECHARGE}}</a></li>
+          <li ng-click="getWithdrawalsRecord(1, num_per_page)"><a data-toggle="tab" data-target="#c">{{$root.translation.RECORD_WITHDRAW}}</a></li>
+          <select name="per_page" ng-model="num_per_page" ng-init="num_per_page = '10'" ng-change="onChangeNum_perPage(1)" style="margin-top: 8px; float: right;">
             <option>5</option>
             <option>10</option>
             <option>15</option>
@@ -20,12 +20,13 @@
    　　   </ul>
    
           <div class="tab-content" style="margin-top:10px;">
+          
               <div class="tab-pane  fade in active" id="a">
                 <div class="padder">      
                   <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
                    
                       <!-- .a message -->
-                      <div class="m-l-lg" ng-repeat="game_record in sub_Records">
+                      <div class="m-l-lg" ng-repeat="game_record in gameRecords">
                         <a class="pull-left thumb-sm avatar">
                           <span class="text-muted m-l-sm pull-right">
                             <p>{{ game_record.time.split(' ')[0] }}<br>
@@ -46,27 +47,15 @@
                   
                   </div>
                 </div>
-
-                <!-- ---------------page -->
-                <div class="row">
-                
-                  <div class="col-sm-3 hidden-xs">
-
-                  </div>
-                  <div class="col-sm-6 text-center">
-                    <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="pageChanged()"></ul>
-                  </div>
-                  <div class="col-sm-3 text-right text-center-xs">                
-                   
-                  </div>
-                </div>
-                <!-- -------------page -->
               </div>
+
+
+
               <div class="tab-pane fade " id="b">
                 <div class="padder">      
                   <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
                     <!-- .a message -->
-                    <div class="m-l-lg" ng-repeat="one_charge in sub_Records">
+                    <div class="m-l-lg" ng-repeat="one_charge in chargeRecords">
                       <a class="pull-left thumb-sm avatar">
                         <span class="text-muted m-l-sm pull-right">
                           <p>{{ one_charge.time.split(' ')[0] }}<br>
@@ -86,24 +75,10 @@
                     <!-- / .a message --> 
                   </div>
                 </div>
-                <!-- ---------------page -->
-                <div class="row">
-                  <div class="col-sm-3 hidden-xs">
-                  </div>
-                  <div class="col-sm-6 text-center">
-
-                    <!--ul uib-pagination total-items="175" max-size="3" class="pagination-sm" boundary-link-numbers="true"></ul-->
-                    <nav>
-                      <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="pageChanged()"></ul>
-                    </nav>
-
-                  </div>
-                  <div class="col-sm-3 text-right text-center-xs">                
-                   
-                  </div>
-                </div>
-                <!-- -------------page -->
               </div>
+
+
+
               <div class="tab-pane fade" id="c">
                 <div class="padder">      
                   <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
@@ -126,6 +101,11 @@
                       </div>
                     </div>
                     <!-- / .a message --> 
+                  </div>
+                </div>
+              </div>
+
+
                 <!-- ---------------page -->
                 <div class="row">
                   <div class="col-sm-3 hidden-xs">
@@ -143,15 +123,12 @@
                   </div>
                 </div>
                 <!-- -------------page -->
-                  </div>
-                </div>
-              </div>
             
           </div>
       
         <!-- / tab -->
 
-          <div style="background: #271e1f; width: 100%; height: 300px; margin-top: 50px;">
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
             <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
               <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
               {{$root.translation.ABOUT_US_CONTENT1}}<br/>
@@ -162,7 +139,7 @@
               </p>
             </div>
             <center>
-              <img src="img/footerLogo.png" />
+              <img src="img/footerLogo.png" style="width: 100%;" />
             </center>
             <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
               <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>

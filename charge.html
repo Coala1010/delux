@@ -70,6 +70,7 @@
                                     </label>
                                   </div>
                                 </div>
+                                <label class="col-sm-4 control-label" style="text-align: left; color: #ff0000;" ng-show="is_charge">{{$root.translation.CHARGE_IMPOSSIBLE_COMMENT}}</label>
                               </div>
                               <div class="line line-dashed b-b line-lg pull-in"></div>
                               <div class="form-group" ng-show="show_bankname">
@@ -220,7 +221,7 @@
 
 
 
-          <div style="background: #271e1f; width: 100%; height: 300px; margin-top: 50px;">
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
             <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
               <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
               {{$root.translation.ABOUT_US_CONTENT1}}<br/>
@@ -231,7 +232,7 @@
               </p>
             </div>
             <center>
-              <img src="img/footerLogo.png" />
+              <img src="img/footerLogo.png" style="width: 100%;" />
             </center>
             <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
               <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>

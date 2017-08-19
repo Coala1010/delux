@@ -224,5 +224,7 @@
 	"ABOUT_US_CONTENT4"					: "우리의 모든 게임영업활동은 마카오특별행정구정부의 카지노규약에 따르고 있습니다.",
 	"ABOUT_US_CONTENT5"					: "날로 더욱 뜨거워지는 카지노시장에서 끊임없는 혁신적인 아이디어를 창조해 나갈것이며 최고의 서비스를 제공할것입니다. 최고품질의 서비스, 제품, 오락이 우리기업의 영원한 목표입니다.",
 	"ABOUT_US_CONTENT6"					: "저작권 © Delux Game",
-	"ABOUT_US_CONTENT7"					: "련계번호 00853-65378808"
+	"ABOUT_US_CONTENT7"					: "영업허가 00853-65378808",
+	"CHARGE_IMPOSSIBLE_ALERT"			: "대리점에 이 카드에 해당한 계정이 없으므로 송금할수 없습니다.",
+	"CHARGE_IMPOSSIBLE_COMMENT"			: "대리점이 준비되지 않았습니다."
 }

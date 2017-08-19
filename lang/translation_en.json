@@ -34,7 +34,7 @@
 	"LOGIN_DIALOG_PASSWORD" 	: "Password",
 	"LOGIN_DIALOG_REGISTER" 	: "Create an account",
 	"LOGIN_DIALOG_LOGIN" 		: "Login",
-	"LOGIN_ERROR_TEXT1" 		: "Thid IP address has blocked.",
+	"LOGIN_ERROR_TEXT1" 		: "This IP address has blocked.",
 	"LOGIN_ERROR_TEXT2" 		: "You can't login now.",
 	"LOGIN_ERROR_TEXT3" 		: "Username or Password is incorrect.",
 	"LOGIN_VERIFY_DIALOG_TITLE" 	: "Verify IP address",
@@ -224,5 +224,7 @@
 	"ABOUT_US_CONTENT4"					: "All our gambling business practices are subject to the Gambling Treaty of the Macao Special Administrative Region.",
 	"ABOUT_US_CONTENT5"					: "We are in the increasingly hot online gaming market, constantly seeking new changes, looking for the latest ideas, uphold the best service. To bring customers high-quality services, products, entertainment, is the eternal purpose of our business.",
 	"ABOUT_US_CONTENT6"					: "Copyright © Delux Game Reserved",
-	"ABOUT_US_CONTENT7"					: "Business license 00853-65378808"
+	"ABOUT_US_CONTENT7"					: "Business license 00853-65378808",
+	"CHARGE_IMPOSSIBLE_ALERT"			: "Sorry, You can't pay now.",
+	"CHARGE_IMPOSSIBLE_COMMENT"			: "You can't pay by this payment method."
 }

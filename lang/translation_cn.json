@@ -224,5 +224,7 @@
 	"ABOUT_US_CONTENT4"					: "我们一切博彩营业行为皆遵从澳门特别行政区政府博彩条约。",
 	"ABOUT_US_CONTENT5"					: "我们在越来越热的网络博彩市场中，不断地求新求变，寻找最新的创意，秉持最好的服务。以带给客户高质量的服务、产品、娱乐，是我们的企业永恒宗旨。",
 	"ABOUT_US_CONTENT6"					: "Copyright © Delux Game Reserved",
-	"ABOUT_US_CONTENT7"					: "经营许可 00853-65378808"
+	"ABOUT_US_CONTENT7"					: "经营许可 00853-65378808",
+	"CHARGE_IMPOSSIBLE_ALERT"			: "대리점에 이 카드에 해당한 계정이 없으므로 송금할수 없습니다.",
+	"CHARGE_IMPOSSIBLE_COMMENT"			: "대리점이 준비되지 않았습니다."
 }

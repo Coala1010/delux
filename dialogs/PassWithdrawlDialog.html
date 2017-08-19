@@ -1,5 +1,5 @@
 <div class="modal-body" id="modal-body">
-    <form class="form-horizontal" name="setPass">
+    <form class="form-horizontal" name="setPass" ng-submit="loginWithdrawPass()">
         <span class="heading">
             <img src="img/logo1.png" alt="." style="max-height: 40px !important;">
             <span style="vertical-align:bottom;">&nbsp;{{$root.translation.PASS_WITHDRAW_DIALOG_TITLE}}</span>
@@ -14,7 +14,7 @@
         </div>
 
         <div class="form-group"> 
-            <button type="button" ng-Click="loginWithdrawPass()" class="btn btn-default" style="font-size:16px;color:white!important;" ng-disabled="setPass.$invalid || setPass.$pristine">{{$root.translation.PASS_WITHDRAW_DIALOG_OK}}
+            <button type="submit" class="btn btn-default" style="font-size:16px;color:white!important;" ng-disabled="setPass.$invalid || setPass.$pristine">{{$root.translation.PASS_WITHDRAW_DIALOG_OK}}
             </button>
             <button type="button" ng-Click="resetWithdrawlPassword()" class="btn btn-default" style="font-size:16px;color:white!important; float:left;">{{$root.translation.PASS_WITHDRAW_DIALOG_RESET}}
             </button>

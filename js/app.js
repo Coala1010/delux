@@ -1,4 +1,4 @@
-var app = angular.module('delux', ['ngRoute','ngAnimate', 'ngResource', 'ngSanitize', 'ui.bootstrap','textAngular','angularSpectrumColorpicker','ui.bootstrap.dropdownToggle','ngFileUpload']);
+var app = angular.module('delux', ['ngRoute','ngAnimate', 'ngResource', 'ngSanitize', 'ngStorage', 'ui.bootstrap','textAngular','angularSpectrumColorpicker','ui.bootstrap.dropdownToggle','ngFileUpload']);
 
 app.config(function($routeProvider, $locationProvider, $provide) {
     $routeProvider
@@ -235,7 +235,7 @@ app.factory('socket', function ($rootScope) {
     };
 });
 
-app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket) {
+app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket, $localStorage) {
 
     $scope.billBoard_portNumber = 10006;
     $rootScope.billBoard_Url = 'http://101.102.224.50:' + $scope.billBoard_portNumber;
@@ -259,6 +259,7 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
                     $rootScope.userInfo = success.data;
                     $rootScope.login_title = $rootScope.userInfo.user_nickname;
                     $rootScope.is_logged = true;
+                    $localStorage.is_logged = 'in';
                     $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
 
                     $scope.tempData = {}
@@ -279,6 +280,11 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
 
     });
 
+
+    $rootScope.$on("logout_", function(){
+        $scope.logout();
+    });
+
     $scope.logout = function()
     {
         $scope.temp_myID = {}
@@ -288,6 +294,8 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             if(success.data.result == 'success')
             {
                 $rootScope.is_logged = false;
+
+                $localStorage.is_logged = 'out';
                 socket.disconnect();
                 $rootScope.login_title = $rootScope.translation.TOP_MENU_LOGIN;
                 $rootScope.userInfo = {}
@@ -545,7 +553,16 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
 });
 
 
-app.controller('loginCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location) {
+app.controller('loginCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $localStorage) {
+
+    $scope.$watch(function() {
+            return angular.toJson($localStorage.is_logged);
+        }, function() {
+        //    alert('The name is *** '+$localStorage.is_logged);
+            if($localStorage.is_logged == 'out')
+                $rootScope.$emit("logout_", {});
+
+    });
 
     $scope.showLoginModal = function()
     {
@@ -567,7 +584,7 @@ app.controller('loginCtrl', function($uibModal, $log, $document, $scope, $rootSc
     };
 });
 
-app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstance, $uibModal, $log, $document) {
+app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstance, $uibModal, $log, $document, $window, $localStorage) {
 
     $scope.noticeRegister = function (size, parentSelector) {
         $uibModalInstance.dismiss('cancel');
@@ -611,7 +628,7 @@ app.controller('NoticeDialogCtrl', function ($scope, $rootScope, $uibModalInstan
     }
 });
 
-app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModalInstance, $uibModal, $log, $document, socket) {
+app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModalInstance, $uibModal, $log, $document, socket, $localStorage) {
 
     $scope.exitMsg = function() {
         $uibModalInstance.dismiss('cancel');
@@ -625,7 +642,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                 $scope.temp_userInfo.u_id = success.data.u_id;
                 $uibModalInstance.dismiss('cancel');
 
-                if(success.data.send_email == 0)
+                if(success.data.send_email == "0")
                 {
                     $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
                         if(success.data.result == "success")
@@ -648,6 +665,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                             $scope.turnOnNotify();
 
                             $rootScope.is_logged = true;
+                            $localStorage.is_logged = 'in';
 
                             $scope.getLatestNews();
                             $scope.getLatestNotice();
@@ -1055,7 +1073,7 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     }
 });
 
-app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModalInstance, socket) {
+app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModalInstance, socket, $localStorage) {
 
     $scope.sendLoginVerificationCode = function () {
 
@@ -1092,6 +1110,7 @@ app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModal
                         $rootScope.$emit("turnAlarm", {});
 
                         $rootScope.is_logged = true;
+                        $localStorage.is_logged = 'in';
 
                         $rootScope.$emit("GetLeftSideInfo", {});
                     }
@@ -1105,7 +1124,7 @@ app.controller('LoginVerifyCtrl', function ($scope, $rootScope, $http, $uibModal
     };
 });
 
-app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $log) {
+app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $log, $localStorage) {
 
     if($rootScope.is_logged != true)
         $location.path('/');
@@ -1114,11 +1133,11 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
     $scope.setAutoPay_Method = function() {
 
-        $scope.bank_Name = "";
+   /*     $scope.bank_Name = "";
         $scope.bank_ID = "";
         $scope.bank_pass = "";
         $scope.bank_UserName = "";
-
+*/
         if($scope.payment_history_count == 0)
             $scope.autopay = false;
         if($scope.autopay == true)
@@ -1228,8 +1247,16 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
     $scope.setUnionPay_Method = function() {
 
+
         if($scope.autopay == false)
         {
+            $scope.is_charge = true;
+            for(var i=0; i<$rootScope.userInfo.availablepayment.length; i++)
+            {
+                if($scope.payMethod_value == $rootScope.userInfo.availablepayment[i])
+                    $scope.is_charge = false;
+            }
+
             if($scope.payMethod_value == 10)
             {
                 $scope.disable_bankName = false;
@@ -1247,6 +1274,8 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         }
         else
         {
+            $scope.is_charge = false;
+
             if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
                 $scope.country_number = 0;
             else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
@@ -1490,15 +1519,180 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[2].balance;
         }
 
-        /////////////////////////////////////////////////////////////////
-
         if($scope.autopay == true)
-        {     
+        {
             $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
 
             $http.post($rootScope.serverUrl + '/autocharge', $scope.requestPay_Array).then(function(success) {
+                if(success.data.result == "success")
+                {
+                    $scope.disable_Charge = false;
+                    $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
+                    $rootScope.modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'dialogs/AlertDialog.html',
+                        controller: 'ChargeCtrl',
+                        resolve: {
+                        }
+                    });
+                    $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                        $scope.autopay = true;
+                        $scope.disable_Charge = false;
+                        $scope.money_select = '100k';
+                        $scope.getBalanceInfo();
+                    });
+
+                }
+            });
+        }
+        else
+        {
+            $scope.isCharge = false;
+            for(var i=0; i<$rootScope.userInfo.availablepayment.length; i++)
+            {
+                if($scope.payMethod_value == $rootScope.userInfo.availablepayment[i])
+                    $scope.isCharge = true;
+            }
+            if($scope.isCharge == true)
+            {
+                if($scope.payMethod_value == 10)
+                {
+                    $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
+                    $scope.requestPay_Array.sru_bank_name = $scope.bank_Name;
+                    $scope.requestPay_Array.sru_bank_username = $scope.bank_UserName;
+                    if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_name == "" || $scope.requestPay_Array.sru_bank_username == "")
+                    {
+                        $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
+                        $scope.disable_Charge = false;
+                        $rootScope.modalInstance = $uibModal.open({
+                            animation: true,
+                            templateUrl: 'dialogs/AlertDialog.html',
+                            controller: 'ChargeCtrl',
+                            resolve: {
+                            }
+                        });
+                        $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                            $scope.autopay = true;
+                            $scope.chargeForm_disable = true;
+                            $scope.disable_bankName = true;
+                            $scope.disable_bankPass = true;
+                            $scope.disable_bankID = true;
+                            $scope.disable_bankUser = true;
+                            $scope.disable_Charge = false;
+                            $scope.getBalanceInfo();
+                        });
+                    }
+                    else
+                    {
+                        $http.post($rootScope.serverUrl + '/offlinecharge', $scope.requestPay_Array).then(function(success) {
+                            if(success.data.result == "success")
+                            {
+                                if(success.data.moneycode == 0)
+                                    $scope.currency = "¥";
+                                else if(success.data.moneycode == 1)
+                                    $scope.currency = "원";
+                                else if(success.data.moneycode == 2)
+                                    $scope.currency = "$";
+                                if($rootScope.currentLanguage == 'ko')
+                                    $rootScope.msg = success.data.name + "로 " + success.data.id + "에 " + success.data.balance + $scope.currency + "을 송금하십시오.";
+                                else if($rootScope.currentLanguage == 'en')
+                                    $rootScope.msg = "Please pay " + $scope.currency + success.data.balance + " to " + success.data.id + " of " + success.data.name + " and please wait...";
+                                $scope.disable_Charge = false;
+                                $rootScope.modalInstance = $uibModal.open({
+                                    animation: true,
+                                    templateUrl: 'dialogs/AlertDialog.html',
+                                    controller: 'ChargeCtrl',
+                                    resolve: {
+                                    }
+                                });
+                                $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                                    $scope.autopay = true;
+                                    $scope.chargeForm_disable = true;
+                                    $scope.disable_bankName = true;
+                                    $scope.disable_bankPass = true;
+                                    $scope.disable_bankID = true;
+                                    $scope.disable_bankUser = true;
+                                    $scope.disable_Charge = false;
+                                    $scope.money_select = '100k';
+                                    $scope.getBalanceInfo();
+                                });
+
+                            }
+                        });
+                    }
+
+                }
+                else
+                {  
+                    $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
+                    $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
+                    $scope.requestPay_Array.sru_bank_pw = $scope.bank_pass;
+                    if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_pw == "")
+                    {
+                        $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
+                        $scope.disable_Charge = false;
+                        $rootScope.modalInstance = $uibModal.open({
+                            animation: true,
+                            templateUrl: 'dialogs/AlertDialog.html',
+                            controller: 'ChargeCtrl',
+                            resolve: {
+                            }
+                        });
+                        $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                            $scope.autopay = true;
+                            $scope.chargeForm_disable = true;
+                            $scope.disable_bankName = true;
+                            $scope.disable_bankPass = true;
+                            $scope.disable_bankID = true;
+                            $scope.disable_bankUser = true;
+                            $scope.disable_Charge = false;
+                            $scope.getBalanceInfo();
+                        });
+                    }
+                    else
+                    {
+                        $http.post($rootScope.serverUrl + '/onlinecharge', $scope.requestPay_Array).then(function(success) {
+                            if(success.data.result == "success")
+                            {
+                                if(success.data.moneycode == 0)
+                                    $scope.currency = "¥";
+                                else if(success.data.moneycode == 1)
+                                    $scope.currency = "원";
+                                else if(success.data.moneycode == 2)
+                                    $scope.currency = "$";
+                                if($rootScope.currentLanguage == 'ko')
+                                    $rootScope.msg = success.data.name + "로 " + success.data.id + "에 " + success.data.balance + $scope.currency + "을 송금하십시오.";
+                                else if($rootScope.currentLanguage == 'en')
+                                    $rootScope.msg = "Please pay " + $scope.currency + success.data.balance + " to " + success.data.id + " of " + success.data.name + " and please wait...";
+                                $scope.disable_Charge = false;
+                                $rootScope.modalInstance = $uibModal.open({
+                                    animation: true,
+                                    templateUrl: 'dialogs/AlertDialog.html',
+                                    controller: 'ChargeCtrl',
+                                    resolve: {
+                                    }
+                                });
+                                $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                                    $scope.autopay = true;
+                                    $scope.chargeForm_disable = true;
+                                    $scope.disable_bankName = true;
+                                    $scope.disable_bankPass = true;
+                                    $scope.disable_bankID = true;
+                                    $scope.disable_bankUser = true;
+                                    $scope.disable_Charge = false;
+                                    $scope.money_select = '100k';
+                                    $scope.getBalanceInfo();
+                                });
+                            }
+                        });            
+                    }
+                }
+
+            }
+            else //cant pay
+            {
+                $rootScope.msg = $rootScope.translation.CHARGE_IMPOSSIBLE_ALERT;
                 $scope.disable_Charge = false;
-                $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
                 $rootScope.modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'dialogs/AlertDialog.html',
@@ -1508,128 +1702,18 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                 });
                 $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
                     $scope.autopay = true;
+                    $scope.chargeForm_disable = true;
+                    $scope.disable_bankName = true;
+                    $scope.disable_bankPass = true;
+                    $scope.disable_bankID = true;
+                    $scope.disable_bankUser = true;
                     $scope.disable_Charge = false;
                     $scope.money_select = '100k';
                     $scope.getBalanceInfo();
                 });
-            });
-        }
-        else
-        {
-            if($scope.payMethod_value == 10)
-            {
-                $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
-                $scope.requestPay_Array.sru_bank_name = $scope.bank_Name;
-                $scope.requestPay_Array.sru_bank_username = $scope.bank_UserName;
-                if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_name == "" || $scope.requestPay_Array.sru_bank_username == "")
-                {
-                    $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
-                    $scope.disable_Charge = false;
-                    $rootScope.modalInstance = $uibModal.open({
-                        animation: true,
-                        templateUrl: 'dialogs/AlertDialog.html',
-                        controller: 'ChargeCtrl',
-                        resolve: {
-                        }
-                    });
-                    $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $scope.autopay = true;
-                        $scope.chargeForm_disable = true;
-                        $scope.disable_bankName = true;
-                        $scope.disable_bankPass = true;
-                        $scope.disable_bankID = true;
-                        $scope.disable_bankUser = true;
-                        $scope.disable_Charge = false;
-                        $scope.getBalanceInfo();
-                    });
-                }
-                else
-                {
-                    $http.post($rootScope.serverUrl + '/offlinecharge', $scope.requestPay_Array).then(function(success) {
-                        if(success.data.result == "success")
-                        {
-                            $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
-                            $scope.disable_Charge = false;
-                            $rootScope.modalInstance = $uibModal.open({
-                                animation: true,
-                                templateUrl: 'dialogs/AlertDialog.html',
-                                controller: 'ChargeCtrl',
-                                resolve: {
-                                }
-                            });
-                            $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $scope.autopay = true;
-                                $scope.chargeForm_disable = true;
-                                $scope.disable_bankName = true;
-                                $scope.disable_bankPass = true;
-                                $scope.disable_bankID = true;
-                                $scope.disable_bankUser = true;
-                                $scope.disable_Charge = false;
-                                $scope.money_select = '100k';
-                                $scope.getBalanceInfo();
-                            });
-
-                        }
-                    });
-                }
 
             }
-            else
-            {  
-                $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
-                $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
-                $scope.requestPay_Array.sru_bank_pw = $scope.bank_pass;
-                if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_pw == "")
-                {
-                    $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
-                    $scope.disable_Charge = false;
-                    $rootScope.modalInstance = $uibModal.open({
-                        animation: true,
-                        templateUrl: 'dialogs/AlertDialog.html',
-                        controller: 'ChargeCtrl',
-                        resolve: {
-                        }
-                    });
-                    $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $scope.autopay = true;
-                        $scope.chargeForm_disable = true;
-                        $scope.disable_bankName = true;
-                        $scope.disable_bankPass = true;
-                        $scope.disable_bankID = true;
-                        $scope.disable_bankUser = true;
-                        $scope.disable_Charge = false;
-                        $scope.getBalanceInfo();
-                    });
-                }
-                else
-                {
-                    $http.post($rootScope.serverUrl + '/onlinecharge', $scope.requestPay_Array).then(function(success) {
-                        if(success.data.result == "success")
-                        {
-                            $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
-                            $scope.disable_Charge = false;
-                            $rootScope.modalInstance = $uibModal.open({
-                                animation: true,
-                                templateUrl: 'dialogs/AlertDialog.html',
-                                controller: 'ChargeCtrl',
-                                resolve: {
-                                }
-                            });
-                            $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                $scope.autopay = true;
-                                $scope.chargeForm_disable = true;
-                                $scope.disable_bankName = true;
-                                $scope.disable_bankPass = true;
-                                $scope.disable_bankID = true;
-                                $scope.disable_bankUser = true;
-                                $scope.disable_Charge = false;
-                                $scope.money_select = '100k';
-                                $scope.getBalanceInfo();
-                            });
-                        }
-                    });            
-                }
-            }
+            
         }
     };
 
@@ -1647,6 +1731,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                 $rootScope.userInfo = success.data;
                 $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
                 $rootScope.is_logged = true;
+                $localStorage.is_logged = 'in';
             }
         });
     }
@@ -1717,7 +1802,10 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
                             $scope.is_hidden = true;
                         }
                         else
-                            $scope.is_hidden = false;
+                        {
+                            if($scope.is_hidden != true)
+                                $scope.is_hidden = false;
+                        }
                     }
                     $scope.disable_bankName = true;
                     $scope.disable_bankPass = true;
@@ -2026,6 +2114,8 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
                 }
             });
         }
+        else
+            alert($rootScope.translation.WITHDRAW_PASS_ERROR);
     }
 
     $scope.loginWithdrawPass = function()
@@ -2035,7 +2125,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
         $scope.tempPassword.u_withdrawlpw = $scope.withdrawl_pass;
 
         $http.post($rootScope.serverUrl + '/withdrawlpasscode', $scope.tempPassword).then(function(success) {
-            // return genericSuccess(success);
             if(success.data.result == "success")
             {
                 $rootScope.loginWithdrawResult = success.data;
@@ -2524,8 +2613,6 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             $scope.Fill_Form_Info();
         $scope.getWithdrawRecord();
         $rootScope.modalInstance.close('cancel');
-
-        //$uibModalInstance.dismiss('cancel');
     }
 });
 
@@ -2550,12 +2637,13 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
         $scope.tempPassword.u_pocketpw = $scope.pocket_pass;
 
        $http.post($rootScope.serverUrl + '/pocketpasscode', $scope.tempPassword).then(function(success) {
-            // return genericSuccess(success);
             if(success.data.result == "success")
             {
                 $rootScope.modalInstance.close('cancel');
                 $location.path( '/pocket' );
             }
+            else
+                alert($rootScope.translation.WITHDRAW_PASS_ERROR);
         });
     }
 
@@ -2589,11 +2677,13 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
                 }
             });
         }
+        else
+            alert($rootScope.translation.WITHDRAW_PASS_ERROR);
     }
 
     $scope.setPocketPassFunc = function()
     {
-        if($scope.pocketpass.first == $scope.pocketpass.second)
+        if($scope.pocketpass.first == $scope.pocketpass.second && $scope.pocketpass.first != null && $scope.pocketpass.first != "")
         {
             $scope.tempPassword = {}
             $scope.tempPassword.u_id = $rootScope.userInfo.userKey;
@@ -2607,6 +2697,8 @@ app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $ui
                 }
             });
         }
+        else
+            alert($rootScope.translation.WITHDRAW_PASS_ERROR);
     }
 
     $scope.sendPocketDraw = function()
@@ -2711,61 +2803,32 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
     if($rootScope.is_logged != true)
         $location.path('/');
 
-    $scope.item_perPage = 5;
     $scope.maxSize = 3;
     $scope.bigTotalItems = 10;
     $scope.bigCurrentPage = 1;
     $scope.flag_page = 1;
+    $scope.num_per_page = 10;
 
     $scope.pageChanged = function() {
-        $scope.onChangeNum_perPage();
+        $scope.onChangeNum_perPage($scope.bigCurrentPage);
     };
 
-    $scope.onChangeNum_perPage = function() {
-        $scope.item_perPage = $scope.num_per_page;
-        $scope.sub_Records = []
+    $scope.onChangeNum_perPage = function(nowPage) {
         if($scope.flag_page == 1)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.gameRecords.length / $scope.item_perPage)) * 10;
-            if($scope.gameRecords.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.gameRecords.length)
-                    $scope.sub_Records.push($scope.gameRecords[j]);
-            }
-        }
+            $scope.getGameRecord(nowPage, $scope.num_per_page);
         else if($scope.flag_page == 2)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.chargeRecords.length / $scope.item_perPage)) * 10;
-            if($scope.chargeRecords.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.chargeRecords.length)
-                    $scope.sub_Records.push($scope.chargeRecords[j]);
-            }
-        }
+            $scope.getRechargeRecord(nowPage, $scope.num_per_page);
         else if($scope.flag_page == 3)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.withdrawRecords.length / $scope.item_perPage)) * 10;
-            if($scope.withdrawRecords.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.withdrawRecords.length)
-                    $scope.sub_Records.push($scope.withdrawRecords[j]);
-            }
-        }
+            $scope.getWithdrawalsRecord(nowPage, $scope.num_per_page);
     };
 
-    $scope.getRechargeRecord = function()
+    $scope.getRechargeRecord = function(page_number, page_limit)
     {
+        $scope.bigCurrentPage = page_number;
         $scope.tempRecharge = {}
         $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
+        $scope.tempRecharge.page_number = page_number - 1;
+        $scope.tempRecharge.page_limit = page_limit;
         $scope.chargeRecords = {}
 
         $http.post($rootScope.serverUrl + '/rechargerecord', $scope.tempRecharge).then(function(success) {
@@ -2781,16 +2844,19 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                     else
                         $scope.chargeRecords[i].type = "취소";
                 }
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
                 $scope.flag_page = 2;
-                $scope.onChangeNum_perPage();
             }
         });
     }
 
-    $scope.getWithdrawalsRecord = function()
+    $scope.getWithdrawalsRecord = function(page_number, page_limit)
     {
+        $scope.bigCurrentPage = page_number;
         $scope.tempRecharge = {}
         $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
+        $scope.tempRecharge.page_number = page_number - 1;
+        $scope.tempRecharge.page_limit = page_limit;
         $scope.withdrawRecords = {}
 
         $http.post($rootScope.serverUrl + '/withdrawlrecord', $scope.tempRecharge).then(function(success) {
@@ -2806,23 +2872,25 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                     else
                         $scope.withdrawRecords[i].type = "취소";
                 }
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
                 $scope.flag_page = 3;
-                $scope.onChangeNum_perPage();
             }
         });
     }
 
-    $scope.getGameRecord = function()
+    $scope.getGameRecord = function(page_number, page_limit)
     {
+        $scope.bigCurrentPage = page_number;
         $scope.tempRecharge = {}
         $scope.tempRecharge.u_id = $rootScope.userInfo.userKey;
-        $scope.gameRecords = {}
+        $scope.tempRecharge.page_number = page_number - 1;
+        $scope.tempRecharge.page_limit = page_limit;
+        $scope.gameRecords = []
 
         $http.post($rootScope.serverUrl + '/gamerecord', $scope.tempRecharge).then(function(success) {
             if(success.data.result == "success")
             {
                 $scope.gameRecords = success.data.record;
-
                 for(var i=0; i<$scope.gameRecords.length; i++)
                 {
                     if($scope.gameRecords[i].type == 1)
@@ -2830,8 +2898,8 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                     else
                         $scope.gameRecords[i].type = "졌";
                 }
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
                 $scope.flag_page = 1;
-                $scope.onChangeNum_perPage();
             }
         });
     }
@@ -2842,153 +2910,115 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
     if($rootScope.is_logged != true)
         $location.path('/');
 
-    $scope.item_perPage = 5;
     $scope.maxSize = 3;
     $scope.bigTotalItems = 10;
     $scope.bigCurrentPage = 1;
     $scope.flag_page = 1;
+    $scope.num_per_page = 10;
 
     $scope.pageChanged = function() {
-        $scope.onChangeNum_perPage();
+        $scope.onChangeNum_perPage($scope.bigCurrentPage);
     };
 
-    $scope.onChangeNum_perPage = function() {
-        $scope.item_perPage = $scope.num_per_page;
-        $scope.sub_Records = []
+    $scope.onChangeNum_perPage = function(nowPage) {
         if($scope.flag_page == 1)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.chargeMessage.length / $scope.item_perPage)) * 10;
-            if($scope.chargeMessage.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.chargeMessage.length)
-                    $scope.sub_Records.push($scope.chargeMessage[j]);
-            }
-        }
+            $scope.getRechargeMessage(nowPage, $scope.num_per_page);
         else if($scope.flag_page == 2)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.withdrawMessage.length / $scope.item_perPage)) * 10;
-            if($scope.withdrawMessage.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.withdrawMessage.length)
-                    $scope.sub_Records.push($scope.withdrawMessage[j]);
-            }
-        }
+            $scope.getWithdrawalsMessage(nowPage, $scope.num_per_page);
         else if($scope.flag_page == 3)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.systemMessage.length / $scope.item_perPage)) * 10;
-            if($scope.systemMessage.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.systemMessage.length)
-                    $scope.sub_Records.push($scope.systemMessage[j]);
-            }
-        }
+            $scope.getSystemMessage(nowPage, $scope.num_per_page);
         else if($scope.flag_page == 4)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.otherMessage.length / $scope.item_perPage)) * 10;
-            if($scope.otherMessage.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.otherMessage.length)
-                    $scope.sub_Records.push($scope.otherMessage[j]);
-            }
-        }
+            $scope.getOtherMessage(nowPage, $scope.num_per_page);
         else if($scope.flag_page == 5)
-        {
-            $scope.bigTotalItems = (Math.floor($scope.questionMessage.length / $scope.item_perPage)) * 10;
-            if($scope.questionMessage.length % $scope.item_perPage != 0)
-                $scope.bigTotalItems = $scope.bigTotalItems + 10;
-
-            for(var j = ($scope.bigCurrentPage - 1) * $scope.item_perPage; j < $scope.bigCurrentPage * $scope.item_perPage; j ++)
-            {
-                if(j < $scope.questionMessage.length)
-                    $scope.sub_Records.push($scope.questionMessage[j]);
-            }
-        }
+            $scope.getQuestionMessage(nowPage, $scope.num_per_page);
     };
 
-    $scope.getRechargeMessage = function()
+    $scope.getRechargeMessage = function(page_number, page_limit)
     {
         $scope.flag_page = 1;
+        $scope.bigCurrentPage = page_number;
 
         $scope.temp_myID = {}
         $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
-        $scope.chargeMessage = {}
+        $scope.temp_myID.page_number = page_number - 1;
+        $scope.temp_myID.page_limit = page_limit;
+        $scope.messageList = {}
 
         $http.post($rootScope.serverUrl + '/rechargemessage', $scope.temp_myID).then(function(success) {
             if(success.data.result == "success")
             {
-                $scope.chargeMessage = success.data.messages;
-                $scope.onChangeNum_perPage();
+                $scope.messageList = success.data.messages;
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
             }
         });
     }
 
-    $scope.getWithdrawalsMessage = function()
+    $scope.getWithdrawalsMessage = function(page_number, page_limit)
     {
         $scope.flag_page = 2;
+        $scope.bigCurrentPage = page_number;
         
         $scope.temp_myID = {}
         $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
-        $scope.chargeMessage = {}
+        $scope.temp_myID.page_number = page_number - 1;
+        $scope.temp_myID.page_limit = page_limit;
+        $scope.messageList = {}
 
         $http.post($rootScope.serverUrl + '/withdrawlmessage', $scope.temp_myID).then(function(success) {
             if(success.data.result == "success")
             {
-                $scope.withdrawMessage = success.data.messages;
-                $scope.onChangeNum_perPage();
+                $scope.messageList = success.data.messages;
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
             }
         });
 
     }
 
-    $scope.getSystemMessage = function()
+    $scope.getSystemMessage = function(page_number, page_limit)
     {
         $scope.flag_page = 3;
+        $scope.bigCurrentPage = page_number;
 
         $scope.temp_myID = {}
         $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
-        $scope.systemMessage = {}
+        $scope.temp_myID.page_number = page_number - 1;
+        $scope.temp_myID.page_limit = page_limit;
+        $scope.messageList = {}
 
         $http.post($rootScope.serverUrl + '/systemmessage', $scope.temp_myID).then(function(success) {
             if(success.data.result == "success")
             {
-                $scope.systemMessage = success.data.messages;
-                $scope.onChangeNum_perPage();
+                $scope.messageList = success.data.messages;
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
             }
         });
     }
 
-    $scope.getOtherMessage = function()
+    $scope.getOtherMessage = function(page_number, page_limit)
     {
         $scope.flag_page = 4;
+        $scope.bigCurrentPage = page_number;
 
         $scope.temp_myID = {}
         $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
-        $scope.otherMessage = {}
+        $scope.temp_myID.page_number = page_number - 1;
+        $scope.temp_myID.page_limit = page_limit;
+        $scope.messageList = {}
 
         $http.post($rootScope.serverUrl + '/othermessage', $scope.temp_myID).then(function(success) {
             if(success.data.result == "success")
             {
-                $scope.otherMessage = success.data.messages;
-                $scope.onChangeNum_perPage();
+                $scope.messageList = success.data.messages;
+                $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
             }
         });
     }
 
-    $scope.getQuestionMessage = function()
+    $scope.getQuestionMessage = function(page_number, page_limit)
     {
         $scope.flag_page = 5;
+        $scope.bigCurrentPage = page_number;
+        $scope.sub_Records = []
 
         $scope.temp_myID = {}
         $scope.temp_myID.u_id = $rootScope.userInfo.userKey;
@@ -2998,7 +3028,13 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
             if(success.data.result == "success")
             {
                 $scope.questionMessage = success.data.messages;
-                $scope.onChangeNum_perPage();
+                $scope.bigTotalItems = success.data.count * (10 / $scope.num_per_page);
+
+                for(var j = ($scope.bigCurrentPage - 1) * $scope.num_per_page; j < $scope.bigCurrentPage * $scope.num_per_page; j ++)
+                {
+                    if(j < $scope.questionMessage.length)
+                        $scope.sub_Records.push($scope.questionMessage[j]);
+                }
             }
         });
     }
@@ -3040,11 +3076,9 @@ app.controller("MessageCtrl", function ($scope, $rootScope, $location, $http, $u
         });
     }
 
-
     $scope.exitMsg = function()
     {
         $rootScope.modalInstance.close('cancel');
-        //$uibModalInstance.dismiss('cancel');
     }
 });
 
