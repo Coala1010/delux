@@ -22,7 +22,7 @@
           <div class="tab-content" style="margin-top:10px;">
           
               <div class="tab-pane  fade in active" id="a">
-                <div class="padder">      
+                <div class="padder">
                   <div class="streamline b-l b-info m-l-lg m-b padder-v" style="margin-left:0px;">
                    
                       <!-- .a message -->
@@ -39,7 +39,7 @@
                             <!--button class="close" style="line-height: 0;">
                               <span style="font-size:25px;">&times;</span>
                             </button-->
-                            당신이 {{game_record.gamename}}에서 ${{game_record.money}}   {{ game_record.type }}습니다.
+                            {{game_record.comments}}
                           </div>
                         </div>
                       </div>
@@ -65,10 +65,7 @@
                       <div class="m-l-xxl panel b-a">
                         <div class="panel-heading pos-rlt">
                           <span class="arrow left pull-up"></span>
-                          <!--button class="close" style="line-height: 0;">
-                            <span style="font-size:25px;">&times;</span>
-                          </button-->
-                          {{one_charge.bank}}을 통해서 ID : {{one_charge.ID}}로 ${{one_charge.money}}를 충전{{one_charge.type}} 하였습니다.
+                          {{one_charge.comments}}
                         </div>
                       </div>
                     </div>
@@ -93,10 +90,7 @@
                       <div class="m-l-xxl panel b-a">
                         <div class="panel-heading pos-rlt">
                           <span class="arrow left pull-up"></span>
-                          <!--button class="close" style="line-height: 0;">
-                            <span style="font-size:25px;">&times;</span>
-                          </button-->
-                          {{one_withdraw.bank}}을 통해서 ID : {{one_withdraw.ID}}로 ${{one_withdraw.money}}를 환전{{one_withdraw.type}} 하였습니다.
+                          {{one_withdraw.comments}}
                         </div>
                       </div>
                     </div>
@@ -112,7 +106,6 @@
                   </div>
                   <div class="col-sm-6 text-center">
 
-                    <!--ul uib-pagination total-items="175" max-size="3" class="pagination-sm" boundary-link-numbers="true"></ul-->
                     <nav>
                       <ul uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" ng-change="pageChanged()"></ul>
                     </nav>
@@ -127,26 +120,6 @@
           </div>
       
         <!-- / tab -->
-
-          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
-            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
-              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
-              </p>
-            </div>
-            <center>
-              <img src="img/footerLogo.png" style="width: 100%;" />
-            </center>
-            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
-              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
-              </p>
-            </div>
-          </div>
 
       </div>
        <!-- -----------------------right start--------------------------- -->
@@ -184,4 +157,24 @@
 
 
   </div>
+
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
+            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
+              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
+              </p>
+            </div>
+            <center>
+              <img src="img/footerLogo.png" style="width: 100%;" />
+            </center>
+            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
+              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
+              </p>
+            </div>
+          </div>
 </div>

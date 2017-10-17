@@ -767,7 +767,6 @@ body {
 .app-content-body {
   float: left;
   width: 100%;
-  padding-bottom: 50px;
 }
 
 .app-footer {
@@ -1325,7 +1324,7 @@ html {
     bottom: 0;
     z-index: 1010;
     display: block !important;
-    width: 75%;
+    width: 50%;
     overflow-x: hidden;
     overflow-y: auto;
     visibility: visible;
@@ -1855,6 +1854,7 @@ fieldset[disabled] .btn-primary.active {
   border-color: #7266ba;
 }
 
+
 .btn-success {
   color: #ffffff !important;
   background-color: #27c24c;
@@ -1864,6 +1864,7 @@ fieldset[disabled] .btn-primary.active {
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:active,
+.btn-success.focus,
 .btn-success.active,
 .open .dropdown-toggle.btn-success {
   color: #ffffff !important;
@@ -1895,6 +1896,7 @@ fieldset[disabled] .btn-success.active {
   background-color: #27c24c;
   border-color: #27c24c;
 }
+
 
 .btn-info {
   color: #ffffff !important;

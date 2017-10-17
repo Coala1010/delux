@@ -165,6 +165,61 @@
         padding: 10px 25px;
         
     }
+
+    
+
+.btn-success {
+  color: #ffffff !important;
+  background: #cbc5ad;
+  border-color: #cbc5ad;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.focus,
+.btn-success.active,
+.open .dropdown-toggle.btn-success {
+  color: #ffffff !important;
+  background-color: #FF4500;
+  border-color: #FF4500;
+}
+
+.btn-success:hover,
+.btn-success.hover,
+.open .dropdown-toggle.btn-success {
+  color: #ffffff !important;
+  background-color: #23ad44;
+  border-color: #20a03f;
+}
+
+.btn-success:active,
+.btn-success.active,
+.open .dropdown-toggle.btn-success {
+  background-image: none;
+}
+
+.btn-success.disabled,
+.btn-success[disabled],
+fieldset[disabled] .btn-success,
+.btn-success.disabled:hover,
+.btn-success[disabled]:hover,
+fieldset[disabled] .btn-success:hover,
+.btn-success.disabled:focus,
+.btn-success[disabled]:focus,
+fieldset[disabled] .btn-success:focus,
+.btn-success.disabled:active,
+.btn-success[disabled]:active,
+fieldset[disabled] .btn-success:active,
+.btn-success.disabled.active,
+.btn-success[disabled].active,
+fieldset[disabled] .btn-success.active {
+  background-color: #27c24c;
+  border-color: #27c24c;
+}
+
+
+
     @media only screen and (max-width: 479px){
         .form-horizontal .form-group{
             padding: 0 25px;
@@ -295,12 +350,13 @@
     <div class="app-header navbar">
       <!-- navbar header -->
       <div class="navbar-header bg-dark">
-        <button class="pull-right visible-xs dk" data-toggle="class:show" data-target=".navbar-collapse">
+        <button class="pull-right visible-xs " data-toggle="class:show" data-target=".navbar-collapse">
           <i class="glyphicon glyphicon-cog"></i>
         </button>
         <button class="pull-right visible-xs" data-toggle="class:off-screen" data-target=".app-aside" ui-scroll="app">
           <i class="glyphicon glyphicon-align-justify"></i>
         </button>
+
         <!-- brand -->
         <a href="#/" class="navbar-brand text-lt">
           <!-- <i class="fa fa-btc"></i> -->
@@ -333,64 +389,70 @@
 
         <!-- link and dropdown -->
         <ul class="nav navbar-nav hidden-sm">
-          <li class="dropdown pos-stc">
-            <a data-toggle="dropdown" class="dropdown-toggle" id="home" ng-click="loadPages('/')" >
+          <li class="dropdown pos-stc" ng-click="loadPages('/')" style="height: 40px;">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_HOME}}</span>
             </a>
           </li>
-          <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" id="download" ng-click="loadPages('/download')" >
+          <li class="dropdown" ng-click="loadPages('/download')" style="height: 40px;">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_DOWNLOAD}}</span>
             </a>
           </li>
-          <li class="dropdown">            
-            <a data-toggle="dropdown" class="dropdown-toggle" id="charge" ng-click="loadPages('/charge')" >
+          <li class="dropdown" ng-click="loadPages('/charge')" style="height: 40px;">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_CHARGE}}</span>
             </a>
           </li>
-          <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="goWithdrawlPage()">
+          <li class="dropdown" ng-click="goWithdrawlPage()" style="height: 40px;">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_WITHDRAW}}</span>
             </a>
           </li>
-          <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="goPocketPage()">
+          <li class="dropdown" ng-click="goPocketPage()" style="height: 40px;">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_SAFE}}</span>
             </a>
           </li>
-          <li class="dropdown" id="record">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="loadPages('/record')">
+          <li class="dropdown" ng-click="loadPages('/record')" style="height: 40px;" id="record">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_RECORD}}</span>
             </a>
           </li>
-          <li class="dropdown" id="message">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="loadPages('/message')">
+          <li class="dropdown" ng-click="loadPages('/message')" style="height: 40px;" id="message">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_MESSAGE}}</span>
             </a>
           </li>
-          <li class="dropdown" id="liuyan">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="loadPages('/billboard')">
+          <li class="dropdown" ng-click="loadPages('/billboard')" style="height: 40px;" id="liuyan">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_BILL}}</span>
             </a>
           </li>
-          <li class="dropdown" id="notice">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="loadPages('/notice')">
+          <li class="dropdown" ng-click="loadPages('/notice')" style="height: 40px;" id="notice">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_NOTICE}}</span>
             </a>
           </li>
-          <li class="dropdown" id="help">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="loadPages('/help')">
+          <li class="dropdown" ng-click="loadPages('/help')" style="height: 40px;" id="help">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_HELP}}</span>
+            </a>
+          </li>
+          <li class="dropdown" ng-click="logout()" style="height: 40px;" id="help" ng-show="$root.is_logged">
+            <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_LOGOUT}}</span>
             </a>
           </li>
           <li class="dropdown" id="language" ng-controller="LanguageCtrl">
@@ -398,17 +460,11 @@
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_LANG}}</span>
             </a>
-            <div class="dropdown-content" style="left:0;">
+            <div class="dropdown-content" data-toggle="class:show" data-target=".navbar-collapse" style="left:0;">
               <a ng-click="translateLanguage('ko')">조선어</a>
               <a ng-click="translateLanguage('en')">English</a>
               <a ng-click="translateLanguage('cn')">中文（简体）</a>
             </div>
-          </li>
-          <li class="dropdown" id="help" ng-show="$root.is_logged">
-            <a data-toggle="dropdown" class="dropdown-toggle" ng-click="logout()">
-              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
-              <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_LOGOUT}}</span>
-            </a>
           </li>
           
         </ul>
@@ -472,15 +528,19 @@
         <div class="navi-wrap" ng-init="getGameList()">
           <!-- user -->
           <div class="clearfix hidden-xs text-center" ng-show="$root.is_logged" id="aside-user" ng-init="$root.userInfo.user_photo=''">
-            <div class="dropdown wrapper">
+            <div class="dropdown wrapper" style="padding-top: 0px; padding-bottom: 0px;">
               <a ui-sref="app.page.profile">
-                <span class="thumb-lg w-auto-folded avatar m-t-sm">
-                  <img src="{{$root.userInfo.user_photo}}" class="img-full" alt="...">
+
+                <span class="thumb-lg w-auto-folded avatar m-t-sm" ng-click="loadPages('/profile')" style="margin-top: 0px; display: block;" ng-init="$root.isShowPhoto = 0" ng-show="$root.isShowPhoto == 0">
+                  <center>
+                    <img src="{{$root.userInfo.user_photo}}" class="img-full" style="width: 60%" alt="...">
+                  </center>
                 </span>
+                <button type="button" class="btn btn-info" style="height: 20px; width: 60px; font-size: 10px; margin-top: 10px; padding: 0 0 0 0;" ng-click="showhideUserPhoto()">{{$root.isShowPhotoBtn}}</button>
               </a>
               <a data-toggle="dropdown" class="dropdown-toggle hidden-folded">
                 <span class="clear">
-                  <span class="block m-t-sm">
+                  <span class="block m-t-sm" style="margin-top: 5px;">
                     <strong class="font-bold text-lt">{{$root.userInfo.user_nickname}}</strong> 
                     <b class="caret"></b>
                   </span>
@@ -491,10 +551,22 @@
               <ul class="dropdown-menu animated fadeInRight w hidden-folded">
                 <li class="wrapper b-b m-b-sm bg-info m-t-n-xs">
                   <span class="arrow top hidden-folded arrow-info"></span>
-                  <div>
-                    <p>{{$root.translation.PROFILE_POPUP_CASH}}&nbsp;&nbsp;&nbsp;&nbsp;{{$root.userInfo.user_balance}}</p>
+                  <div ng-if="$root.userInfo.displaybalanceflag == 1">
+                    <p>{{$root.translation.PROFILE_POPUP_CASH}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*******</p>
+                  </div>
+                  <div ng-if="$root.userInfo.displaybalanceflag == 0">
+                    <p>{{$root.translation.PROFILE_POPUP_CASH}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$root.userInfo.user_balance | number}}</p>
+                  </div>
+                  <div ng-if="$root.userInfo.displaybalanceflag == 1">
+                    <p style="margin-bottom: 0px;">{{$root.translation.PROFILE_SAFE_MONEY}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*******</p>
+                  </div>
+                  <div ng-if="$root.userInfo.displaybalanceflag == 0">
+                    <p style="margin-bottom: 0px;">{{$root.translation.PROFILE_SAFE_MONEY}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$root.userInfo.user_pocketmoney | number}}</p>
                   </div>
                   <progressbar value="60" type="white" class="progress-xs m-b-none dker"></progressbar>
+                </li>
+                <li >
+                  <a ng-click="showhideMoney()">{{$root.profileMoneyBtn}}</a>
                 </li>
                 <li>
                   <a href>{{$root.translation.PROFILE_POPUP_SETTINGS}}</a>
@@ -502,9 +574,9 @@
                 <li ng-click="loadPages('/profile')">
                   <a ui-sref="app.page.profile">{{$root.translation.PROFILE_POPUP_PROFILE}}</a>
                 </li>
-                <li ng-click="showNoticeDetails('')">
+                <li ng-click="showNoticeDetails()" ng-if="$root.showNotices.length != 0">
                   <a href>
-                    <span class="badge bg-danger pull-right" ng-show="$root.showNotices.length != 0">{{ $root.showNotices.length }}</span>
+                    <span class="badge bg-danger pull-right">{{ $root.showNotices.length }}</span>
                     {{$root.translation.PROFILE_POPUP_NOTIFICATIONS}}
                   </a>
                 </li>
@@ -518,7 +590,6 @@
             <div class="line dk hidden-folded"></div>
           </div>
           <!-- / user -->
-          <br>
           <!-- nav -->
           <nav ui-nav class="navi">
             <ul class="nav">
@@ -529,9 +600,9 @@
               <li ui-sref-active="active" ng-repeat="one_card in card_gameLists">
                 <a ui-sref="app.calendar" class="game_detail">
                   <img src={{one_card.game_photolink}} height="35px" style="margin-top:5px;"/>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_card.gamename.ga_en}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_card.gamename.ga_kr}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_card.gamename.ga_ch}}</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_card.gamename.ga_en}}&nbsp;&nbsp;({{one_card.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_card.gamename.ga_kr}}&nbsp;&nbsp;({{one_card.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_card.gamename.ga_ch}}&nbsp;&nbsp;({{one_card.game_online_count}})</span>
                 </a>
               </li>
 
@@ -548,9 +619,9 @@
               <li ui-sref-active="active" ng-repeat="one_orak in orak_gameLists">
                 <a ui-sref="app.calendar">
                   <img src={{one_orak.game_photolink}} height="35px" style="margin-top:5px;"/>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_orak.gamename.ga_en}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_orak.gamename.ga_kr}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_orak.gamename.ga_ch}}</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_orak.gamename.ga_en}}&nbsp;&nbsp;({{one_orak.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_orak.gamename.ga_kr}}&nbsp;&nbsp;({{one_orak.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_orak.gamename.ga_ch}}&nbsp;&nbsp;({{one_orak.game_online_count}})</span>
                 </a>
               </li>
               
@@ -566,9 +637,9 @@
               <li ui-sref-active="active" ng-repeat="one_sport in sport_gameLists">
                 <a ui-sref="app.calendar" class="game_detail2">
                   <img src={{one_sport.game_photolink}} height="35px" style="margin-top:5px;"/>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_sport.gamename.ga_en}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_sport.gamename.ga_kr}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_sport.gamename.ga_ch}}</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_sport.gamename.ga_en}}&nbsp;&nbsp;({{one_sport.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_sport.gamename.ga_kr}}&nbsp;&nbsp;({{one_sport.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_sport.gamename.ga_ch}}&nbsp;&nbsp;({{one_sport.game_online_count}})</span>
                 </a>
               </li>
               <li ui-sref-active="active">
@@ -595,9 +666,9 @@
               <li ui-sref-active="active" ng-repeat="one_horse in horse_gameLists">
                 <a ui-sref="app.calendar">
                   <img src={{one_horse.game_photolink}} height="35px" style="margin-top:5px;"/>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_horse.gamename.ga_en}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_horse.gamename.ga_kr}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_horse.gamename.ga_ch}}</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_horse.gamename.ga_en}}&nbsp;&nbsp;({{one_horse.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_horse.gamename.ga_kr}}&nbsp;&nbsp;({{one_horse.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_horse.gamename.ga_ch}}&nbsp;&nbsp;({{one_horse.game_online_count}})</span>
                 </a>
               </li>
 
@@ -625,9 +696,9 @@
               <li ui-sref-active="active" ng-repeat="one_live in live_gameLists">
                 <a ui-sref="app.calendar">
                   <img src={{one_live.game_photolink}} height="35px" style="margin-top:5px;"/>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_live.gamename.ga_en}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_live.gamename.ga_kr}}</span>
-                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_live.gamename.ga_ch}}</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'en'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_live.gamename.ga_en}}&nbsp;&nbsp;({{one_live.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'ko'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_live.gamename.ga_kr}}&nbsp;&nbsp;({{one_live.game_online_count}})</span>
+                  <span class="font-bold" translate="aside.nav.CALENDAR" ng-if="$root.currentLanguage == 'cn'">&nbsp;&nbsp;&nbsp;&nbsp;{{one_live.gamename.ga_ch}}&nbsp;&nbsp;({{one_live.game_online_count}})</span>
                 </a>
               </li>
               <li ui-sref-active="active">

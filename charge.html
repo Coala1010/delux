@@ -8,143 +8,138 @@
             <div class="col">
               <div class="wrapper-md">
                   <div>
-                   
                     <div class="row">
                       <!--div class="col-sm-3">
                       </div-->
-                      <div class="col-sm-12" style="margin-top:20px; min-width: 500px;">
-                        <form name="chargeForm" action="#" class="form-horizontal form-validation" ng-init="getBalanceInfo()">
-                        <fieldset ng-disabled = 'chargeForm_disable'>
-                          <div class="panel panel-default">
-                            <div class="panel-heading bg-light lter"  style="text-align:left;">
-                              <h2 style="margin-left:80px;"><strong>{{$root.translation.CHARGE_TITLE}}</strong></h2>
-                            </div>
-                            <div class="panel-body">                    
-                              <div class="form-group">
-                                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_COUNTRY_NAME}}</label>
-                                <div class="col-sm-6">
-                                  <select name="account" ng-model="country_select" ng-init="country_select=$root.translation.CHARGE_COUNTRY_CHINA" class="form-control m-b" ng-change="onCountryChange(country_select)">
-                                    <option>{{$root.translation.CHARGE_COUNTRY_CHINA}}</option>
-                                    <option>{{$root.translation.CHARGE_COUNTRY_KOREA}}</option>
-                                    <option>{{$root.translation.CHARGE_COUNTRY_OTHERS}}</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="line line-dashed b-b line-lg pull-in" ng-show="is_hidden"></div>
-                              <div style="padding: 0 40px;margin: 0 0 25px 0;">
-                                <label class="col-sm-1 control-label" ng-show="is_hidden">{{$root.translation.CHARGE_PAYWAY}}</label>
-                                <div class="col-sm-6 form-inline" style="text-align:left;"  >
-                                  <div class="radio" style="margin-right:10px;" ng-show="payMethod_1">
-                                    <label class="i-checks i-checks-sm">
-                                      <input type="radio" ng-model="payMethod_value" value="10" ng-value="10" name="a" ng-click="setUnionPay_Method()">
-                                      <i ></i>
-                                      <img src="./img/unionpay.png" style="width:50px;"/>
-                                    </label>
-                                  </div>
-                                  <div class="radio" style="margin-right:10px;" ng-show="payMethod_2">
-                                    <label class="i-checks i-checks-sm">
-                                      <input type="radio" ng-model="payMethod_value" value="3" ng-value="3" name="a" ng-click="setUnionPay_Method()">
-                                      <i></i>
-                                      <img src="./img/alipay.png" style="width:50px;"/>
-                                    </label>
-                                  </div>
-                                  <div class="radio" style="margin-right:10px;" ng-show="payMethod_3">
-                                    <label class="i-checks i-checks-sm">
-                                      <input type="radio" ng-model="payMethod_value" value="2" ng-value="2" name="a" ng-click="setUnionPay_Method()">
-                                      <i></i>
-                                      <img src="./img/wxpay.png" style="width:50px;"/>
-                                    </label>
-                                  </div>
-                                  <div class="radio" style="margin-right:10px;" ng-show="payMethod_4">
-                                    <label class="i-checks i-checks-sm">
-                                      <input type="radio" ng-model="payMethod_value" value="4" ng-value="4" name="a" ng-click="setUnionPay_Method()">
-                                      <i></i>
-                                      <img src="./img/tenpay.png" style="width:50px;"/>
-                                    </label>
-                                  </div>
-                                  <div class="radio" style="margin-right:10px;" ng-show="payMethod_5">
-                                    <label class="i-checks i-checks-sm">
-                                      <input type="radio" ng-model="payMethod_value" value="1" ng-value="1" name="a" ng-click="setUnionPay_Method()">
-                                      <i></i>
-                                      <img src="./img/paypalpay.png" style="width:50px;"/>
-                                    </label>
-                                  </div>
-                                </div>
-                                <label class="col-sm-4 control-label" style="text-align: left; color: #ff0000;" ng-show="is_charge">{{$root.translation.CHARGE_IMPOSSIBLE_COMMENT}}</label>
-                              </div>
-                              <div class="line line-dashed b-b line-lg pull-in"></div>
-                              <div class="form-group" ng-show="show_bankname">
-                                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKNAME}}</label>
-                                <div class="col-sm-6">
-                                  <input type="text" ng-disabled='disable_bankName' class="form-control" placeholder={{$root.translation.CHARGE_BANKNAME}} ng-model="bank_Name" ><!-- ng-pattern="/^[0-9]+$/"-->
-                                </div>
-                              </div>
-                              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_bankname"></div>
-                              <div class="form-group" ng-show="show_bankid">
-                                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKID}}</label>
-                                <div class="col-sm-6">
-                                  <input type="text" ng-disabled='disable_bankID' class="form-control" placeholder={{$root.translation.CHARGE_BANKID}} ng-model="bank_ID" required >
-                                </div>
-                              </div>
-                              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_bankid"></div>
-                              <div class="form-group" ng-show="show_pass">
-                                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKPASS}}</label>
-                                <div class="col-sm-6">
-                                  <input type="text" ng-disabled='disable_bankPass' class="form-control" placeholder={{$root.translation.CHARGE_BANKPASS}} ng-model="bank_pass" >
-                                </div>
-                              </div>
-                              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_pass"></div>
-                              <div class="form-group" ng-show="show_username">
-                                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_USERNAME}}</label>
-                                <div class="col-sm-6">
-                                  <input type="text" ng-disabled='disable_bankUser' class="form-control" placeholder={{$root.translation.CHARGE_USERNAME}} ng-model="bank_UserName"  required >
-                                </div>
-                              </div>
-                              <div class="line line-dashed b-b line-lg pull-in" ng-show="show_username"></div>
-                              <div class="form-group">
-                                <label class="col-sm-1 control-label">{{$root.translation.CHARGE_MONEY_TITLE}}</label>
-                                <div class="col-sm-6">
-                                  <select ng-model="money_select" ng-init="money_select='100k'" ng-change="onMoneyChange()" class="form-control m-b">
-                                    <option>100k</option>
-                                    <option>200k</option>
-                                    <option>500k</option>
-                                    <option>1M</option>
-                                    <option>2M</option>
-                                    <option>5M</option>
-                                    <option>10M</option>
-                                    <option>20M</option>
-                                    <option>50M</option>
-                                    <option>100M</option>
-                                    <option>200M</option>
-                                    <option>500M</option>
-                                  </select> 
-                                </div>
-                              </div>
-                                  <label class="col-sm-6">{{$root.translation.CHARGE_GAMEMONEY}} 10k : 1 USD : {{currentBalance}}{{currency}}&nbsp;×&nbsp;{{real_money}}&nbsp;=&nbsp;{{currentMoney}}{{currency}}
-                                  </label>
-                                  
-                              <div class="line line-dashed b-b line-lg pull-in"></div>
-                              <div class="form-group">
-                                <div class="col-sm-6">
-                                  <label>
-                                    <input type="checkbox" ng-init="autopay = true" ng-click="setAutoPay_Method()" ng-model="autopay"/>&nbsp;&nbsp;{{$root.translation.CHARGE_AUTOPAY}}
+                      <div class="col-sm-12" style="margin-top:20px; width: 100%">
+                        <form name="chargeForm" class="form-validation" ng-init="getBalanceInfo()">
+                          <fieldset ng-disabled = 'chargeForm_disable'>
+                            <div class="panel panel-default">
+                              <div class="panel-heading bg-light lter"  style="text-align:left;">
+
+                                <div class="btn-group" data-toggle="buttons">
+                                  <label class="btn btn-success" ng-class="{'active':payType=='auto'}" ng-click="setAutoPay_Method()"> 
+                                    <input type="radio" ng-model="payType" value="auto" ng-value="auto" name="b"> {{$root.translation.CHARGE_AUTO}} 
+                                  </label> 
+                                  <label class="btn btn-success" ng-class="{'active':payType=='manual'}" ng-click="setManualPay_Method()">
+                                    <input type="radio" ng-model="payType" value="manual" ng-value="manual" name="b"> {{$root.translation.CHARGE_MANUAL}} 
                                   </label>
                                 </div>
+                                <!--h2 style="margin-left:80px;"><strong>{{$root.translation.CHARGE_TITLE}}</strong></h2-->
                               </div>
-                              <div class="line line-dashed b-b line-lg pull-in"></div>
+                              <div class="form-horizontal panel-body">                    
+                                <div class="form-group" style="margin-bottom: 0px;">
+                                  <label class="col-sm-1 control-label">{{$root.translation.CHARGE_COUNTRY_NAME}}</label>
+                                  <div class="col-sm-7">
+                                    <select name="country" ng-model="country_select" class="form-control m-b" ng-change="onCountryChange()" ng-options="opt.label for opt in options" style="margin-bottom: 0px;">
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg pull-in" ng-show="is_hidden"></div>
+                                <div style="padding: 0 40px;margin: 0 0 25px 0;">
+                                  <label class="col-sm-1 control-label" ng-show="is_hidden">{{$root.translation.CHARGE_PAYWAY}}</label>
+                                  <div class="col-sm-7 form-inline" style="text-align:left;"  >
+                                    <div class="radio" style="margin-right:10px;" ng-show="payMethod_1">
+                                      <label class="i-checks i-checks-sm">
+                                        <input type="radio" ng-model="payMethod_value" value="10" ng-value="10" name="a" ng-click="setUnionPay_Method()">
+                                        <i ></i>
+                                        <img src="./img/unionpay.png" style="width:50px;"/>
+                                      </label>
+                                    </div>
+                                    <div class="radio" style="margin-right:10px;" ng-show="payMethod_2">
+                                      <label class="i-checks i-checks-sm">
+                                        <input type="radio" ng-model="payMethod_value" value="3" ng-value="3" name="a" ng-click="setUnionPay_Method()">
+                                        <i></i>
+                                        <img src="./img/alipay.png" style="width:50px;"/>
+                                      </label>
+                                    </div>
+                                    <div class="radio" style="margin-right:10px;" ng-show="payMethod_3">
+                                      <label class="i-checks i-checks-sm">
+                                        <input type="radio" ng-model="payMethod_value" value="2" ng-value="2" name="a" ng-click="setUnionPay_Method()">
+                                        <i></i>
+                                        <img src="./img/wxpay.png" style="width:50px;"/>
+                                      </label>
+                                    </div>
+                                    <div class="radio" style="margin-right:10px;" ng-show="payMethod_4">
+                                      <label class="i-checks i-checks-sm">
+                                        <input type="radio" ng-model="payMethod_value" value="4" ng-value="4" name="a" ng-click="setUnionPay_Method()">
+                                        <i></i>
+                                        <img src="./img/tenpay.png" style="width:50px;"/>
+                                      </label>
+                                    </div>
+                                    <div class="radio" style="margin-right:10px;" ng-show="payMethod_5">
+                                      <label class="i-checks i-checks-sm">
+                                        <input type="radio" ng-model="payMethod_value" value="1" ng-value="1" name="a" ng-click="setUnionPay_Method()">
+                                        <i></i>
+                                        <img src="./img/paypalpay.png" style="width:50px;"/>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <!--label class="col-sm-4 control-label" style="text-align: left; color: #ff0000;" ng-show="is_charge">{{$root.translation.CHARGE_IMPOSSIBLE_COMMENT}}</label-->
+                                </div>
+                                <div class="line line-dashed b-b line-lg pull-in"></div>
+                                <div class="form-group" ng-show="show_bankname" style="margin-bottom: 0px;">
+                                  <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKNAME}}</label>
+                                  <div class="col-sm-7">
+                                    <input type="text" ng-disabled='disable_bankName' class="form-control" placeholder={{$root.translation.CHARGE_BANKNAME}} ng-model="bank_Name" ><!-- ng-pattern="/^[0-9]+$/"-->
+                                  </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg pull-in" ng-show="show_bankname"></div>
+                                <div class="form-group" ng-show="show_bankid" style="margin-bottom: 0px;">
+                                  <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKID}}</label>
+                                  <div class="col-sm-7">
+                                    <input type="text" ng-disabled='disable_bankID' class="form-control" placeholder={{$root.translation.CHARGE_BANKID}} ng-model="bank_ID" required >
+                                  </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg pull-in" ng-show="show_bankid"></div>
+                                <div class="form-group" ng-show="show_pass" style="margin-bottom: 0px;">
+                                  <label class="col-sm-1 control-label">{{$root.translation.CHARGE_BANKPASS}}</label>
+                                  <div class="col-sm-7">
+                                    <input type="text" ng-disabled='disable_bankPass' class="form-control" placeholder={{$root.translation.CHARGE_BANKPASS}} ng-model="bank_pass" >
+                                  </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg pull-in" ng-show="show_pass"></div>
+                                <div class="form-group" ng-show="show_username" style="margin-bottom: 0px;">
+                                  <label class="col-sm-1 control-label">{{$root.translation.CHARGE_USERNAME}}</label>
+                                  <div class="col-sm-7">
+                                    <input type="text" ng-disabled='disable_bankUser' class="form-control" placeholder={{$root.translation.CHARGE_USERNAME}} ng-model="bank_UserName"  required >
+                                  </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg pull-in" ng-show="show_username"></div>
+                                <div class="form-group" style="margin-bottom: 0px;">
+                                  <label class="col-sm-1 control-label">{{$root.translation.CHARGE_MONEY_TITLE}}</label>
+                                  <div class="col-sm-7">
+                                    <select ng-model="money_select" ng-init="money_select='100k'" ng-change="onMoneyChange()" class="form-control m-b">
+                                      <option>100k</option>
+                                      <option>200k</option>
+                                      <option>500k</option>
+                                      <option>1M</option>
+                                      <option>2M</option>
+                                      <option>5M</option>
+                                      <option>10M</option>
+                                      <option>20M</option>
+                                      <option>50M</option>
+                                      <option>100M</option>
+                                      <option>200M</option>
+                                      <option>500M</option>
+                                    </select> 
+                                  </div>
+                                </div>
+                                    <label class="col-sm-7">{{$root.translation.CHARGE_GAMEMONEY}} 10k : 1 USD : {{currentBalance}}{{currency}}&nbsp;×&nbsp;{{real_money}}&nbsp;=&nbsp;{{currentMoney|number:0}}{{currency}}
+                                    </label>
+                                    
+                                <div class="line line-dashed b-b line-lg pull-in"></div>
+                              </div>
+                              <footer class="form-horizontal panel-footer bg-light lter" style="height:65px;">
+                                <div class="col-sm-1">
+                                </div>
+                                <div class="col-sm-7">
+                                  <center>
+                                    <button type="button" class="btn btn-info" style="margin-right:50px; float: none;" ng-click="showDialogForPayRequest()" ng-disabled="disable_Charge">{{$root.translation.CHARGE_OK}}</button>
+                                    <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="resetPayRequest()" >{{$root.translation.CHARGE_RESET}}</button>
+                                  </center>
+                              </footer>
                             </div>
-                            <footer class="panel-footer bg-light lter" style="height:65px;">
-                              <div class="col-sm-1">
-                              </div>
-                              <div class="col-sm-6">
-                                <center>
-                              
-                                  <button type="button" class="btn btn-info" style="margin-right:50px; float: none;" ng-click="sendPayRequest()" ng-disabled="disable_Charge">{{$root.translation.CHARGE_OK}}</button>
-                                  <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="resetPayRequest()" >{{$root.translation.CHARGE_RESET}}</button>
-                                  
-                                </center>
-                            </footer>
-                          </div>
                           </fieldset>
                         </form>
                       </div>
@@ -168,6 +163,8 @@
               <option>20</option>
             </select> 
             <label style="margin-top: 7px; margin-right: 10px; float: right;">{{$root.translation.MESSAGE_ITEM_PAGE}} : </label>
+            <label style="margin-top: 7px; margin-right: 20px; float: right;">{{$root.totalChargeAmount | number}} ({{$root.translation.CHARGE_RECORD_GAMEMONEY}})</label>
+            <label style="margin-top: 7px; margin-right: 10px; float: right;">{{$root.translation.CHARGE_RECORD_TOTAL_AMUONT}} : </label>
           </div>
     
           <div class="table-responsive">
@@ -193,8 +190,10 @@
                   <td>{{ one_record.country }}</td>
                   <td>{{ one_record.bank }}</td>
                   <td>{{ one_record.money }}</td>
-                  <td>{{ one_record.real_money | setDecimal:4 }}&nbsp;{{ one_record.currency }}</td>
-                  <td ng-if="one_record.is_cancel">{{ one_record.status }}</td>
+                  <td>{{ one_record.real_money | setDecimal:0 }}{{ one_record.currency }}</td>
+                  <td ng-if="one_record.is_cancel" ng-show="one_record.type == 3" style="color: #0000ff;">{{ one_record.status }}</td>
+                  <td ng-if="one_record.is_cancel" ng-show="one_record.type == 2" style="color: #ccc;">{{ one_record.status }}</td>
+                  <td ng-if="one_record.is_cancel" ng-show="one_record.type == 1" style="color: #ff0000;">{{ one_record.status }}</td>
                   <td ng-if="!one_record.is_cancel"><button type="button" class="btn btn-info" ng-click="cancelCharge(one_record)" >{{$root.translation.CHARGE_RECORD_CANCEL}}</button></td>
                 </tr>
                                 
@@ -219,27 +218,6 @@
     </div>
 
 
-
-
-          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
-            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
-              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
-              </p>
-            </div>
-            <center>
-              <img src="img/footerLogo.png" style="width: 100%;" />
-            </center>
-            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
-              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
-              </p>
-            </div>
-          </div>
 
             </div>
 
@@ -271,6 +249,27 @@
               </div>
             </div>
              <!-- ----------------------------------------------- -->
+          </div>
+
+
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
+            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
+              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
+              </p>
+            </div>
+            <center>
+              <img src="img/footerLogo.png" style="width: 100%;" />
+            </center>
+            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
+              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
+              </p>
+            </div>
           </div>
         <!-- PASTE above -->
       </div>

@@ -75,12 +75,12 @@
                               <div class="line line-dashed b-b"></div>
                               <div class="form-group">
                                 <label class="col-sm-2 control-label">{{$root.translation.PROFILE_POCKET_MONEY}} : </label>
-                                <label class="col-sm-6 control-label" style="text-align: left;">   {{ $root.userInfo.user_balance }}</label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">   {{$root.userInfo.user_balance | number}}</label>
                               </div>
                               <div class="line line-dashed b-b"></div>
                               <div class="form-group">
                                 <label class="col-sm-2 control-label">{{$root.translation.PROFILE_SAFE_MONEY}} : </label>
-                                <label class="col-sm-6 control-label" style="text-align: left;">   {{ $root.userInfo.user_pocketmoney }}</label>
+                                <label class="col-sm-6 control-label" style="text-align: left;">   {{$root.userInfo.user_pocketmoney | number}}</label>
                               </div>
                               <div class="line line-dashed b-b"></div>
                               <div class="form-group">
@@ -111,13 +111,15 @@
                                 </div>
                               </div>
                               <div class="line line-dashed b-b"></div>
-                              <div class="form-group">
+                              <div class="form-group" style="margin-left: 10px;">
                                 <label class="col-sm-2 control-label">{{$root.translation.PROFILE_USER_VERIFY}} : </label>
-                                <div class="col-sm-6">
-                                  <label class="switch">
+                                <div class="col-sm-8">
+                                  <label class="switch" style="float: left; margin-left: 30px;">
                                     <input type="checkbox" ng-click="changeUserVerification()" ng-model="userVerify">
                                     <span class="slider round"></span>
                                   </label>
+                                  <label style="float: left; margin-left: 30px; margin-bottom: 0px;">{{$root.translation.PROFILE_USER_VERIFY_COMMENT1}}</label>
+                                  <label style="float: left; margin-left: 30px;">{{$root.translation.PROFILE_USER_VERIFY_COMMENT2}}</label>
                                 </div>
                               </div>
                             </div>
@@ -128,26 +130,6 @@
                     </div>
                   </div>
               </div>
-
-          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
-            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
-              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
-              </p>
-            </div>
-            <center>
-              <img src="img/footerLogo.png" style="width: 100%;" />
-            </center>
-            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
-              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
-              </p>
-            </div>
-          </div>
           
             </div>
 
@@ -178,6 +160,26 @@
               </div>
             </div>
              <!-- ----------------------------------------------- -->
+          </div>
+
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
+            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
+              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
+              </p>
+            </div>
+            <center>
+              <img src="img/footerLogo.png" style="width: 100%;" />
+            </center>
+            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
+              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
+              </p>
+            </div>
           </div>
         <!-- PASTE above -->
       </div>

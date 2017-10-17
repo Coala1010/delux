@@ -171,6 +171,14 @@ app.service('translationService', function($resource, $rootScope) {
             
             if($rootScope.is_logged == false)
                 $rootScope.login_title = $rootScope.translation.TOP_MENU_LOGIN;
+            if($rootScope.userInfo.displaybalanceflag == 1)
+                $rootScope.profileMoneyBtn = $rootScope.translation.PROFILE_POPUP_BTN_SHOW;
+            else
+                $rootScope.profileMoneyBtn = $rootScope.translation.PROFILE_POPUP_BTN_HIDE;
+            if($rootScope.isShowPhoto == 0)
+                $rootScope.isShowPhotoBtn = $rootScope.translation.PROFILE_POPUP_BTN_HIDE;
+            else
+                $rootScope.isShowPhotoBtn = $rootScope.translation.PROFILE_POPUP_BTN_SHOW;
         });
     };
 });
@@ -211,7 +219,7 @@ app.factory('socket', function ($rootScope) {
             });
         },
         init: function () {
-            socket = io.connect('http://101.102.224.50/');
+            socket = io.connect('http://isopda.55555.io/');
         },
         emit: function (eventName, data, callback) {
             socket.emit(eventName, data, function () {
@@ -224,7 +232,7 @@ app.factory('socket', function ($rootScope) {
             })
         },
         reconnect: function (id) {
-            socket = io.connect('http://101.102.224.50/',{'forceNew': true });
+            socket = io.connect('http://isopda.55555.io/',{'forceNew': true });
             socket.emit('CLIENT_LOGGED_IN', {u_id: id });
             },
         disconnect: function () {
@@ -238,13 +246,13 @@ app.factory('socket', function ($rootScope) {
 app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket, $localStorage) {
 
     $scope.billBoard_portNumber = 10006;
-    $rootScope.billBoard_Url = 'http://101.102.224.50:' + $scope.billBoard_portNumber;
+    $rootScope.billBoard_Url = 'http://isopda.55555.io:' + $scope.billBoard_portNumber;
 
     $scope.portNumber = 10005;
-    $rootScope.serverUrl = 'http://101.102.224.50:';// + $scope.portNumber;
+    $rootScope.serverUrl = 'http://isopda.55555.io'// + $scope.portNumber;
 
     $scope.resource_portNumber = 10008;
-    $rootScope.resource_Url = 'http://101.102.224.50:' + $scope.resource_portNumber;
+    $rootScope.resource_Url = 'http://isopda.55555.io:' + $scope.resource_portNumber;
 
     $scope.gameLists = {}
     $http.post($rootScope.serverUrl + '/sessioncheck').then(function(success) {
@@ -518,7 +526,47 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
         });
-    };
+    }
+
+    if($rootScope.isShowPhoto == 0)
+        $rootScope.isShowPhotoBtn = $rootScope.translation.PROFILE_POPUP_BTN_HIDE;
+    $scope.showhideUserPhoto = function()
+    {
+        if($rootScope.isShowPhoto == 0)
+        {
+            $rootScope.isShowPhotoBtn = $rootScope.translation.PROFILE_POPUP_BTN_SHOW;
+            $rootScope.isShowPhoto = 1;
+        }
+        else
+        {
+            $rootScope.isShowPhotoBtn = $rootScope.translation.PROFILE_POPUP_BTN_HIDE;
+            $rootScope.isShowPhoto = 0;
+        }
+    }
+
+    $scope.showhideMoney = function()
+    {
+        $scope.tempData = {}
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
+        if($rootScope.userInfo.displaybalanceflag == 1)
+            $scope.tempData.displaybalanceflag = 0;
+        else
+            $scope.tempData.displaybalanceflag = 1;
+
+        $http.post($rootScope.serverUrl + '/changebalancestatus', $scope.tempData).then(function(success) {
+            if(success.data.result == 'success')
+            {
+                if($scope.tempData.displaybalanceflag == 0)
+                    $rootScope.userInfo.displaybalanceflag = 0;
+                else
+                    $rootScope.userInfo.displaybalanceflag = 1;
+                if($rootScope.userInfo.displaybalanceflag == 1)
+                    $rootScope.profileMoneyBtn = $rootScope.translation.PROFILE_POPUP_BTN_SHOW;
+                else
+                    $rootScope.profileMoneyBtn = $rootScope.translation.PROFILE_POPUP_BTN_HIDE;
+            }
+        });
+    }
 
     $scope.showNoticeDetails = function()
     {
@@ -645,12 +693,17 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
                 if(success.data.send_email == "0")
                 {
                     $http.post($rootScope.serverUrl + '/requestuserinfo', $scope.temp_userInfo).then(function(success) {
+                        console.log(success);
                         if(success.data.result == "success")
                         {
                             $rootScope.userInfo = success.data;
                             $rootScope.userInfo.userKey = $scope.temp_userInfo.u_id;
 
                             $rootScope.login_title = $rootScope.userInfo.user_nickname;
+                            if($rootScope.userInfo.displaybalanceflag == 1)
+                                $rootScope.profileMoneyBtn = $rootScope.translation.PROFILE_POPUP_BTN_SHOW;
+                            else
+                                $rootScope.profileMoneyBtn = $rootScope.translation.PROFILE_POPUP_BTN_HIDE;
 
                             $scope.tempData = {}
                             $scope.tempData.u_id = $rootScope.userInfo.userKey;
@@ -705,33 +758,58 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
     $scope.turnOnNotify = function()
     {
         socket.on('PUSH_RW_RESULT', function (data) {
-            var snd = new Audio('audio/alarm.mp3');
-            snd.play();
             if(data.rw_flag == 1)
-                $scope.rw = "충전";
+                $scope.rw = $rootScope.translation.CHARGE_TITLE;
             else if(data.rw_flag == 2)
-                $scope.rw = "환전";
-            if(data.type == 1)
-                $scope.reply_type = "승인";
-            else if(data.type == 2)
-                $scope.reply_type = "취소";
+                $scope.rw = $rootScope.translation.WITHDRAW_TITLE;
             $rootScope.alarm_time = $rootScope.translation.ALARM_DIALOG_TIME + " : " + data.time;
             $rootScope.alarm_money = $rootScope.translation.CHARGE_GAMEMONEY + " : " + data.money;
-            $rootScope.msg = data.bank+"을 통해서 " + "ID : " + data.ID + "의 " + $scope.rw + "요청이 " + $scope.reply_type + "되였습니다.";
-            $rootScope.modalInstance = $uibModal.open({
+            if($rootScope.currentLanguage == 'ko')
+            {
+                if(data.type == 1)
+                    $scope.reply_type = "승인";
+                else if(data.type == 2)
+                    $scope.reply_type = "취소";
+                $rootScope.msg = data.bank+"을 통해서 " + "ID : " + data.ID + "의 " + $scope.rw + "요청이 " + $scope.reply_type + "되였습니다.";
+            }
+            else if($rootScope.currentLanguage == 'en')
+            {
+                if(data.type == 1)
+                    $scope.reply_type = "Accepted to ";
+                else if(data.type == 2)
+                    $scope.reply_type = "Canceled to ";
+                $rootScope.msg = $scope.reply_type + $scope.rw + " to " + data.ID + " through " + data.bank;
+            }
+            else if($rootScope.currentLanguage == 'cn')
+            {
+                if(data.type == 1)
+                    $scope.reply_type = "已通过.";
+                else if(data.type == 2)
+                    $scope.reply_type = "已取消.";
+                $rootScope.msg = "ID: " + data.ID + "通过" + data.bank + "申请的" + $scope.rw + $scope.reply_type;
+            }
+
+            var parentSelector;
+            var size;
+            var parentElem = parentSelector ? 
+            angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+
+            var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'dialogs/AlarmDialog.html',
-                controller: 'AlertCtrl',
-                resolve: {
-                }
+                controller: 'LoginDialogCtrl',
+                size: size,
+                resolve: {}
             });
-            $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+            modalInstance.result.then(function (selectedItem) {}, function () {
+                $rootScope.$emit("ReGetRechargeInfo", {});
             });
+
+            var snd = new Audio('audio/alarm.mp3');
+            snd.play();
         });
 
         socket.on('PUSH_OP_RESULT', function (data) {
-            var snd = new Audio('audio/alarm.mp3');
-            snd.play();
             $rootScope.q_time = $rootScope.translation.ALARM_QUESTION_UPLOAD_CONTENT + " " + data.time;
             $rootScope.q_content = data.message;
             $rootScope.qr_time = $rootScope.translation.ALARM_QUESTION_REPLY_CONTENT + " " + data.f_time;
@@ -746,6 +824,8 @@ app.controller('LoginDialogCtrl', function ($scope, $rootScope, $http, $uibModal
             });
             $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
             });
+            var snd = new Audio('audio/alarm.mp3');
+            snd.play();
         });
 
     }
@@ -1129,593 +1209,355 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
     if($rootScope.is_logged != true)
         $location.path('/');
 
+    $scope.payType = 'auto';
     $scope.chargeForm_disable = true;
 
+    $scope.disable_bankName = false;
+    $scope.disable_bankPass = false;
+    $scope.disable_bankID = false;
+    $scope.disable_bankUser = false;
+
     $scope.setAutoPay_Method = function() {
-
-   /*     $scope.bank_Name = "";
-        $scope.bank_ID = "";
-        $scope.bank_pass = "";
-        $scope.bank_UserName = "";
-*/
-        if($scope.payment_history_count == 0)
-            $scope.autopay = false;
-        if($scope.autopay == true)
-        {
-            $scope.disable_bankName = true;
-            $scope.disable_bankPass = true;
-            $scope.disable_bankID = true;
-            $scope.disable_bankUser = true;
-
-            $scope.payMethod_1 = false;
-            $scope.payMethod_2 = false;
-            $scope.payMethod_3 = false;
-            $scope.payMethod_4 = false;
-            $scope.payMethod_5 = false;
-
-            if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-                $scope.country_number = 0;
-            else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-                $scope.country_number = 1;
-            else
-                $scope.country_number = 2;
-
-            $scope.bank_Name = "";
-            $scope.bank_ID = "";
-            $scope.bank_pass = "";
-            $scope.bank_UserName = "";
-            for(var i=0; i<$scope.payment_history_count; i++)
-            {
-                if($scope.payment_history[i].sru_country == $scope.country_number)
-                {
-                    if($scope.payment_history[i].sru_paygate == 10)
-                        $scope.payMethod_1 = true;
-                    else if($scope.payment_history[i].sru_paygate == 1)
-                        $scope.payMethod_5 = true;
-                    else if($scope.payment_history[i].sru_paygate == 2)
-                        $scope.payMethod_3 = true;
-                    else if($scope.payment_history[i].sru_paygate == 3)
-                        $scope.payMethod_2 = true;
-                    else if($scope.payment_history[i].sru_paygate == 4)
-                        $scope.payMethod_4 = true;
-                    $scope.bank_Name = $scope.payment_history[i].sru_bank_name;
-                    $scope.bank_ID = $scope.payment_history[i].sru_bank_id;
-                    $scope.bank_pass = $scope.payment_history[i].sru_bank_pw;
-                    $scope.bank_UserName = $scope.payment_history[i].sru_bank_username;
-                    if($scope.payment_history[i].sru_paygate == 10)
-                        $scope.payMethod_value = 10;
-                    else if($scope.payment_history[i].sru_paygate == 1)
-                        $scope.payMethod_value = 1;
-                    else if($scope.payment_history[i].sru_paygate == 2)
-                        $scope.payMethod_value = 2;
-                    else if($scope.payment_history[i].sru_paygate == 3)
-                        $scope.payMethod_value = 3;
-                    else if($scope.payment_history[i].sru_paygate == 4)
-                        $scope.payMethod_value = 4;
-                }
-            }
-        }
-        else
-        {
-            if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-            {
-                $scope.payMethod_value = 10;
-                $scope.payMethod_1 = true;
-                $scope.payMethod_2 = true;
-                $scope.payMethod_3 = true;
-                $scope.payMethod_4 = true;
-                $scope.payMethod_5 = true;
-            }
-            else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-            {
-                $scope.payMethod_value = 10;
-                $scope.payMethod_1 = true;
-                $scope.payMethod_2 = false;
-                $scope.payMethod_3 = true;
-                $scope.payMethod_4 = false;
-                $scope.payMethod_5 = true;
-            }
-            else
-            {
-                $scope.payMethod_value = 2;
-                $scope.payMethod_1 = false;
-                $scope.payMethod_2 = false;
-                $scope.payMethod_3 = true;
-                $scope.payMethod_4 = false;
-                $scope.payMethod_5 = true;
-            }
-            if($scope.payMethod_value == 10)
-            {
-                $scope.disable_bankName = false;
-                $scope.disable_bankPass = true;
-                $scope.disable_bankID = false;
-                $scope.disable_bankUser = false;
-            }
-            else
-            {
-                $scope.disable_bankName = true;
-                $scope.disable_bankPass = false;
-                $scope.disable_bankID = false;
-                $scope.disable_bankUser = true;
-            }
-        }
-        if($scope.payMethod_1 == false && $scope.payMethod_2 == false && $scope.payMethod_3 == false && $scope.payMethod_4 == false && $scope.payMethod_5 == false)
-            $scope.is_hidden = false;
-        else
-            $scope.is_hidden = true;
+        $scope.payType = 'auto';
+        $scope.updateCountryList();
+        $scope.FillAutoPayForm();
+        $scope.updatePayWaySelection();
     };
 
-    $scope.setUnionPay_Method = function() {
-
-
-        if($scope.autopay == false)
-        {
-            $scope.is_charge = true;
-            for(var i=0; i<$rootScope.userInfo.availablepayment.length; i++)
-            {
-                if($scope.payMethod_value == $rootScope.userInfo.availablepayment[i])
-                    $scope.is_charge = false;
-            }
-
-            if($scope.payMethod_value == 10)
-            {
-                $scope.disable_bankName = false;
-                $scope.disable_bankPass = true;
-                $scope.disable_bankID = false;
-                $scope.disable_bankUser = false;
-            }
-            else
-            {
-                $scope.disable_bankName = true;
-                $scope.disable_bankPass = false;
-                $scope.disable_bankID = false;
-                $scope.disable_bankUser = true;
-            }            
-        }
-        else
-        {
-            $scope.is_charge = false;
-
-            if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-                $scope.country_number = 0;
-            else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-                $scope.country_number = 1;
-            else
-                $scope.country_number = 2;
-            for(var i=$scope.payment_history.length-1; i>=0; i--)
-            {
-                if($scope.payment_history[i].sru_paygate == $scope.payMethod_value && $scope.payment_history[i].sru_country == $scope.country_number)
-                {
-                    $scope.bank_Name = $scope.payment_history[i].sru_bank_name;
-                    $scope.bank_ID = $scope.payment_history[i].sru_bank_id;
-                    $scope.bank_pass = $scope.payment_history[i].sru_bank_pw;
-                    $scope.bank_UserName = $scope.payment_history[i].sru_bank_username;
-                }
-            }
-        }
-        $scope.showInputForm();
-    };
-
-    $scope.onCountryChange = function(country_selected) {
-        if(country_selected == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-            $scope.country_number = 0;
-        else if(country_selected == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-            $scope.country_number = 1;
-        else
-            $scope.country_number = 2;
+    $scope.FillAutoPayForm = function()
+    {
         $scope.payMethod_1 = false;
         $scope.payMethod_2 = false;
         $scope.payMethod_3 = false;
         $scope.payMethod_4 = false;
         $scope.payMethod_5 = false;
-            $scope.bank_Name = "";
-            $scope.bank_ID = "";
-            $scope.bank_pass = "";
-            $scope.bank_UserName = "";
-        if($scope.autopay == false)
+        if($scope.country_select == null)
+            return;
+        for(var i=0; i<$scope.payment_history.length; i++)
         {
-            if(country_selected == $rootScope.translation.CHARGE_COUNTRY_CHINA)
+            if($scope.payment_history[i].sru_country == $scope.country_select.value)
             {
-                $scope.payMethod_value = 10;
+                if($scope.payment_history[i].sru_paygate == 10)
+                    $scope.payMethod_1 = true;
+                else if($scope.payment_history[i].sru_paygate == 1)
+                    $scope.payMethod_5 = true;
+                else if($scope.payment_history[i].sru_paygate == 2)
+                    $scope.payMethod_3 = true;
+                else if($scope.payment_history[i].sru_paygate == 3)
+                    $scope.payMethod_2 = true;
+                else if($scope.payment_history[i].sru_paygate == 4)
+                    $scope.payMethod_4 = true;
+            }
+        }
+        $scope.selectFirstItem();
+        $scope.showInputForm();
+        for(var i=0; i<$scope.payment_history.length; i++)
+        {
+            if($scope.payment_history[i].sru_country == $scope.country_select.value && $scope.payment_history[i].sru_paygate == $scope.payMethod_value)
+            {
+                $scope.bank_Name = $scope.payment_history[i].sru_bank_name;
+                $scope.bank_ID = $scope.payment_history[i].sru_bank_id;
+                $scope.bank_pass = $scope.payment_history[i].sru_bank_pw;
+                $scope.bank_UserName = $scope.payment_history[i].sru_bank_username;
+            }
+        }
+    }
+
+    $scope.setManualPay_Method = function() {
+        $scope.payType = 'manual';
+        $scope.resetPayRequest();
+        $scope.updateCountryList();
+        $scope.updatePayWaySelection();
+        $scope.selectFirstItem();
+        $scope.showInputForm();
+    }
+
+    $scope.selectFirstItem = function() {
+        if($scope.payMethod_1 == true)
+            $scope.payMethod_value = 10;
+        else if($scope.payMethod_2 == true)
+            $scope.payMethod_value = 3;
+        else if($scope.payMethod_3 == true)
+            $scope.payMethod_value = 2;
+        else if($scope.payMethod_4 == true)
+            $scope.payMethod_value = 4;
+        else if($scope.payMethod_5 == true)
+            $scope.payMethod_value = 1;
+    }
+
+    $scope.updatePayWaySelection = function()
+    {
+        $scope.payMethod_1 = false;
+        $scope.payMethod_2 = false;
+        $scope.payMethod_3 = false;
+        $scope.payMethod_4 = false;
+        $scope.payMethod_5 = false;
+        for(var i=0; i<$rootScope.userInfo.availablepayment.length; i++)
+        {
+            if($rootScope.userInfo.availablepayment[i] == 10)
                 $scope.payMethod_1 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 1)
+                $scope.payMethod_5 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 2)
+                $scope.payMethod_3 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 3)
                 $scope.payMethod_2 = true;
-                $scope.payMethod_3 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 4)
                 $scope.payMethod_4 = true;
-                $scope.payMethod_5 = true;
-            }
-            else if(country_selected == $rootScope.translation.CHARGE_COUNTRY_KOREA)
+        }
+        if($scope.country_select != null)
+        {
+            if($scope.country_select.value == 1)
             {
-                $scope.payMethod_value = 10;
-                $scope.payMethod_1 = true;
                 $scope.payMethod_2 = false;
-                $scope.payMethod_3 = true;
                 $scope.payMethod_4 = false;
-                $scope.payMethod_5 = true;
             }
-            else if(country_selected == $rootScope.translation.CHARGE_COUNTRY_OTHERS)
+            else if($scope.country_select.value == 2)
             {
-                $scope.payMethod_value = 2;
                 $scope.payMethod_1 = false;
                 $scope.payMethod_2 = false;
-                $scope.payMethod_3 = true;
                 $scope.payMethod_4 = false;
-                $scope.payMethod_5 = true;
             }
         }
-        else
-        {
-            for(var i=0; i<$scope.payment_history.length; i++)
-            {
-                if($scope.payment_history[i].sru_country == $scope.country_number)
-                {
-                    $scope.bank_Name = "";
-                    $scope.bank_ID = "";
-                    $scope.bank_pass = "";
-                    $scope.bank_UserName = "";
-                    $scope.bank_Name = $scope.payment_history[i].sru_bank_name;
-                    $scope.bank_ID = $scope.payment_history[i].sru_bank_id;
-                    $scope.bank_pass = $scope.payment_history[i].sru_bank_pw;
-                    $scope.bank_UserName = $scope.payment_history[i].sru_bank_username;
-
-                    if($scope.payment_history[i].sru_paygate == 10)
-                        $scope.payMethod_1 = true;
-                    else if($scope.payment_history[i].sru_paygate == 1)
-                        $scope.payMethod_5 = true;
-                    else if($scope.payment_history[i].sru_paygate == 2)
-                        $scope.payMethod_3 = true;
-                    else if($scope.payment_history[i].sru_paygate == 3)
-                        $scope.payMethod_2 = true;
-                    else if($scope.payment_history[i].sru_paygate == 4)
-                        $scope.payMethod_4 = true;
-                    $scope.payMethod_value_temp = $scope.payment_history[i].sru_paygate;
-                }
-            }
-        }
-        if($scope.payMethod_value_temp == 10)
-            $scope.payMethod_value = 10;
-        else if($scope.payMethod_value_temp == 1)
-            $scope.payMethod_value = 1;
-        else if($scope.payMethod_value_temp == 2)
-            $scope.payMethod_value = 2;
-        else if($scope.payMethod_value_temp == 3)
-            $scope.payMethod_value = 3;
-        else if($scope.payMethod_value_temp == 4)
-            $scope.payMethod_value = 4;
-
-
-
-        if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-        {
-            $scope.currentBalance = $scope.balances[0].balance;
-            $scope.currency = "¥";
-        }
-        else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-        {
-            $scope.currentBalance = $scope.balances[1].balance;
-            $scope.currency = "원";
-        }
-        else
-        {
-            $scope.currentBalance = $scope.balances[2].balance;
-            $scope.currency = "$";
-        }
-
-        $scope.showInputForm();
-
-
         if($scope.payMethod_1 == false && $scope.payMethod_2 == false && $scope.payMethod_3 == false && $scope.payMethod_4 == false && $scope.payMethod_5 == false)
             $scope.is_hidden = false;
         else
             $scope.is_hidden = true;
+    }
 
+    $scope.setUnionPay_Method = function()
+    {
+        if($scope.payType =='auto')
+        {
+            for(var i=$scope.payment_history.length-1; i>=0; i--)
+            {
+                if($scope.payment_history[i].sru_paygate == $scope.payMethod_value && $scope.payment_history[i].sru_country == $scope.country_select.value)
+                {
+                    $scope.bank_Name = $scope.payment_history[i].sru_bank_name;
+                    $scope.bank_ID = $scope.payment_history[i].sru_bank_id;
+                    $scope.bank_pass = $scope.payment_history[i].sru_bank_pw;
+                    $scope.bank_UserName = $scope.payment_history[i].sru_bank_username;
+                }
+            }
+        }
+        $scope.showInputForm();
+    };
+
+    $scope.onCountryChange = function()
+    {
+        if($scope.payType == 'auto')
+        {
+            $scope.FillAutoPayForm();
+            $scope.updatePayWaySelection();
+        }
+        else
+        {
+            $scope.updatePayWaySelection();
+            $scope.selectFirstItem();
+            $scope.showInputForm();
+        }
+        $scope.getCurrentBalanceInfo();
     };
 
     $scope.resetPayRequest = function()
     {
-        if($scope.autopay == false)
-        {
-            $scope.bank_Name = "";
-            $scope.bank_pass = "";
-            $scope.bank_ID = "";
-            $scope.bank_UserName = "";
-        }
+        $scope.bank_Name = "";
+        $scope.bank_pass = "";
+        $scope.bank_ID = "";
+        $scope.bank_UserName = "";
     }
 
     $scope.onMoneyChange = function()
     {
-
-        if($scope.money_select == '100k')
-            $scope.real_money = 100000 / 100000;
-        else if($scope.money_select == '200k')
-            $scope.real_money = 200000 / 100000;
-        else if($scope.money_select == '500k')
-            $scope.real_money = 500000 / 100000;
-        else if($scope.money_select == '1M')
-            $scope.real_money = 1000000 / 100000;
-        else if($scope.money_select == '2M')
-            $scope.real_money = 2000000 / 100000;
-        else if($scope.money_select == '5M')
-            $scope.real_money = 5000000 / 100000;
-        else if($scope.money_select == '10M')
-            $scope.real_money = 10000000 / 100000;
-        else if($scope.money_select == '20M')
-            $scope.real_money = 20000000 / 100000;
-        else if($scope.money_select == '50M')
-            $scope.real_money = 50000000 / 100000;
-        else if($scope.money_select == '100M')
-            $scope.real_money = 100000000 / 100000;
-        else if($scope.money_select == '200M')
-            $scope.real_money = 200000000 / 100000;
-        else if($scope.money_select == '500M')
-            $scope.real_money = 500000000 / 100000;
-        $scope.real_money = $scope.real_money * 10;
-
-
-        if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-        {
-            $scope.currentBalance = $scope.balances[0].balance;
-            $scope.currency = "¥";
-        }
-        else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-        {
-            $scope.currentBalance = $scope.balances[1].balance;
-            $scope.currency = "원";
-        }
-        else
-        {
-            $scope.currentBalance = $scope.balances[2].balance;
-            $scope.currency = "$";
-        }
-
+        $scope.real_money = $scope.moneyFromStrToInt($scope.money_select) / 10000;
+        $scope.getCurrentBalanceInfo();
         $scope.currentMoney = $scope.currentBalance * $scope.real_money;
-
     }
 
-    $scope.sendPayRequest = function() {
+    $scope.getAdminInfoForCharge = function()
+    {
+        for(var i=0; i<$rootScope.userInfo.paymentsetting.length; i++)
+        {
+            if($scope.payMethod_value == $rootScope.userInfo.paymentsetting[i].index)
+                return $rootScope.userInfo.paymentsetting[i];
+        }
+    }
 
+    $scope.showDialogForFillForm = function()
+    {
+        $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
+        $scope.disable_Charge = false;
+        $rootScope.modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'dialogs/AlertDialog.html',
+            controller: 'ChargeCtrl',
+            resolve: {
+            }
+        });
+        $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+            $scope.chargeForm_disable = true;
+            $scope.disable_Charge = false;
+            $scope.getBalanceInfo();
+        });
+    }
+
+    $scope.showDialogForPayRequest = function()
+    {
         $scope.disable_Charge = true;
 
-        $scope.requestPay_Array = {}
-        $scope.requestPay_Array.u_id = $rootScope.userInfo.userKey;
-
-        if($scope.money_select == '100k')
-            $scope.requestPay_Array.u_game_money = 100000;
-        else if($scope.money_select == '200k')
-            $scope.requestPay_Array.u_game_money = 200000;
-        else if($scope.money_select == '500k')
-            $scope.requestPay_Array.u_game_money = 500000;
-        else if($scope.money_select == '1M')
-            $scope.requestPay_Array.u_game_money = 1000000;
-        else if($scope.money_select == '2M')
-            $scope.requestPay_Array.u_game_money = 2000000;
-        else if($scope.money_select == '5M')
-            $scope.requestPay_Array.u_game_money = 5000000;
-        else if($scope.money_select == '10M')
-            $scope.requestPay_Array.u_game_money = 10000000;
-        else if($scope.money_select == '20M')
-            $scope.requestPay_Array.u_game_money = 20000000;
-        else if($scope.money_select == '50M')
-            $scope.requestPay_Array.u_game_money = 50000000;
-        else if($scope.money_select == '100M')
-            $scope.requestPay_Array.u_game_money = 100000000;
-        else if($scope.money_select == '200M')
-            $scope.requestPay_Array.u_game_money = 200000000;
-        else if($scope.money_select == '500M')
-            $scope.requestPay_Array.u_game_money = 500000000;
-
-        if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
+        $rootScope.requestPay_Array = {}
+        $rootScope.requestPay_Array.u_id = $rootScope.userInfo.userKey;
+        $rootScope.requestPay_Array.u_game_money = $scope.moneyFromStrToInt($scope.money_select);
+        $rootScope.requestPay_Array.sru_paygate = $scope.payMethod_value;
+        if($scope.country_select == null)
         {
-            $scope.requestPay_Array.sru_country = 0;
-            $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[0].balance;
-        }
-        else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-        {
-            $scope.requestPay_Array.sru_country = 1;
-            $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[1].balance;
+            $scope.showDialogForFillForm();
+            return;
         }
         else
         {
-            $scope.requestPay_Array.sru_country = 2;
-            $scope.requestPay_Array.u_money = $scope.requestPay_Array.u_game_money / 10000 * $scope.balances[2].balance;
+            $rootScope.requestPay_Array.sru_country = $scope.country_select.value;
+            $rootScope.requestPay_Array.u_money = Math.round($rootScope.requestPay_Array.u_game_money / 10000 * $scope.balances[parseInt($rootScope.requestPay_Array.sru_country)].balance);
         }
 
-        if($scope.autopay == true)
+        if($scope.payType == 'auto')
         {
-            $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
-
-            $http.post($rootScope.serverUrl + '/autocharge', $scope.requestPay_Array).then(function(success) {
-                if(success.data.result == "success")
+            $scope.sendPayRequest();
+        }
+        else
+        {
+            $scope.adminInfo = $scope.getAdminInfoForCharge();
+            if($scope.payMethod_value == 10)
+            {
+                $rootScope.requestPay_Array.sru_bank_id = $scope.bank_ID;
+                $rootScope.requestPay_Array.sru_bank_name = $scope.bank_Name;
+                $rootScope.requestPay_Array.sru_bank_username = $scope.bank_UserName;
+                if($rootScope.requestPay_Array.sru_bank_id == "" || $rootScope.requestPay_Array.sru_bank_name == "" || $rootScope.requestPay_Array.sru_bank_username == ""
+                    || $rootScope.requestPay_Array.sru_bank_id == null || $rootScope.requestPay_Array.sru_bank_name == null || $rootScope.requestPay_Array.sru_bank_username == null)
+                {
+                    $scope.showDialogForFillForm();
+                    return;
+                }
+                else
                 {
                     $scope.disable_Charge = false;
-                    $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
+                    $rootScope.chargesuccess = {}
+                    $rootScope.chargesuccess.comment1 = $scope.adminInfo.bankname;
+                    $rootScope.chargesuccess.comment2 = $scope.adminInfo.id;
+                    $rootScope.chargesuccess.comment3 = $rootScope.requestPay_Array.u_game_money;
+                    $rootScope.chargesuccess.comment4 = $rootScope.requestPay_Array.u_money;
+                    $rootScope.chargesuccess.currency = $scope.currency;
+                    $rootScope.chargesuccess.isuser = 1;
+                    $rootScope.chargesuccess.comment5 = $scope.adminInfo.username;
+
                     $rootScope.modalInstance = $uibModal.open({
                         animation: true,
-                        templateUrl: 'dialogs/AlertDialog.html',
+                        templateUrl: 'dialogs/ChargeSuccess.html',
                         controller: 'ChargeCtrl',
                         resolve: {
                         }
                     });
                     $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                        $scope.autopay = true;
+                        $scope.chargeForm_disable = true;
                         $scope.disable_Charge = false;
                         $scope.money_select = '100k';
                         $scope.getBalanceInfo();
                     });
+                }
 
+            }
+            else
+            {  
+                $rootScope.requestPay_Array.sru_bank_id = $scope.bank_ID;
+                $rootScope.requestPay_Array.sru_bank_pw = $scope.bank_pass;
+                if($rootScope.requestPay_Array.sru_bank_id == "" || $rootScope.requestPay_Array.sru_bank_pw == "" || $rootScope.requestPay_Array.sru_bank_id == null || $rootScope.requestPay_Array.sru_bank_pw == null)
+                {
+                    $scope.showDialogForFillForm();
+                    return;
+                }
+                else
+                {
+                    $scope.disable_Charge = false;
+                    $rootScope.chargesuccess = {}
+                    $rootScope.chargesuccess.comment1 = $scope.adminInfo.username;
+                    $rootScope.chargesuccess.comment2 = $scope.adminInfo.id;
+                    $rootScope.chargesuccess.comment3 = $rootScope.requestPay_Array.u_game_money;
+                    $rootScope.chargesuccess.comment4 = $rootScope.requestPay_Array.u_money;
+                    $rootScope.chargesuccess.currency = $scope.currency;
+                    $rootScope.chargesuccess.isuser = 0;
+                    $rootScope.chargesuccess.comment5 = "";
+
+                    $rootScope.modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'dialogs/ChargeSuccess.html',
+                        controller: 'ChargeCtrl',
+                        resolve: {
+                        }
+                    });
+                    $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+                        $scope.chargeForm_disable = true;
+                        $scope.disable_Charge = false;
+                        $scope.money_select = '100k';
+                        $scope.getBalanceInfo();
+                    });
+                }
+            }
+        }
+    }
+
+    $scope.sendPayRequest = function()
+    {
+        if($scope.payType == 'auto')
+        {
+            $http.post($rootScope.serverUrl + '/autocharge', $rootScope.requestPay_Array).then(function(success) {
+                if(success.data.result == "success")
+                {
+                    $scope.showChargeSuccessDialog();
                 }
             });
         }
         else
         {
-            $scope.isCharge = false;
-            for(var i=0; i<$rootScope.userInfo.availablepayment.length; i++)
+            $rootScope.modalInstance.close('cancel');
+            if($rootScope.requestPay_Array.sru_paygate == 10)
             {
-                if($scope.payMethod_value == $rootScope.userInfo.availablepayment[i])
-                    $scope.isCharge = true;
-            }
-            if($scope.isCharge == true)
-            {
-                if($scope.payMethod_value == 10)
-                {
-                    $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
-                    $scope.requestPay_Array.sru_bank_name = $scope.bank_Name;
-                    $scope.requestPay_Array.sru_bank_username = $scope.bank_UserName;
-                    if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_name == "" || $scope.requestPay_Array.sru_bank_username == "")
+                console.log($rootScope.requestPay_Array);
+                $http.post($rootScope.serverUrl + '/offlinecharge', $rootScope.requestPay_Array).then(function(success) {
+                    if(success.data.result == "success")
                     {
-                        $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
-                        $scope.disable_Charge = false;
-                        $rootScope.modalInstance = $uibModal.open({
-                            animation: true,
-                            templateUrl: 'dialogs/AlertDialog.html',
-                            controller: 'ChargeCtrl',
-                            resolve: {
-                            }
-                        });
-                        $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                            $scope.autopay = true;
-                            $scope.chargeForm_disable = true;
-                            $scope.disable_bankName = true;
-                            $scope.disable_bankPass = true;
-                            $scope.disable_bankID = true;
-                            $scope.disable_bankUser = true;
-                            $scope.disable_Charge = false;
-                            $scope.getBalanceInfo();
-                        });
-                    }
-                    else
-                    {
-                        $http.post($rootScope.serverUrl + '/offlinecharge', $scope.requestPay_Array).then(function(success) {
-                            if(success.data.result == "success")
-                            {
-                                if(success.data.moneycode == 0)
-                                    $scope.currency = "¥";
-                                else if(success.data.moneycode == 1)
-                                    $scope.currency = "원";
-                                else if(success.data.moneycode == 2)
-                                    $scope.currency = "$";
-                                if($rootScope.currentLanguage == 'ko')
-                                    $rootScope.msg = success.data.name + "로 " + success.data.id + "에 " + success.data.balance + $scope.currency + "을 송금하십시오.";
-                                else if($rootScope.currentLanguage == 'en')
-                                    $rootScope.msg = "Please pay " + $scope.currency + success.data.balance + " to " + success.data.id + " of " + success.data.name + " and please wait...";
-                                $scope.disable_Charge = false;
-                                $rootScope.modalInstance = $uibModal.open({
-                                    animation: true,
-                                    templateUrl: 'dialogs/AlertDialog.html',
-                                    controller: 'ChargeCtrl',
-                                    resolve: {
-                                    }
-                                });
-                                $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                    $scope.autopay = true;
-                                    $scope.chargeForm_disable = true;
-                                    $scope.disable_bankName = true;
-                                    $scope.disable_bankPass = true;
-                                    $scope.disable_bankID = true;
-                                    $scope.disable_bankUser = true;
-                                    $scope.disable_Charge = false;
-                                    $scope.money_select = '100k';
-                                    $scope.getBalanceInfo();
-                                });
-
-                            }
-                        });
-                    }
-
-                }
-                else
-                {  
-                    $scope.requestPay_Array.sru_paygate = $scope.payMethod_value;
-                    $scope.requestPay_Array.sru_bank_id = $scope.bank_ID;
-                    $scope.requestPay_Array.sru_bank_pw = $scope.bank_pass;
-                    if($scope.requestPay_Array.sru_bank_id == "" || $scope.requestPay_Array.sru_bank_pw == "")
-                    {
-                        $rootScope.msg = $rootScope.translation.CHARGE_FILL_FORM;
-                        $scope.disable_Charge = false;
-                        $rootScope.modalInstance = $uibModal.open({
-                            animation: true,
-                            templateUrl: 'dialogs/AlertDialog.html',
-                            controller: 'ChargeCtrl',
-                            resolve: {
-                            }
-                        });
-                        $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                            $scope.autopay = true;
-                            $scope.chargeForm_disable = true;
-                            $scope.disable_bankName = true;
-                            $scope.disable_bankPass = true;
-                            $scope.disable_bankID = true;
-                            $scope.disable_bankUser = true;
-                            $scope.disable_Charge = false;
-                            $scope.getBalanceInfo();
-                        });
-                    }
-                    else
-                    {
-                        $http.post($rootScope.serverUrl + '/onlinecharge', $scope.requestPay_Array).then(function(success) {
-                            if(success.data.result == "success")
-                            {
-                                if(success.data.moneycode == 0)
-                                    $scope.currency = "¥";
-                                else if(success.data.moneycode == 1)
-                                    $scope.currency = "원";
-                                else if(success.data.moneycode == 2)
-                                    $scope.currency = "$";
-                                if($rootScope.currentLanguage == 'ko')
-                                    $rootScope.msg = success.data.name + "로 " + success.data.id + "에 " + success.data.balance + $scope.currency + "을 송금하십시오.";
-                                else if($rootScope.currentLanguage == 'en')
-                                    $rootScope.msg = "Please pay " + $scope.currency + success.data.balance + " to " + success.data.id + " of " + success.data.name + " and please wait...";
-                                $scope.disable_Charge = false;
-                                $rootScope.modalInstance = $uibModal.open({
-                                    animation: true,
-                                    templateUrl: 'dialogs/AlertDialog.html',
-                                    controller: 'ChargeCtrl',
-                                    resolve: {
-                                    }
-                                });
-                                $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                                    $scope.autopay = true;
-                                    $scope.chargeForm_disable = true;
-                                    $scope.disable_bankName = true;
-                                    $scope.disable_bankPass = true;
-                                    $scope.disable_bankID = true;
-                                    $scope.disable_bankUser = true;
-                                    $scope.disable_Charge = false;
-                                    $scope.money_select = '100k';
-                                    $scope.getBalanceInfo();
-                                });
-                            }
-                        });            
-                    }
-                }
-
-            }
-            else //cant pay
-            {
-                $rootScope.msg = $rootScope.translation.CHARGE_IMPOSSIBLE_ALERT;
-                $scope.disable_Charge = false;
-                $rootScope.modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: 'dialogs/AlertDialog.html',
-                    controller: 'ChargeCtrl',
-                    resolve: {
+                        $scope.showChargeSuccessDialog();
                     }
                 });
-                $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
-                    $scope.autopay = true;
-                    $scope.chargeForm_disable = true;
-                    $scope.disable_bankName = true;
-                    $scope.disable_bankPass = true;
-                    $scope.disable_bankID = true;
-                    $scope.disable_bankUser = true;
-                    $scope.disable_Charge = false;
-                    $scope.money_select = '100k';
-                    $scope.getBalanceInfo();
-                });
-
             }
-            
+            else
+            {  
+                $http.post($rootScope.serverUrl + '/onlinecharge', $rootScope.requestPay_Array).then(function(success) {
+                    if(success.data.result == "success")
+                    {
+                        $scope.showChargeSuccessDialog();
+                    }
+                });
+            }
         }
     };
+
+    $scope.showChargeSuccessDialog = function()
+    {
+        $scope.disable_Charge = false;
+        $rootScope.msg = $rootScope.translation.CHARGE_SUCCESS;
+        $rootScope.modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'dialogs/AlertDialog.html',
+            controller: 'ChargeCtrl',
+            resolve: {
+            }
+        });
+        $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {
+            $scope.disable_Charge = false;
+            $scope.money_select = '100k';
+            $scope.getBalanceInfo();
+        });
+    }
 
     $rootScope.$on("ReGet_UserInfo", function(){
         $scope.Reget_userinfo();
@@ -1736,6 +1578,61 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         });
     }
 
+    $scope.updateCountryList = function()
+    {
+        $scope.options = []
+        $scope.payMethod_1 = false;
+        $scope.payMethod_2 = false;
+        $scope.payMethod_3 = false;
+        $scope.payMethod_4 = false;
+        $scope.payMethod_5 = false;
+        for(var i=0; i<$rootScope.userInfo.availablepayment.length; i++)
+        {
+            if($rootScope.userInfo.availablepayment[i] == 10)
+                $scope.payMethod_1 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 1)
+                $scope.payMethod_5 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 2)
+                $scope.payMethod_3 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 3)
+                $scope.payMethod_2 = true;
+            else if($rootScope.userInfo.availablepayment[i] == 4)
+                $scope.payMethod_4 = true;
+        }
+        if($scope.payMethod_1 == true || $scope.payMethod_2 == true || $scope.payMethod_3 == true || $scope.payMethod_4 == true || $scope.payMethod_5 == true)
+            $scope.options.push({label:$rootScope.translation.CHARGE_COUNTRY_CHINA,value:"0"});
+        if($scope.payMethod_2 == true || $scope.payMethod_4 == true)
+            $scope.options.push({label:$rootScope.translation.CHARGE_COUNTRY_KOREA,value:"1"});
+        if($scope.payMethod_1 == true || $scope.payMethod_2 == true || $scope.payMethod_4 == true)
+            $scope.options.push({label:$rootScope.translation.CHARGE_COUNTRY_OTHERS,value:"2"});
+
+        if($scope.payMethod_1 == false && $scope.payMethod_2 == false && $scope.payMethod_3 == false && $scope.payMethod_4 == false && $scope.payMethod_5 == false)
+            $scope.is_hidden = false;
+        else
+            $scope.is_hidden = true;
+        $scope.country_select = $scope.options[0];
+    }
+
+    $scope.getCurrentBalanceInfo = function()
+    {
+        if($scope.country_select == null)
+            return;
+        if($scope.country_select.value == 0)
+        {
+            $scope.currentBalance = $scope.balances[0].balance;
+            $scope.currency = "¥";
+        }
+        else if($scope.country_select.value == 1)
+        {
+            $scope.currentBalance = $scope.balances[1].balance;
+            $scope.currency = "원";
+        }
+        else if($scope.country_select.value == 2)
+        {
+            $scope.currentBalance = $scope.balances[2].balance;
+            $scope.currency = "$";
+        }
+    }
 
     $scope.show_bankname = false;
     $scope.show_pass = false;
@@ -1744,134 +1641,43 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
     $scope.getBalanceInfo = function() {
         $scope.is_hidden = true;
 
-
         $scope.Reget_userinfo();
 
-        $scope.myUserID = {}
-        $scope.myUserID.u_id = $rootScope.userInfo.userKey;
+        $scope.tempData = {}
+        $scope.tempData.u_id = $rootScope.userInfo.userKey;
 
-        $scope.payMethod_1 = false;
-        $scope.payMethod_2 = false;
-        $scope.payMethod_3 = false;
-        $scope.payMethod_4 = false;
-        $scope.payMethod_5 = false;
-        $http.post($rootScope.serverUrl + '/requestbalanceinfo', $scope.myUserID).then(function(success) {
+        $http.post($rootScope.serverUrl + '/requestbalanceinfo', $scope.tempData).then(function(success) {
+            console.log(success);
             if(success.data.result == "success")
             {
                 $scope.balances = success.data.balances;
                 $scope.chargeForm_disable = false;
-                $scope.payment_history_count = success.data.infocount;
+                $scope.payment_history = success.data.infos;
 
-                if(success.data.infocount != 0)
+                $scope.updateCountryList();
+                if($scope.payType == 'auto')
                 {
-                    $scope.pay_way = true;
-                    $scope.payment_history = {}
-                    $scope.infos = success.data.infos;
-                    $scope.payment_history = success.data.infos;
-
-                    for(var i=0; i<$scope.infos.length; i++)
-                    {
-                        if($scope.infos[i].sru_country == 0)
-                        {
-                            if($scope.infos[i].sru_paygate == 10)
-                                $scope.payMethod_1 = true;
-                            else if($scope.infos[i].sru_paygate == 1)
-                                $scope.payMethod_5 = true;
-                            else if($scope.infos[i].sru_paygate == 2)
-                                $scope.payMethod_3 = true;
-                            else if($scope.infos[i].sru_paygate == 3)
-                                $scope.payMethod_2 = true;
-                            else if($scope.infos[i].sru_paygate == 4)
-                                $scope.payMethod_4 = true;
-
-                            $scope.bank_Name = $scope.infos[i].sru_bank_name;
-                            $scope.bank_ID = $scope.infos[i].sru_bank_id;
-                            $scope.bank_pass = $scope.infos[i].sru_bank_pw;
-                            $scope.bank_UserName = $scope.infos[i].sru_bank_username;
-
-                            if($scope.infos[i].sru_paygate == 10)
-                                $scope.payMethod_value = 10;
-                            else if($scope.infos[i].sru_paygate == 1)
-                                $scope.payMethod_value = 1;
-                            else if($scope.infos[i].sru_paygate == 2)
-                                $scope.payMethod_value = 2;
-                            else if($scope.infos[i].sru_paygate == 3)
-                                $scope.payMethod_value = 3;
-                            else if($scope.infos[i].sru_paygate == 4)
-                                $scope.payMethod_value = 4;
-                            $scope.is_hidden = true;
-                        }
-                        else
-                        {
-                            if($scope.is_hidden != true)
-                                $scope.is_hidden = false;
-                        }
-                    }
-                    $scope.disable_bankName = true;
-                    $scope.disable_bankPass = true;
-                    $scope.disable_bankID = true;
-                    $scope.disable_bankUser = true;
+                    $scope.FillAutoPayForm();
+                    $scope.updatePayWaySelection();
                 }
                 else
                 {
-                    $scope.payMethod_value = 10;
-                    $scope.autopay = false;
-                    $scope.disable_bankName = false;
-                    $scope.disable_bankPass = false;
-                    $scope.disable_bankID = false;
-                    $scope.disable_bankUser = false;
-                    $scope.setAutoPay_Method();
+                    $scope.updatePayWaySelection();
+                    $scope.selectFirstItem();
+                    $scope.showInputForm();
                 }
 
+                $scope.getCurrentBalanceInfo();
 
-                if($scope.money_select == '100k')
-                    $scope.real_money = 100000 / 100000;
-                else if($scope.money_select == '200k')
-                    $scope.real_money = 200000 / 100000;
-                else if($scope.money_select == '500k')
-                    $scope.real_money = 500000 / 100000;
-                else if($scope.money_select == '1M')
-                    $scope.real_money = 1000000 / 100000;
-                else if($scope.money_select == '2M')
-                    $scope.real_money = 2000000 / 100000;
-                else if($scope.money_select == '5M')
-                    $scope.real_money = 5000000 / 100000;
-                else if($scope.money_select == '10M')
-                    $scope.real_money = 10000000 / 100000;
-                else if($scope.money_select == '20M')
-                    $scope.real_money = 20000000 / 100000;
-                else if($scope.money_select == '50M')
-                    $scope.real_money = 50000000 / 100000;
-                else if($scope.money_select == '100M')
-                    $scope.real_money = 100000000 / 100000;
-                else if($scope.money_select == '200M')
-                    $scope.real_money = 200000000 / 100000;
-                else if($scope.money_select == '500M')
-                    $scope.real_money = 500000000 / 100000;
-                $scope.real_money = $scope.real_money * 10;
-
-
-                if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_CHINA)
-                {
-                    $scope.currentBalance = $scope.balances[0].balance;
-                    $scope.currency = "¥";
-                }
-                else if($scope.country_select == $rootScope.translation.CHARGE_COUNTRY_KOREA)
-                {
-                    $scope.currentBalance = $scope.balances[1].balance;
-                    $scope.currency = "원";
-                }
-                else
-                {
-                    $scope.currentBalance = $scope.balances[2].balance;
-                    $scope.currency = "$";
-                }
+                $scope.real_money = $scope.moneyFromStrToInt($scope.money_select) / 10000;
                 $scope.currentMoney = $scope.currentBalance * $scope.real_money;
-
-                $scope.showInputForm();
             }
         });
     };
+
+    $scope.title_bankname = $rootScope.translation.CHARGE_BANKNAME;
+    $scope.title_bankpass = $rootScope.translation.SET_WITHDRAW_DIALOG_PASSWORD;
+    $scope.title_username = $rootScope.translation.CHARGE_USERNAME;
 
     $scope.showInputForm = function()
     {
@@ -1882,10 +1688,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             $scope.show_bankid = true;
             $scope.show_username = true;
 
-            $scope.title_bankname = "은행이름";
-            $scope.title_bankid = "카드번호";
-            $scope.title_bankpass = "암호";
-            $scope.title_username = "소유자이름";
+            $scope.title_bankid = $rootScope.translation.WITHDRAW_CARDNUMBER;
         }
         else
         {
@@ -1894,12 +1697,13 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             $scope.show_bankid = true;
             $scope.show_username = false;
 
-            $scope.title_bankname = "은행이름";
-            $scope.title_bankid = "ID";
-            $scope.title_bankpass = "암호";
-            $scope.title_username = "소유자이름";
+            $scope.title_bankid = $rootScope.translation.CHARGE_BANKID;
         }
     }
+
+    $rootScope.$on("ReGetRechargeInfo", function(){
+        $scope.getChargeRecord();
+    });
 
     $scope.getChargeRecord = function()
     {
@@ -1916,6 +1720,12 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             {
                 $rootScope.chargeRecords = success.data.record;
                 $scope.bigTotalItems = 10*($rootScope.chargeRecords.length / $scope.num_record);
+                $rootScope.totalChargeAmount = 0;
+                for(var i=0; i<$rootScope.chargeRecords.length; i++)
+                {
+                    if($rootScope.chargeRecords[i].type == 1)
+                        $rootScope.totalChargeAmount = parseInt($rootScope.totalChargeAmount) + parseInt($rootScope.chargeRecords[i].money);
+                }
                 for(var i=0; i<$rootScope.chargeRecords.length; i++)
                 {
                     $rootScope.chargeRecords[i].showNumber = i+1;
@@ -1923,17 +1733,17 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
                     if($rootScope.chargeRecords[i].country == 0)
                     {
-                        $rootScope.chargeRecords[i].country = 'China';
+                        $rootScope.chargeRecords[i].country = $rootScope.translation.CHARGE_COUNTRY_CHINA;
                         $rootScope.chargeRecords[i].currency = '¥';
                     }
                     else if($rootScope.chargeRecords[i].country == 1)
                     {
-                        $rootScope.chargeRecords[i].country = 'Korea';
+                        $rootScope.chargeRecords[i].country = $rootScope.translation.CHARGE_COUNTRY_KOREA;
                         $rootScope.chargeRecords[i].currency = '원';
                     }
                     else if($rootScope.chargeRecords[i].country == 2)
                     {
-                        $rootScope.chargeRecords[i].country = 'Others';
+                        $rootScope.chargeRecords[i].country = $rootScope.translation.CHARGE_COUNTRY_OTHERS;
                         $rootScope.chargeRecords[i].currency = '$';
                     }
 
@@ -1970,6 +1780,9 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
         }
     }
 
+    $rootScope.$on("GetMoneyFromIntToStr", function(moneyInt){
+        $scope.moneyFromIntToStr(moneyInt);
+    });
     $scope.moneyFromIntToStr = function(moneyInt)
     {
         if(moneyInt == '100000')
@@ -1996,6 +1809,38 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
             return '200M';
         else if(moneyInt == '500000000')
             return '500M';
+    }
+
+    $rootScope.$on("GetMoneyFromStrToInt", function(moneyStr){
+        console.log(moneyStr);
+        $scope.moneyFromIntToStr(moneyStr);
+    });
+    $scope.moneyFromStrToInt = function(moneyStr)
+    {
+        if(moneyStr == '100k')
+            return '100000';
+        else if(moneyStr == '200k')
+            return '200000';
+        else if(moneyStr == '500k')
+            return '500000';
+        else if(moneyStr == '1M')
+            return '1000000';
+        else if(moneyStr == '2M')
+            return '2000000';
+        else if(moneyStr == '5M')
+            return '5000000';
+        else if(moneyStr == '10M')
+            return '10000000';
+        else if(moneyStr == '20M')
+            return '20000000';
+        else if(moneyStr == '50M')
+            return '50000000';
+        else if(moneyStr == '100M')
+            return '100000000';
+        else if(moneyStr == '200M')
+            return '200000000';
+        else if(moneyStr == '500M')
+            return '500000000';
     }
 
     $scope.cancelCharge = function(record)
@@ -2027,12 +1872,7 @@ app.controller('ChargeCtrl', function ($scope, $rootScope, $http, $uibModal, $lo
 
     $scope.exitMsg = function()
     {
-        $scope.autopay = true;
         $scope.chargeForm_disable = true;
-        $scope.disable_bankName = true;
-        $scope.disable_bankPass = true;
-        $scope.disable_bankID = true;
-        $scope.disable_bankUser = true;
         $scope.disable_Charge = false;
         $scope.money_select = '100k';
         $scope.getBalanceInfo();
@@ -2052,6 +1892,7 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
 
     $scope.onMoneyChange = function()
     {
+        $rootScope.$emit("GetMoneyFromStrToInt", $scope.money_select);
         if($scope.money_select == '100k')
             $scope.real_money = 100000 / 100000;
         else if($scope.money_select == '200k')
@@ -2500,6 +2341,12 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
             {
                 $rootScope.withdrawRecords = success.data.record;
                 $scope.bigTotalItems = 10*($rootScope.withdrawRecords.length / $scope.num_record);
+                $rootScope.totalWithdrawAmount = 0;
+                for(var i=0; i<$rootScope.withdrawRecords.length; i++)
+                {
+                    if($rootScope.withdrawRecords[i].type == 1)
+                        $rootScope.totalWithdrawAmount = parseInt($rootScope.totalWithdrawAmount) + parseInt($rootScope.withdrawRecords[i].money);
+                }
                 for(var i=0; i<$rootScope.withdrawRecords.length; i++)
                 {
                     $rootScope.withdrawRecords[i].showNumber = i+1;
@@ -2616,14 +2463,12 @@ app.controller('WithdrawlCtrl', function ($scope, $rootScope, $http, $location, 
     }
 });
 
-
 app.controller("AlertCtrl", function ($scope, $rootScope) {
     $scope.exitMsg = function()
     {
         $rootScope.modalInstance.close('cancel');
     }
 });
-
 
 app.controller("PocketCtrl", function ($scope, $rootScope, $location, $http, $uibModal, $log, $document) {
 
@@ -2837,12 +2682,45 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                 $scope.chargeRecords = success.data.record;
                 for(var i=0; i<$scope.chargeRecords.length; i++)
                 {
-                    if($scope.chargeRecords[i].type == 1)
-                        $scope.chargeRecords[i].type = "요청";
-                    else if($scope.chargeRecords[i].type == 2)
-                        $scope.chargeRecords[i].type = "승인";
-                    else
-                        $scope.chargeRecords[i].type = "취소";
+                    if($rootScope.currentLanguage == 'ko')
+                    {
+                        if($scope.chargeRecords[i].type == 1)
+                            $scope.chargeRecords[i].type = "요청";
+                        else if($scope.chargeRecords[i].type == 2)
+                            $scope.chargeRecords[i].type = "승인";
+                        else
+                            $scope.chargeRecords[i].type = "취소";
+                        $scope.chargeRecords[i].comments = $scope.chargeRecords[i].bank + "를 통해서 ID : " + $scope.chargeRecords[i].ID + "로 " + $scope.formatNumbers($scope.chargeRecords[i].money) + "를 충전" + $scope.chargeRecords[i].type + "하였습니다.";
+                    }
+                    else if($rootScope.currentLanguage == 'en')
+                    {
+                        if($scope.chargeRecords[i].type == 1)
+                            $scope.chargeRecords[i].type = "Requested to charge ";
+                        else if($scope.chargeRecords[i].type == 2)
+                            $scope.chargeRecords[i].type = "Accepted to charge ";
+                        else
+                            $scope.chargeRecords[i].type = "Canceled to charge ";
+                        $scope.chargeRecords[i].comments = $scope.chargeRecords[i].type + $scope.formatNumbers($scope.chargeRecords[i].money) + " with ID: " + $scope.chargeRecords[i].ID + " through " + $scope.chargeRecords[i].bank + ".";
+                    }
+                    else if($rootScope.currentLanguage == 'cn')
+                    {
+                        if($scope.chargeRecords[i].type == 1)
+                        {
+                            $scope.chargeRecords[i].type1 = ".";
+                            $scope.chargeRecords[i].type2 = " 申请 充值 ";
+                        }
+                        else if($scope.chargeRecords[i].type == 2)
+                        {
+                            $scope.chargeRecords[i].type1 = " 提现成功.";
+                            $scope.chargeRecords[i].type2 = " 申请的充值 ";
+                        }
+                        else
+                        {
+                            $scope.chargeRecords[i].type1 = " 提现已取消.";
+                            $scope.chargeRecords[i].type2 = " 申请的充值 ";
+                        }
+                        $scope.chargeRecords[i].comments = "ID: " + $scope.chargeRecords[i].ID + " 用" + $scope.chargeRecords[i].bank + $scope.chargeRecords[i].type2 + $scope.formatNumbers($scope.chargeRecords[i].money) + $scope.chargeRecords[i].type1;
+                    }
                 }
                 $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
                 $scope.flag_page = 2;
@@ -2865,16 +2743,56 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                 $scope.withdrawRecords = success.data.record;
                 for(var i=0; i<$scope.withdrawRecords.length; i++)
                 {
-                    if($scope.withdrawRecords[i].type == 1)
-                        $scope.withdrawRecords[i].type = "요청";
-                    else if($scope.withdrawRecords[i].type == 2)
-                        $scope.withdrawRecords[i].type = "승인";
-                    else
-                        $scope.withdrawRecords[i].type = "취소";
+                    if($rootScope.currentLanguage == 'ko')
+                    {
+                        if($scope.withdrawRecords[i].type == 1)
+                            $scope.withdrawRecords[i].type = "요청";
+                        else if($scope.withdrawRecords[i].type == 2)
+                            $scope.withdrawRecords[i].type = "승인";
+                        else
+                            $scope.withdrawRecords[i].type = "취소";
+                        $scope.withdrawRecords[i].comments = $scope.withdrawRecords[i].bank + "를 통해서 ID : " + $scope.withdrawRecords[i].ID + "로 " + $scope.formatNumbers($scope.withdrawRecords[i].money) + "를 환전" + $scope.withdrawRecords[i].type + "하였습니다.";
+                    }
+                    else if($rootScope.currentLanguage == 'en')
+                    {
+                        if($scope.withdrawRecords[i].type == 1)
+                            $scope.withdrawRecords[i].type = "Requested to withdraw ";
+                        else if($scope.withdrawRecords[i].type == 2)
+                            $scope.withdrawRecords[i].type = "Accepted to withdraw ";
+                        else
+                            $scope.withdrawRecords[i].type = "Canceled to withdraw ";
+                        $scope.withdrawRecords[i].comments = $scope.withdrawRecords[i].type + $scope.formatNumbers($scope.withdrawRecords[i].money) + " with ID: " + $scope.withdrawRecords[i].ID + " through " + $scope.withdrawRecords[i].bank + ".";
+                    }
+                    else if($rootScope.currentLanguage == 'cn')
+                    {
+                        if($scope.withdrawRecords[i].type == 1)
+                        {
+                            $scope.withdrawRecords[i].type1 = ".";
+                            $scope.withdrawRecords[i].type2 = " 申请 充值 ";
+                        }
+                        else if($scope.withdrawRecords[i].type == 2)
+                        {
+                            $scope.withdrawRecords[i].type1 = " 充值成功.";
+                            $scope.withdrawRecords[i].type2 = " 申请的充值 ";
+                        }
+                        else
+                        {
+                            $scope.withdrawRecords[i].type1 = " 充值已取消.";
+                            $scope.withdrawRecords[i].type2 = " 申请的充值 ";
+                        }
+                        $scope.withdrawRecords[i].comments = "ID: " + $scope.withdrawRecords[i].ID + " 用" + $scope.withdrawRecords[i].bank + $scope.withdrawRecords[i].type2 + $scope.formatNumbers($scope.withdrawRecords[i].money) + $scope.withdrawRecords[i].type1;
+                    }
                 }
                 $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
                 $scope.flag_page = 3;
             }
+        });
+    }
+
+    $scope.formatNumbers = function(num){
+        var n = num.toString(), p = n.indexOf('.');
+        return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, function($0, i){
+            return p<0 || i<p ? ($0+',') : $0;
         });
     }
 
@@ -2893,10 +2811,30 @@ app.controller("RecordCtrl", function ($scope, $rootScope, $location, $http, $ui
                 $scope.gameRecords = success.data.record;
                 for(var i=0; i<$scope.gameRecords.length; i++)
                 {
-                    if($scope.gameRecords[i].type == 1)
-                        $scope.gameRecords[i].type = "이겼";
-                    else
-                        $scope.gameRecords[i].type = "졌";
+                    if($rootScope.currentLanguage == 'ko')
+                    {
+                        if($scope.gameRecords[i].type == 1)
+                            $scope.gameRecords[i].type = "이겼";
+                        else
+                            $scope.gameRecords[i].type = "졌";
+                        $scope.gameRecords[i].comments = "당신이 " + $scope.gameRecords[i].gamename + "에서 " + $scope.formatNumbers($scope.gameRecords[i].money) + " " + $scope.gameRecords[i].type + "습니다.";
+                    }
+                    else if($rootScope.currentLanguage == 'en')
+                    {
+                        if($scope.gameRecords[i].type == 1)
+                            $scope.gameRecords[i].type = "win ";
+                        else
+                            $scope.gameRecords[i].type = "lose ";
+                        $scope.gameRecords[i].comments = "You " + $scope.gameRecords[i].type + $scope.formatNumbers($scope.gameRecords[i].money) + " in " + $scope.gameRecords[i].gamename + ".";
+                    }
+                    else if($rootScope.currentLanguage == 'cn')
+                    {
+                        if($scope.gameRecords[i].type == 1)
+                            $scope.gameRecords[i].type = "이겼";
+                        else
+                            $scope.gameRecords[i].type = "졌";
+                        $scope.gameRecords[i].comments = "당신이 " + $scope.gameRecords[i].gamename + "에서 " + $scope.formatNumbers($scope.gameRecords[i].money) + " " + $scope.gameRecords[i].type + "습니다.";
+                    }
                 }
                 $scope.bigTotalItems = success.data.totalcount * (10 / $scope.num_per_page);
                 $scope.flag_page = 1;
@@ -3087,7 +3025,13 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
     if($rootScope.is_logged != true)
         $location.path('/');
 
-    $scope.flag_gameList = 1;
+    $scope.flag_gameList = 0;
+
+    $scope.all_game = function()
+    {
+        $scope.flag_gameList = 0;
+        $scope.getGameList();
+    }
 
     $scope.card_game = function()
     {
@@ -3151,10 +3095,35 @@ app.controller("DownloadCtrl", function ($scope, $rootScope, $location, $http, $
         $scope.show_gameList = []
         $http.post($rootScope.serverUrl + '/sitestart').then(function(success) {
             $scope.gameLists = success.data.games;
-            for(var i=0; i<$scope.gameLists.length; i++)
+            if($scope.flag_gameList == 0)
             {
-                if($scope.gameLists[i].game_category == $scope.flag_gameList)
-                    $scope.show_gameList.push($scope.gameLists[i]);
+                $scope.show_gameList = $scope.gameLists;
+                $scope.card_games = [];
+                $scope.orak_games = [];
+                $scope.sport_games = [];
+                $scope.horse_games = [];
+                $scope.live_games = [];
+                for(var i=0; i<$scope.gameLists.length; i++)
+                {
+                    if($scope.gameLists[i].game_category == 1)
+                        $scope.card_games.push($scope.gameLists[i]);
+                    else if($scope.gameLists[i].game_category == 2)
+                        $scope.orak_games.push($scope.gameLists[i]);
+                    else if($scope.gameLists[i].game_category == 3)
+                        $scope.sport_games.push($scope.gameLists[i]);
+                    else if($scope.gameLists[i].game_category == 4)
+                        $scope.horse_games.push($scope.gameLists[i]);
+                    else if($scope.gameLists[i].game_category == 5)
+                        $scope.live_games.push($scope.gameLists[i]);
+                }
+            }
+            else
+            {
+                for(var i=0; i<$scope.gameLists.length; i++)
+                {
+                    if($scope.gameLists[i].game_category == $scope.flag_gameList)
+                        $scope.show_gameList.push($scope.gameLists[i]);
+                }
             }
         });
     }
@@ -3432,7 +3401,6 @@ app.controller("ProfileCtrl", function ($scope, $rootScope, $location, $http, $u
             animation: true,
             templateUrl: 'dialogs/ResetUserPhoto.html',
             controller: 'ProfileCtrl',
-            size: 'lg',
             resolve: {}
         });
         $rootScope.modalInstance.result.then(function (selectedItem) {}, function () {

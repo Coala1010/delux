@@ -26,7 +26,7 @@
                   <i class="fa fa-apple block m-b-xs fa-4x"></i>
                   <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
                 </a>
-                <a href="http://101.102.224.50:10008/gameapks/Casino_Poker.apk" class="col padder-v text-white">
+                <a href="http://116.255.149.50:10008/gameapks/Casino_Poker.apk" class="col padder-v text-white">
                   <i class="fa fa-android block m-b-xs fa-4x"></i>
                   <span class=" fa-2x">{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
                 </a>
@@ -42,14 +42,15 @@
           <h2 class="font-bold">{{$root.translation.DOWNLOAD_SINGLE}}</h2>
         </div>
         <div class="clearfix panel-footer">
-           <div class="col-sm-6">
-           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="card_game()">{{ $root.translation.SIDE_MENU_CARD }}</button>
-           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="orak_game()">{{ $root.translation.SIDE_MENU_ORAK }}</button>
-           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="sport_game()">{{ $root.translation.SIDE_MENU_SPORT }}</button>
-           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="horse_game()">{{ $root.translation.SIDE_MENU_HORSE }}</button>
-           <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="live_game()">{{ $root.translation.SIDE_MENU_LIVE }}</button>
-        </div>
-          <div class="input-group col-sm-4">
+          <div class="col-sm-8">
+            <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="all_game()">{{ $root.translation.DOWNLOAD_CATEGORY_ALL }} ({{show_gameList.length}})</button>
+            <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="card_game()">{{ $root.translation.SIDE_MENU_CARD }} ({{card_games.length}})</button>
+            <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="orak_game()">{{ $root.translation.SIDE_MENU_ORAK }} ({{orak_games.length}})</button>
+            <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="sport_game()">{{ $root.translation.SIDE_MENU_SPORT }} ({{sport_games.length}})</button>
+            <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="horse_game()">{{ $root.translation.SIDE_MENU_HORSE }} ({{horse_games.length}})</button>
+            <button class="btn btn-download btn-rounded" style="margin-right: 10px;" ng-click="live_game()">{{ $root.translation.SIDE_MENU_LIVE }} ({{live_games.length}})</button>
+          </div>
+          <div class="input-group col-sm-4" style="float: right;">
             <input type="text" class="form-control input-sm btn-rounded" ng-model="game_search" placeholder={{$root.translation.TOP_MENU_SEARCH}}>
             <span class="input-group-btn">
               <button type="button" ng-click="search_Games()" class="btn btn-default btn-sm btn-rounded"><i class="fa fa-search"></i></button>
@@ -58,15 +59,15 @@
         </div>
       </div>
       
-<div class="panel b-a">
-
-  <div class="col-lg-3" ng-repeat="one_show in show_gameList">
+                    <div ng-repeat="one_show in show_gameList">
+                     <div class="clearfix" ng-if="$index % 4 == 0"></div>
+  <div class="col-lg-3">
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="clearfix text-center ">
             <div class="inline">
             
-              <div class="thumb-xl">
+              <div class="thumb-xl" style="width: 100%">
                 <img src={{one_show.game_photolink}}   width="100%"/>
               </div>
             
@@ -78,7 +79,7 @@
           </div>
         </div>
       
-         <div class="hbox text-center b-b b-light text-sm " style="background-color:#23b7e5;">          
+        <div class="hbox text-center b-b b-light text-sm " style="background-color:#23b7e5;">          
           <a ng-click="notReady()" class="col padder-v text-white b-r b-light">
             <i class="fa fa-laptop block m-b-xs fa-2x"></i>
             <span >{{$root.translation.DOWNLOAD_DOWNLOAD}}&nbsp;<i class="fa fa-download"></i></span>
@@ -95,31 +96,11 @@
    
       </div>
   </div>
-
+                          </div>
    
-      </div>  
 
 
-          <br style="clear: both;">
-          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
-            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
-              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
-              </p>
-            </div>
-            <center>
-              <img src="img/footerLogo.png" style="width: 100%;" />
-            </center>
-            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
-              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
-              </p>
-            </div>
-          </div>   
+          <br style="clear: both;"> 
 
     </div>
 
@@ -138,7 +119,7 @@
                   <ul class="list-group">
                  
                     <li class="list-group-item" ng-repeat="one_popular in popular_gameLists">
-                       <a href="#" class="thumb pull-left m-r">
+                      <a href="#" class="thumb pull-left m-r">
                         <img src={{one_popular.game_photolink}}  />
                       </a>
                       <div class="clear">
@@ -157,6 +138,28 @@
               </div>
             </div>
           </div>
+		  
+		  
+		  
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
+            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
+              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
+              </p>
+            </div>
+            <center>
+              <img src="img/footerLogo.png" style="width: 100%;" />
+            </center>
+            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
+              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
+              </p>
+            </div>
+          </div>  
         <!-- PASTE above -->
       </div>
     </div>

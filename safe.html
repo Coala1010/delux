@@ -4,7 +4,7 @@
       <a href class="off-screen-toggle hide" data-toggle="class:off-screen" data-target=".app-aside" ></a>
       <div class="app-content-body fade-in-up">
         <!-- COPY the content from "tpl/" -->
-          <div class="hbox hbox-auto-xs hbox-auto-sm">
+          <div class="hbox hbox-auto-xs hbox-auto-sm" style="margin-bottom: 95px;">
             <div class="col">
               <div class="wrapper-md">
                   <div>
@@ -12,32 +12,32 @@
                     <div class="row">
                       <!--div class="col-sm-3">
                       </div-->
-                      <div class="col-sm-12" style="margin-top:20px; min-width: 500px;">
+                      <div class="col-sm-12" style="margin-top:20px; width: 100%;">
                         <form name="pocketForm" class="form-horizontal form-validation">
                           <div class="panel panel-default">
                             <div class="panel-heading bg-light lter"  style="text-align:left;">
-                              <h2 style="margin-left:80px;"><strong>{{$root.translation.PCOKET_TITLE}}</strong></h2>
+                              <h2 style="margin-left:80px;"><strong>{{$root.translation.POCKET_TITLE}}</strong></h2>
                             </div>
                             <div class="panel-body">                    
                              
                               <div class="form-group">
-                                <label class="col-sm-1 control-label">{{$root.translation.PCOKET_BALANCE}}</label>
+                                <label class="col-sm-1 control-label">{{$root.translation.POCKET_BALANCE}}</label>
                                 <div class="col-sm-6">
-                                   <label class="control-label" style="float: left; margin-left: 30px;">   {{ $root.userInfo.user_balance }}</label>
+                                   <label class="control-label" style="float: left; margin-left: 30px;">   {{ $root.userInfo.user_balance | number }}</label>
                                 </div>
                               </div>
                               <div class="line line-dashed b-b line-lg pull-in"></div>
                               <div class="form-group">
-                                <label class="col-sm-1 control-label">{{$root.translation.PCOKET_SAFE}}</label>
+                                <label class="col-sm-1 control-label">{{$root.translation.POCKET_SAFE}}</label>
                                 <div class="col-sm-6">
-                                   <label class="control-label" style="float: left; margin-left: 30px;">   {{ $root.userInfo.user_pocketmoney }}</label>
+                                   <label class="control-label" style="float: left; margin-left: 30px;">   {{ $root.userInfo.user_pocketmoney | number }}</label>
                                 </div>
                               </div>
                               <div class="line line-dashed b-b line-lg pull-in"></div>
                               <div class="form-group">
-                                <label class="col-sm-1 control-label">{{$root.translation.PCOKET_MONEY}}</label>
+                                <label class="col-sm-1 control-label">{{$root.translation.POCKET_MONEY}}</label>
                                 <div class="col-sm-6">
-                                  <input type="number" class="form-control" placeholder="" ng-model="pocket_money"  required >
+                                  <input type="text" class="form-control" placeholder="" ng-model="pocket_money" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required >
                                 </div>
                               </div>
                               <div class="line line-dashed b-b line-lg pull-in"></div>
@@ -45,12 +45,12 @@
                             </div>
                             <footer class="panel-footer  bg-light lter" style="height:65px;">
                               <div class="col-sm-2">
-                                <span class="text"><a ng-click="resetPocketPassword()"><em style="color:#58666e;text-decoration: underline;">{{$root.translation.PCOKET_CHANGE_PASSWORD}}</em></a></span>
+                                <span class="text"><a ng-click="resetPocketPassword()"><em style="color:#58666e;text-decoration: underline;">{{$root.translation.POCKET_CHANGE_PASSWORD}}</em></a></span>
                               </div>
-                              <div class="col-sm-6">
-                                <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="sendPocketDraw()" >{{$root.translation.PCOKET_DRAW}}</button>
-                                <button type="button" class="btn btn-info" style="margin-right:20px; float: none;" ng-click="sendPocketDeposit()" >{{$root.translation.PCOKET_DEPOSIT}}</button>
-                                <button type="reset" class="btn btn-info" style="margin-right:20px; float: none;">{{$root.translation.PCOKET_RESET}}</button>
+                              <div class="col-sm-10">
+                                <button type="button" class="btn btn-info" style="margin-right:10px; float: none;" ng-click="sendPocketDeposit()" >{{$root.translation.POCKET_DRAW}}</button>
+                                <button type="button" class="btn btn-info" style="margin-right:10px; float: none;" ng-click="sendPocketDraw()">{{$root.translation.POCKET_DEPOSIT}}</button>
+                                <button type="reset" class="btn btn-info" style="float: none;">{{$root.translation.POCKET_RESET}}</button>
                               </div>
                             </footer>
                           </div>
@@ -63,26 +63,6 @@
                    
                   </div>
               </div>
-
-          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
-            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
-              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
-              </p>
-            </div>
-            <center>
-              <img src="img/footerLogo.png" style="width: 100%;" />
-            </center>
-            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
-              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
-              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
-              </p>
-            </div>
-          </div>
           
             </div>
 
@@ -114,6 +94,26 @@
               </div>
             </div>
              <!-- ----------------------------------------------- -->
+          </div>
+
+          <div style="background: #271e1f; width: 100%; margin-top: 50px;">
+            <div style="display: table; margin: 0 auto; color: #c0bebe; padding-top: 28px; padding-right: 30px; padding-left: 30px;">
+              <p>{{$root.translation.ABOUT_US_TITLE}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT1}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT2}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT3}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT4}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT5}}<br/>
+              </p>
+            </div>
+            <center>
+              <img src="img/footerLogo.png" style="width: 100%;" />
+            </center>
+            <div style="display: table; margin: 0 auto; color: #c0bebe; text-align: center;">
+              <p>{{$root.translation.ABOUT_US_CONTENT6}}<br/>
+              {{$root.translation.ABOUT_US_CONTENT7}}<br/>
+              </p>
+            </div>
           </div>
         <!-- PASTE above -->
       </div>

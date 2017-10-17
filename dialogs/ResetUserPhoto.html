@@ -8,21 +8,21 @@
             </button>
         </span>
 
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 0px;">
             <div class="row">
                 <div ng-repeat="product in photoAvatar">
-                    <div class="clearfix" ng-if="$index % 5 == 0"></div>
-                    <div class="col col-sm-3" style="width: 20%;">
+                    <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                    <div class="col col-sm-2" style="width: 23%;">
                         <label>
                             <input type="radio" name="fb" id={{product.photoindex}} ng-model="photo_value" value={{product.photoindex}} ng-value={{product.photoindex}} ng-click="selectPhoto(photo_value)"/>
-                            <img src={{product.photourl}} style="width: 120px; height: 200px; margin-bottom: 40px;">
+                            <img src={{product.photourl}} style="width: 50px; height: 60px; margin-bottom: 40px;">
                         </label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="form-group"> 
+        <div class="form-group" style="margin-bottom: 15px;"> 
             <button type="button" ng-Click="resetUserPhotoFunc()" class="btn btn-default" style="font-size:16px;color:white!important;">{{$root.translation.RESET_USER_EMAIL_OK}}
             </button>
         </div>
