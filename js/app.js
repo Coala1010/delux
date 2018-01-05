@@ -1,4 +1,4 @@
-var app = angular.module('delux', ['ngRoute','ngAnimate', 'ngResource', 'ngSanitize', 'ngStorage', 'ui.bootstrap','textAngular','angularSpectrumColorpicker','ui.bootstrap.dropdownToggle','ngFileUpload']);
+var app = angular.module('delux', ['ngRoute', 'ngAnimate', 'ngResource', 'ngSanitize', 'ngStorage', 'ui.bootstrap','textAngular','angularSpectrumColorpicker','ui.bootstrap.dropdownToggle','ngFileUpload']);
 
 app.config(function($routeProvider, $locationProvider, $provide) {
     $routeProvider
@@ -49,6 +49,10 @@ app.config(function($routeProvider, $locationProvider, $provide) {
     .when("/profile", {
         templateUrl : "profile.html",
         controller : "ProfileCtrl"
+    })
+    .when("/gameplay", {
+        templateUrl : "Gameplay/index.html",
+        controller : "loadPageCtrl"
     })
     .when("/notification", {
         templateUrl : "notification.html",
@@ -204,7 +208,7 @@ app.controller("LanguageCtrl", function ($scope, $rootScope, translationService,
     };
 
     //Init
-    $scope.translateLanguage('ko');
+    $scope.translateLanguage('cn');
 });
 
 app.factory('socket', function ($rootScope) {
@@ -219,7 +223,7 @@ app.factory('socket', function ($rootScope) {
             });
         },
         init: function () {
-            socket = io.connect('http://isopda.55555.io/');
+            socket = io.connect('http://39.104.79.22:8081');
         },
         emit: function (eventName, data, callback) {
             socket.emit(eventName, data, function () {
@@ -232,7 +236,7 @@ app.factory('socket', function ($rootScope) {
             })
         },
         reconnect: function (id) {
-            socket = io.connect('http://isopda.55555.io/',{'forceNew': true });
+            socket = io.connect('http://39.104.79.22:8081',{'forceNew': true });
             socket.emit('CLIENT_LOGGED_IN', {u_id: id });
             },
         disconnect: function () {
@@ -243,16 +247,16 @@ app.factory('socket', function ($rootScope) {
     };
 });
 
-app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket, $localStorage) {
+app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $rootScope, $location, $http, socket, $localStorage, $window) {
 
     $scope.billBoard_portNumber = 10006;
-    $rootScope.billBoard_Url = 'http://isopda.55555.io:' + $scope.billBoard_portNumber;
+    $rootScope.billBoard_Url = 'http://39.104.79.22:' + $scope.billBoard_portNumber;
 
-    $scope.portNumber = 10005;
-    $rootScope.serverUrl = 'http://isopda.55555.io'// + $scope.portNumber;
+    $scope.portNumber = 8081;
+    $rootScope.serverUrl = 'http://39.104.79.22:' + $scope.portNumber;
 
     $scope.resource_portNumber = 10008;
-    $rootScope.resource_Url = 'http://isopda.55555.io:' + $scope.resource_portNumber;
+    $rootScope.resource_Url = 'http://39.104.79.22:' + $scope.resource_portNumber;
 
     $scope.gameLists = {}
     $http.post($rootScope.serverUrl + '/sessioncheck').then(function(success) {
@@ -410,10 +414,15 @@ app.controller('loadPageCtrl', function($uibModal, $log, $document, $scope, $roo
             }
         }
     }
+
+    $scope.openGamePlayTab = function()
+    {
+    	$window.open('116.255.149.50:8081');
+    }
     
     $scope.loadPages = function(path)
     {
-        if($rootScope.is_logged == true || path == '/' || path == '/help' || path == '/notice' || path =='/billboard')
+        if($rootScope.is_logged == true || path == '/' || path == '/help' || path == '/notice' || path =='/billboard' || path =='/gameplay')
         {
             if(path == '/')
             {

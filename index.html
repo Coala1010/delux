@@ -449,6 +449,12 @@ fieldset[disabled] .btn-success.active {
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_HELP}}</span>
             </a>
           </li>
+          <li class="dropdown"  style="height: 40px;" id="gameplay">
+            <a ng-href="Gameplay" ng-mousedown="openTab()" target="_blank" class="app-header navbar" style="position: inherit; top: auto;">
+              <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
+              <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_GAMEPLAY}}</span>
+            </a>
+          </li>
           <li class="dropdown" ng-click="logout()" style="height: 40px;" id="help" ng-show="$root.is_logged">
             <a class="app-header navbar" data-toggle="class:show" data-target=".navbar-collapse" style="position: inherit; top: auto;">
               <i class="fa fa-fw fa-plus visible-xs-inline-block"></i>
@@ -461,9 +467,9 @@ fieldset[disabled] .btn-success.active {
               <span translate="header.navbar.new.NEW">{{translation.TOP_MENU_LANG}}</span>
             </a>
             <div class="dropdown-content" data-toggle="class:show" data-target=".navbar-collapse" style="left:0;">
-              <a ng-click="translateLanguage('ko')">조선어</a>
               <a ng-click="translateLanguage('en')">English</a>
               <a ng-click="translateLanguage('cn')">中文（简体）</a>
+              <a ng-click="translateLanguage('ko')">한국어</a>
             </div>
           </li>
           
